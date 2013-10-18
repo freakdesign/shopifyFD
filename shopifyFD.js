@@ -1615,7 +1615,7 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/export-email-addresses-from-
 							shopifyCSS.type = "text/css";
 							shopifyCSS.rel = "stylesheet";
 							shopifyCSS.id = "shopifyjs";
-							shopifyCSS.href = "//dl.dropbox.com/s/kz1eyogfmmpmiby/shopifyJS.css";
+							shopifyCSS.href = "//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css";
 							document.body.appendChild(shopifyCSS);
 						},
 						get_theme_data:function(){
