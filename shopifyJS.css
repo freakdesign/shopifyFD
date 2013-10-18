@@ -1,0 +1,149 @@
+/*
+
+
+
+      ############# 
+    ##            *## 
+   #        %      **#
+  #        %%%    ***#
+ #       %%F%D%%   ****#
+#          %%%    *****#
+#   ###     %     ###***# 
+#  # ####       #### #**# 
+#  #     #     #     #**# 
+#   #####  # #  #####***# 
+#         #   #  *******# 
+ ### #           **# ### 
+     # - - - - - - #                 
+      | | | | | | |
+	
+     freakdesign.com               
+
+
+	
+	Enjoying the tool? Consider leaving a tip:
+	http://shopify.freakdesign.com.au
+
+*/
+#shopifyJSbar.loading{top:-40px;}
+#shopifyJSbar{background:#96bf48;position:fixed;top:40px;left:0;width:100%;z-index:9999;min-width: 996px;transition:top .5s;}
+#shopifyJSbar ul{list-style: none;margin:0 0 0 1em;color:#fff;}
+#shopifyJSbar li, #shopifyJSbar li a{display: inline-block;}
+#shopifyJSbar li:first-child{width:164px;}
+#shopifyJSbar li a{padding:.5em;border-left:1px solid #7ea13d;transition:background .2s;color:#fff;}
+#shopifyJSbar li a.active{background:#658626;-webkit-box-shadow: inset 3px 3px 8px rgba(0,0,0,.3);}
+#shopifyJSbar li a:hover{background:#fff;text-decoration: none;color:#96bf48;}
+#shopifyJSbar li:last-child{float:right;}
+#shopifyJSbar li:first-child a{border-left:none;}
+#shopifyJSbar li:last-child a{border-left:none;}
+
+body{padding-top:40px;}
+#wrapper{padding-bottom: 5em;}
+.header-row {top:70px;}
+#gheader.black-header {z-index:99999;}
+#global-notification {z-index:999999;}
+
+/* ======================================================================= */
+
+/* Useful to note what things are not Standard */
+.shopifyJSoverride .altered{color:red!important;}
+
+/* Open orders count has a new action on it. Make that obvious. */
+.shopifyJSoverride .main-nav-count{background: #129BDB;color: #FFFFFF; border:none!important;}
+.shopifyJSoverride .selected .main-nav-count{background: #fff;color: #129BDB; border:none!important;}
+.shopifyJSoverride .main-nav-count:hover{background: #121212;color: #FFFFFF; border:none!important;}
+
+/* you know, for hiding stuff... */
+.shopifyJSoverride .hidden{display:none;}
+
+/* why did we use the hidden class here? */
+.shopifyJSoverride span[data-hideif="product.isVisible"].hidden{display:inline-block;padding: 1px 5px 0px 5px}
+
+/* Buttons */
+.shopifyJSoverride .section.buttons{padding:20px;}
+.shopifyJSoverride .btn.delete{border-color: #C41818;background: #E72323;text-shadow:none;color:#fff;transition:background .25s}
+
+/* Make those delete buttons far more obvious */
+.shopifyJSoverride .btn.delete:hover{background:#121212;color:#fff;}
+.shopifyJSoverride .btn.destroy{background:#E71414;color:#fff;text-shadow:none;border:none}
+
+/* Inventory table adjustment */
+.shopifyJSoverride th.inventory.tc{min-width: 50px;}
+.shopifyJSoverride td.image.thumb, .shopifyJSoverride th.image { display:none!important; }
+
+/* Batman modal*/
+.shopifyJSoverride .modal body{overflow: hidden;}
+.shopifyJSoverride #metacount {background: #ADB498;display: inline-block;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff;}
+.shopifyJSoverride #metacount.active {background: #686965;}
+
+/* do we really need to see the rate box all the time? nope. */
+.shopifyJSoverride div[data-showif='showNetPromoterScore'] {display:none!important;}
+
+/* Sub section - mostly for the metafield box */
+.shopifyJSoverride .sub_section-summary{margin-bottom:.5em;background: #F7F8F5;padding: 1em;border: 1px solid #ddd;transition:border-color .25s;}
+.shopifyJSoverride .sub_section-summary:hover{border: 1px solid #bbb;}
+.shopifyJSoverride .sub_section-summary .content{padding-left:0;padding-bottom:0;margin-bottom:0;}
+.sub_section-summary h1, .sub_section-summary h2 {font-size: 18px!important;margin-bottom: 10px!important;font-weight: 300!important;}
+
+/* Page selector */
+.shopifyJSoverride #shopifyjs_pageselect {margin-top:3px;}
+
+.shopifyJSoverride .section>.section-summary { padding-left:1.5em; } /* just a little bit smaller */
+.shopifyJSoverride .row-attached-to-top { position: relative;top: -40px; }
+.shopifyJSoverride .view-in-store {background-position: 100% -2561px;}
+
+/* Editor extra */
+.shopifyJSoverride #rte_extra{background: #eee;padding: 3px;border-top: 1px solid #ccc;}
+.shopifyJSoverride #rte_extra a{background: #E2DFDF;padding: .15em .8em;line-height: 2;text-decoration: none;color: #121212;display: inline-block;border-radius: 3px;border: 1px solid #ccc;transition:background .2s;}
+.shopifyJSoverride #rte_extra a:hover{background:#96bf48;color:#fff;border-color: #6B8569;}
+
+/* Admin menu */
+.shopifyJSoverride .nav-secondary.is-active {margin-top:30px;}
+
+/* loading... */
+.shopifyJSoverride #content.loading .header-row {top:70px!important;}
+
+/* variant editing... */
+.shopifyJSoverride .vbox {background: #efefef;padding: 1em;border-bottom: 2px solid #212121;}
+.shopifyJSoverride .vbox fieldset {padding:0;display:block;width:100%;}
+.shopifyJSoverride .vbox input, .shopifyJSoverride .vbox select {width:24.24%; display:inline-block;margin:0 1% 0 0;}
+.shopifyJSoverride .vbox fieldset input:last-child{margin-right:0;}
+.shopifyJSoverride .vbox select.active{border: 1px solid rgb(35, 116, 42);background: #8BBD21;color: #fff;}
+.shopifyJSoverride td.vid{cursor:pointer;font-size: .9em;text-decoration: underline;}
+.shopifyJSoverride .vbox .mybuttons {display: block;margin-top:.25em;}
+.shopifyJSoverride .vbox .mybuttons a.delete {color: #C71919;float:right;}
+.shopifyJSoverride .vbox .mybuttons a:first-child{margin-right:2em;}
+.shopifyJSoverride tr.variant.active {background: #efefef;}
+
+.shopifyJSoverride .sku.label {float:right;background: #83C96D;line-height: 1em;border: none;}
+
+/* Beta or new classes will appear below */
+
+html.dragit{
+  height: 100%;overflow: hidden;opacity: .5;
+  -webkit-user-select: none; 
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Modal window, because wrestling the built in one is a pain in the bee-hind... */
+.modalWindow {
+  position: fixed;top: 0;right: 0;bottom: 0;left: 0;
+  background: rgba(1, 12, 2, 0.7);z-index: 99999;
+  display:none;text-align:center;
+}
+.modalWindow .span1, .modalWindow .span2, .modalWindow .span3, .modalWindow .half{float:left;padding:0;}
+.modalWindow .span1 {width:33.332%;}
+.modalWindow .span2 {width:66.665%;}
+.modalWindow .half {width:50%;}
+
+.modalWindow .active {display:block;}
+.modalWindow > div {width: 500px;position: relative;margin: 10% auto;background: #fff;border-radius: 3px;padding:1em;text-align: left;box-shadow: 0 0 15px rgba(0,0,0,.5);}
+.modalWindow .content li{margin-bottom: 1em;}
+.modalWindow .content > div {max-height:400px;overflow:auto;}
+.modalWindow .close-modal{position:absolute;color:#000;border:1px solid #000;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:.7em;right:.7em;border-radius:50%}
+.modalWindow .close-modal:hover{background:#121212;color:#fff;}
+.modalWindow header{border-bottom:1px solid #ccc;margin:0 0 .5em;padding:0 2em .25em 0;min-height: .25em;}
+.modalWindow td{vertical-align: top;}
+.modalWindow .warning{background:red;padding:.25em;color:#fff;line-height:1.3;margin:0 0 .5em;}
+.modalWindow ul{padding-left: 1em;}
