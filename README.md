@@ -3,7 +3,7 @@ shopifyFD
 
 JavaScript layer to provide additional functionality and fixes to the Shopify dashboard. It adds some complexity to the dashboard so it's intended more for developers, or store owners that understand theme editing.
 
-A seperate tool is being made that allows easy ways for store owners to edit metafields via Custom Fields. Check the [Project Homepage](http://shopify.freakdesign.com.au) for info. 
+A seperate tool is being made that allows easy ways for store owners to edit metafields via Custom Fields. Check the [Project Homepage](http://shopify.freakdesign.com.au/index.html#customfields) for info. 
 
 Latest Builds
 -------------
