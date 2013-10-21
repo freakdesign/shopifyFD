@@ -1811,35 +1811,36 @@ _.load_css();
 
 
 					if(id=='themesettings' && isNaN(_.data('alpha')) ){
-
-						if(!_.data('themeID')){
-							_.flog('no theme set');
-							$.ajax({
-								type: "GET",
-								url: '/admin/themes.json',
-								success: function(d){
-								if(d){
 /*
-	Search through the themes and find the main one
-	This code is a double up on another function...
+--------------------------
+Thanks to Caroline Schnapp for pointing out that this is not required, when simply 
+/admin/themes/current/settings will do...
+--------------------------
+	if(!_.data('themeID')){
+		_.flog('no theme set');
+		$.ajax({
+			type: "GET",
+			url: '/admin/themes.json',
+			success: function(d){
+			if(d){
+
+				for (var i = 0, len = d.themes.length; i < len; i++) {
+					if(d.themes[i].role ==='main'){
+						_.flog(d.themes[i].id);
+						_.data('themeID',d.themes[i].id);
+						_.redirect('/themes/'+_.data('themeID') + '/settings');
+						break;
+					}
+				}
+			}
+			}
+		});
+
+	}else{
+		_.redirect('/themes/'+_.data('themeID') + '/settings');
+	}
 */
-									for (var i = 0, len = d.themes.length; i < len; i++) {
-										if(d.themes[i].role ==='main'){
-											_.flog(d.themes[i].id);
-											_.data('themeID',d.themes[i].id);
-											_.redirect('/themes/'+_.data('themeID') + '/settings');
-											break;
-										}
-									}
-								}
-								}
-							});
-
-						}else{
-							_.redirect('/themes/'+_.data('themeID') + '/settings');
-						}
-
-
+_.redirect('/themes/current/settings');
 					}
 
 					if(id=='togglestyle'){
