@@ -16,6 +16,12 @@ Installation
 
 To run the version shown here open the [install page](https://rawgithub.com/freakdesign/shopifyFD/master/installation.html) and drag the link into the browser bookmark bar.
 
+Notes
+------------
+
+* Only the minified version of the script is loaded and I'll make that file as required. Any pull requests should be made to the unminified verison, complete with nice verbose comments for other devs. 
+* Chrome extension that uses these files is on it's way...
+
 
 Thanks
 ------
