@@ -1629,8 +1629,13 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/export-email-addresses-from-
 									url: '/admin/themes.json',
 									success: function(d){
 										if(d){
-											_.data('themeID',d["themes"][0].id);
-											_.data('themeName',d["themes"][0].name);
+											for (var i = 0, len = d.themes.length; i < len; i++) {
+												if(d.themes[i].role ==='main'){
+													_.flog(d.themes[i].id);
+													_.data('themeID',d["themes"][i].id);
+													_.data('themeName',d["themes"][i].name);
+												}
+											}
 										}
 									}
 								});
@@ -1808,7 +1813,7 @@ _.load_css();
 					if(id=='themesettings' && isNaN(_.data('alpha')) ){
 
 						if(!_.data('themeID')){
-							
+							_.flog('no theme set');
 							$.ajax({
 								type: "GET",
 								url: '/admin/themes.json',
@@ -1816,9 +1821,11 @@ _.load_css();
 								if(d){
 /*
 	Search through the themes and find the main one
+	This code is a double up on another function...
 */
 									for (var i = 0, len = d.themes.length; i < len; i++) {
 										if(d.themes[i].role ==='main'){
+											_.flog(d.themes[i].id);
 											_.data('themeID',d.themes[i].id);
 											_.redirect('/themes/'+_.data('themeID') + '/settings');
 											break;
