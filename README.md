@@ -1,7 +1,9 @@
 shopifyFD
 =========
 
-JavaScript layer to provide additional functionality and fixes to the Shopify dashboard
+JavaScript layer to provide additional functionality and fixes to the Shopify dashboard. It adds some complexity to the dashboard so it's intended more for developers, or store owners that understand theme editing.
+
+A seperate tool is being made that allows easy ways for store owners to edit metafields via Custom Fields. Check the [Project Homepage](http://shopify.freakdesign.com.au) for info. 
 
 Latest Builds
 -------------
@@ -19,8 +21,7 @@ To run the version shown here open the [install page](https://rawgithub.com/frea
 Notes
 ------------
 
-* Only the minified version of the script is loaded and I'll make that file as required. Any pull requests should be made to the unminified verison, complete with nice verbose comments for other devs. 
-* Chrome extension that uses these files is on it's way...
+Only the minified version of the script is loaded and I'll make that file as required. Any pull requests should be made to the unminified verison, complete with nice verbose comments for other devs. 
 
 
 Thanks
