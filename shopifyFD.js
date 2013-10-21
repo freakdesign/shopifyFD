@@ -1819,7 +1819,7 @@ _.load_css();
 */
 									for (var i = 0, len = d.themes.length; i < len; i++) {
 										if(d.themes[i].role ==='main'){
-											_.data('themeID',d["themes"][0].id);
+											_.data('themeID',d.themes[i].id);
 											_.redirect('/themes/'+_.data('themeID') + '/settings');
 											break;
 										}
