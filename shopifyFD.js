@@ -116,6 +116,9 @@ return {
 		return null;
 	},
 	notice:function(m,err){
+		/*
+		Show message at bottom of the screen
+		*/
 		if(err){
 			Shopify.Flash.error(m);
 		}else{
@@ -1811,8 +1814,16 @@ _.load_css();
 								url: '/admin/themes.json',
 								success: function(d){
 								if(d){
-									_.data('themeID',d["themes"][0].id);
-									_.redirect('/themes/'+_.data('themeID') + '/settings');
+/*
+	Search through the themes and find the main one
+*/
+									for (var i = 0, len = d.themes.length; i < len; i++) {
+										if(d.themes[i].role ==='main'){
+											_.data('themeID',d["themes"][0].id);
+											_.redirect('/themes/'+_.data('themeID') + '/settings');
+											break;
+										}
+									}
 								}
 								}
 							});
