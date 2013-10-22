@@ -49,16 +49,20 @@ if(url.indexOf("myshopify.com/admin")>1){
 	var appnav = '<li><a id="aboutapp" href="'+jsvoid+'">About this tool</a></li><li><a id="togglestyle" href="'+jsvoid+'">Toggle CSS</a></li><li><a id="themesettings" href="javascript:void(0)">Theme Settings</a></li><li><a id="manageinventory" href="'+jsvoid+'">Manage Inventory</a></li><li><a id="bulkmetafields" href="'+jsvoid+'">Bulk Metafields</a></li><li><a title="This tool is free, consider leaving a tip" href="http://shopify.freakdesign.com.au/#donate" target="_blank">Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>Warning:</strong> This section can make bulk changes to your product metafields. There is no undo should something go wrong so be very sure you want to attempt this.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten. Have I given you enough warning?</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
+
 	var autosave_html = '<li> <a id="autosave" tabindex="-1" class="btn slim tooltip" href="#"><span class="tooltip-container"><span class="tooltip-label">Enable Autosave</span></span>Autosave</a></li>';
+
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var welcome_message = '<ul><li>Grab emails from recent orders now active.</li><li>Option to show SKUs on product page</li><li>Copy and paste metafields between products. Handy!</li><li>Bulk Metafield editor added. Be super careful with this one...</li></ul>';
-	var welcome_title='What\'s new in ShopifyFD : 2013-10-09';
+	var welcome_message = '<ul><li>Roll over the order number in Orders to see the items purchased</li></ul>';
+	
+	var welcome_title='What\'s new in ShopifyFD : 2013-10-23';
 
 	var html_about = '<table><tbody><tr><td width="50%">Oh hey! This tool has been made by Jason from freakdesign. He is awesome, and likes talking in the third person...</td><td><h4>Resources and links</h4><ul><li><a href="http://shopify.freakdesign.com.au" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://ecommerce.shopify.com/c/shopify-discussion/t/tool-to-add-new-dashboard-features-151067" target="_blank">Shopify forum post</a></li></ul></td></tr></tbody></table>';
 
 	var aargh_msg = '<p>Do note that once you run this you are going to have to manually refresh to see the updates. Annoying I know, but I have not found a way around this...</p>';
 
+	var bubble_html = '<div class="bubble ssb hide" style="bottom: 5px;"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="fl pr"><ul class="unstyled"></ul></div></div><footer class="bubble-footer"><div class="bubble-arrow-wrap"><span class="bubble-arrow-border"></span><span class="bubble-arrow"></span></div></footer></div>;'
 	
 /* ===========================*/ 
 var _ = (function(){
@@ -67,7 +71,7 @@ var _ = (function(){
 		debug: false,
 		drag_on:true,
 		author: 'freakdesign',
-		version: 20130829,
+		version: 20131023,
 		alpha: false,
 		omega: false,
 		countries:false,
@@ -1553,6 +1557,45 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/export-email-addresses-from-
 
 								$('.header-right .segmented').eq(1).after(u);
 
+/* 
+------------------- 
+get order on hover
+http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-hoover-on-order-number-shows-items-orders-in-admin-159836
+------------------- 
+*/
+
+								var visible_orders = $('#all-orders a[data-bind="order.name"]'),
+									order_timer = false; /* we should add a slight timeout to the box load */
+
+								visible_orders.append(bubble_html).css({'position':'relative'}).hover(function(){
+									var t = $(this),
+										l = t.find('ul').eq(0),
+										a = t.attr('href');
+	
+									if(!t.data('order')){
+									$.ajax({
+									type: "GET",
+									url: a+'.json',
+									success: function(d){
+										if(d){
+											var line_items = d.order.line_items,
+												order_list = '';
+											for (var i = 0, len = line_items.length; i < len; i++) {
+												order_list +='<li style="white-space:normal">'+line_items[i].quantity + ' x '+line_items[i].name+'</li>';
+											}
+											t.data('order',order_list);
+											l.html(order_list);
+											t.find('div.bubble').removeClass('hide');
+										}
+									}});
+									}else{
+										t.find('div.bubble').removeClass('hide');	
+									}
+
+								},function(){
+									var t = $(this);
+									t.find('div.bubble').addClass('hide');
+								});
 
 						},
 						get_recent_emails:function(a){
