@@ -16,7 +16,7 @@ Already using this tool? [Leave a tip](http://shopify.freakdesign.com.au/#donate
 Installation
 ------------
 
-To run the version shown here open the [install page](https://rawgithub.com/freakdesign/shopifyFD/master/installation.html) and drag the link into the browser bookmark bar.
+To run the version shown here either install the [Chrome Extension](http://bit.ly/_shopifyFD) or open the [install page](https://rawgithub.com/freakdesign/shopifyFD/master/installation.html) and drag the link into the browser bookmark bar.
 
 Notes
 ------------
