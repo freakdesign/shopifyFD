@@ -46,7 +46,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save" href="#">'+_savelabel+'</a> <a class="saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a id="togglestyle" href="'+jsvoid+'">Toggle CSS</a></li><li><a id="themesettings" href="javascript:void(0)">Theme Settings</a></li><li><a id="manageinventory" href="'+jsvoid+'">Manage Inventory</a></li><li><a id="bulkmetafields" href="'+jsvoid+'">Bulk Metafields</a></li><li><a title="This tool is free, consider leaving a tip" href="http://shopify.freakdesign.com.au/#donate" target="_blank">Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a title="About this tool" id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a title="View recent news" id="getnotifications" href="'+jsvoid+'"><i class="ico ico-16 ico-announcements-inactive"></i></a></li><li><a id="togglestyle" href="'+jsvoid+'">Toggle CSS</a></li><li><a id="themesettings" href="'+jsvoid+'">Theme Settings</a></li><li><a id="manageinventory" href="'+jsvoid+'">Manage Inventory</a></li><li><a id="bulkmetafields" href="'+jsvoid+'">Bulk Metafields</a></li><li><a title="This tool is free, consider leaving a tip" href="http://shopify.freakdesign.com.au/#donate" target="_blank">Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>Warning:</strong> This section can make bulk changes to your product metafields. There is no undo should something go wrong so be very sure you want to attempt this.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten. Have I given you enough warning?</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
@@ -54,9 +54,9 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var welcome_message = '<ul><li>Roll over the order number in Orders to see the items purchased</li></ul>';
+	var welcome_message = '<ul><li>Moved updates here rather than opening on load.</li><li>You can hover over the order number in Orders to see the actual items purchased.</li></ul>';
 	
-	var welcome_title='What\'s new in ShopifyFD : 2013-10-23';
+	var welcome_title='Recent updates and news';
 
 	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopify.freakdesign.com.au/#donate">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://shopify.freakdesign.com.au" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://ecommerce.shopify.com/c/shopify-discussion/t/tool-to-add-new-dashboard-features-151067" target="_blank">Shopify forum post</a></li></ul></p>';
 
@@ -132,6 +132,13 @@ return {
 	about_app:function(){
 		_.fd_modal(true,html_about,'About this tool',true);
 		return false;
+	},
+	show_notification:function(){
+		_.fd_modal(true,welcome_message,welcome_title);
+		$('#getnotifications').find('i').removeClass('blinker');
+	},
+	flash_notification:function(){
+		$('#getnotifications').find('i').addClass('blinker');
 	},
 	createbackup:function(id){
 	if(id){
@@ -1663,7 +1670,11 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 							shopifyCSS.type = "text/css";
 							shopifyCSS.rel = "stylesheet";
 							shopifyCSS.id = "shopifyjs";
-							shopifyCSS.href = "//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css";
+							/* mirrors:
+							//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css
+							//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css
+							*/
+							shopifyCSS.href = "//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css";
 							document.body.appendChild(shopifyCSS);
 						},
 						get_theme_data:function(){
@@ -1693,7 +1704,10 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 		_.get_theme_data();
 		if(!_.data('debug')){
 			if(!_.readCookie('shopifyfd')){
-				_.fd_modal(true,welcome_message,welcome_title);
+				/*
+				notification flash
+				*/
+				_.flash_notification();
 				_.createCookie('shopifyfd','loaded',3);
 			}
 		}
@@ -1893,7 +1907,8 @@ _.redirect('/themes/current/settings');
 						t.toggleClass('active');
 					}
 
-					if(id=='aboutapp'){_.about_app();}
+					if(id=='aboutapp'){_.about_app()}
+					if(id=='getnotifications'){_.show_notification()}
 
 				}else{
 					return true;
