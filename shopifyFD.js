@@ -34,14 +34,14 @@ if(url.indexOf("myshopify.com/admin")>1){
 		_deletelabel = 'Delete',
 		jsvoid = 'javascript:void(0)';
 
-	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace"><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key"><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a class="btn hidden delete" id="shopifyjs_deletemetafield">'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p>';
+	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace"><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key"><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a class="btn hidden delete" id="shopifyjs_deletemetafield">'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="'+jsvoid+'">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="'+jsvoid+'">Clear cache</a></p><p><a id="adv_get_collections" class="btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
 
 	var metafieldloader = '<div class="sub_section-summary"><h1><strong>Metafields</strong> <span id="metacount">0</span></h1><div class="content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
 
 	var metafield_default = '<option value="">Select or create a metafield</option>';
 
 	var metafield_copybox = '<div><a class="btn" id="fd_copymetafields">Copy Metafields</a> <a class="btn" id="fd_pastemetafields">Paste Metafields</a> <a class="btn" title="What have I copied?" href="#" id="fd_whatmetafields">?</a></div>';
-	
+
 	var rte_menu = '<div id="rte_extra" style="background:#efefef"><a title="Careful, this method is brutal..." id="clearformatting" href="#">Purge html</a> <a id="createbackup" href="#">Create Backup</a> <a style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a title="Add any images in the description to a Metafield" id="save_images_to_meta" href="#">Images to Metafields</a></div>';
 
 	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save" href="#">'+_savelabel+'</a> <a class="saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
@@ -58,7 +58,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 	
 	var welcome_title='Recent updates and news';
 
-	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopify.freakdesign.com.au/#donate">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://shopify.freakdesign.com.au" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://ecommerce.shopify.com/c/shopify-discussion/t/tool-to-add-new-dashboard-features-151067" target="_blank">Shopify forum post</a></li></ul></p>';
+	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopify.freakdesign.com.au/#donate">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://shopify.freakdesign.com.au" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
 
 	var aargh_msg = '<p>Do note that once you run this you are going to have to manually refresh to see the updates. Annoying I know, but I have not found a way around this...</p>';
 
@@ -214,6 +214,118 @@ return {
 
 			loadinto.html(h).append(metafieldform);
 
+		$('#advanced_meta_features').off('click').on('click',function(){
+			var adv_meta = $('#advanced_meta').eq(0);
+			adv_meta.toggleClass('hidden');
+			return false;
+		});
+
+		$('#adv_clear_cache').off('click').on('click',function(){
+			$('#advanced_meta').find('select').remove().end().find('a').show();
+			_.data('products',false);
+			_.data('collections',false);
+			return false;
+		});
+
+		/* 
+		note the double up functions 
+		these should be merged into one
+		*/
+		$('#adv_get_products').off('click').on('click',function(){
+
+			var t = $(this);
+			if(!_.data('products')){
+			$.ajax({
+			type: "GET",
+			url: '/admin/products.json',
+			dataType: 'json',
+			success: function(d){
+				if(d.products.length){
+					_.data('products',d);
+					var toappend='',
+						select=$('<select />',{}).change(function(){
+							var t=$(this);
+							$('#metafield_value').val(t.val());
+						}).html('<option value="">Add product handle as value</option>');
+
+					for (var i = 0, len = d.products.length; i < len; i++) {
+						toappend+='<option value="'+d.products[i].handle+'">'+d.products[i].title+'</option>';
+					}
+
+					select.append(toappend);
+					t.after(select).hide();
+				}
+			},
+			fail: function(){
+				_.notice('Failed to load products',true);
+			}
+			});
+			}else{
+				var d = _.data('products');
+				var toappend='',
+					select=$('<select />',{}).change(function(){
+							var t=$(this);
+							$('#metafield_value').val(t.val());
+					}).html('<option value="">Add product handle as value</option>');
+
+					for (var i = 0, len = d.products.length; i < len; i++) {
+						toappend+='<option value="'+d.products[i].handle+'">'+d.products[i].title+'</option>';
+					}
+
+					select.append(toappend);
+					t.after(select).hide();
+			}
+
+			return false;
+
+		});
+
+		$('#adv_get_collections').off('click').on('click',function(){
+			var t = $(this);
+			if(!_.data('collections')){
+			$.ajax({
+			type: "GET",
+			url: '/admin/collections.json',
+			dataType: 'json',
+			success: function(d){
+				if(d.collections.length){
+					_.data('collections',d);
+					var toappend='',
+						select=$('<select />',{}).change(function(){
+							var t=$(this);
+							$('#metafield_value').val(t.val());
+						}).html('<option value="">Add collection handle as value</option>');
+
+					for (var i = 0, len = d.collections.length; i < len; i++) {
+						toappend+='<option value="'+d.collections[i].handle+'">'+d.collections[i].title+'</option>';
+					}
+
+					select.append(toappend);
+					t.after(select).hide();
+				}
+			},
+			fail: function(){
+				_.notice('Failed to load collections',true);
+			}
+			});
+			}else{
+				var d = _.data('collections');
+				var toappend='',
+					select=$('<select />',{}).change(function(){
+							var t=$(this);
+							$('#metafield_value').val(t.val());
+					}).html('<option value="">Add collection handle as value</option>');
+
+					for (var i = 0, len = d.collections.length; i < len; i++) {
+						toappend+='<option value="'+d.collections[i].handle+'">'+d.collections[i].title+'</option>';
+					}
+
+					select.append(toappend);
+					t.after(select).hide();
+			}
+			return false;
+
+		});
 
 
 		$('#metafieldselect').change(function(){
@@ -1103,7 +1215,10 @@ return {
 			sdt.after(sdt_textarea).hide();
 
 		},
-						setup_copypaste:function(){
+		setup_dropdown_helper:function(){
+			/* future use. will add dropdown menus for easy handle selection of products and collections */
+		},
+		setup_copypaste:function(){
 
 							var a = $(metafield_copybox),
 								p = a.find('#fd_pastemetafields'),
@@ -1154,7 +1269,7 @@ return {
 
 							$('div.sub_section-summary').after(a);
 
-						},
+		},
 						save_metafield_queue:function(q,i){
 
 								_.fd_modal(true,'','Please wait whilst we past the metafields',true);
