@@ -54,7 +54,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var welcome_message = '<ul><li>Moved updates here rather than opening on load.</li><li>You can hover over the order number in Orders to see the actual items purchased.</li></ul>';
+	var welcome_message = '<ul><li>Copy and paste for Shipping rates added.</li><li>Moved updates here rather than opening on load.</li><li>You can hover over the order number in Orders to see the actual items purchased.</li></ul>';
 	
 	var welcome_title='Recent updates and news';
 
@@ -71,7 +71,7 @@ var _ = (function(){
 		debug: false,
 		drag_on:true,
 		author: 'freakdesign',
-		version: 20131023,
+		version: 20131111,
 		alpha: false,
 		omega: false,
 		countries:false,
@@ -1187,7 +1187,6 @@ return {
 					
 				});
 
-
 				};
 
 				_.fd_modal(true,'Loading SKUs, please wait...','Loading',true);
@@ -1255,9 +1254,7 @@ return {
 								
 								if(_.data('m-copy')){
 									_.save_metafield_queue(_.data('m-copy'),0);
-								}
-
-								
+								}						
 
 								return false;
 							});
@@ -1300,11 +1297,7 @@ return {
 								  		Shopify.Flash.notice("Pasted!");
 								  	}
 								  }
-							});
-
-
-							
-							
+							});		
 
 						},
 						setup_products:function(){
@@ -1385,9 +1378,6 @@ if(_.data('debug')){
 								});
 								$(this).find('td.col-remove').prepend(a);
 							});
-							
-
-
 
 
 						},
@@ -1467,35 +1457,91 @@ if(_.data('debug')){
 					'url': url,
 					'success': function(){
 						$('div.shipping-rate-table').remove();
-						_.fd_modal(false);
-						_.redirect('/settings/shipping');
+						_.redirect('/settings');
+						setTimeout(function(){
+							_.redirect('/settings/shipping');
+						},2000);
 					}
 					});
-
-				
-				/*
-					Shopify.Flash.notice('All removed, though Shopify will not let the go. Hard refresh the page...');
-					window.location = d.URL; 
-				*/
 			}
 
 	},
-	setup_shipping:function(){
+	save_new_rates:function(to_add,i,t){
+
+		console.log(i);
+
+		if(to_add[i]){
+			var d = to_add[i],
+				o ={},
+				type = d.type,
+				path='';
+
+				console.log(d);
+
+				delete d.type; /* remove this */
+
+			if(type){
+			if(type === 'weight'){
+				o = {weight_based_shipping_rate:{}};
+				o.weight_based_shipping_rate = d;
+				path='/admin/weight_based_shipping_rates.json';
+
+			}else if(type === 'price'){
+				o = {price_based_shipping_rate:{}}
+				o.price_based_shipping_rate = d,
+				path='/admin/price_based_shipping_rates.json';
+
+			}else if (type === 'carrier'){
+				o = {carrier_shipping_rate_provider:{}}
+				o.carrier_shipping_rate_provider = d,
+				path='/admin/carrier_shipping_rate_providers.json';
+			}
+
+			$.ajax({
+				type: "POST",
+				url: path,
+				dataType: 'json',
+				data: o,
+				success: function(d){
+					t.parent().parent().find('table').append('<tbody><tr style="background:#efefef"><td>'+to_add[i].name+'</td><td>Pasted a custom shipping rate. <a href=".">Refresh page</a> to view</td><td>'+to_add[i].price+'</td></tr></tbody>');
+
+					if(i === (to_add.length-1)){
+						_.notice('Paste complete');
+					}else{
+						i++;
+						_.save_new_rates(to_add,i,t);
+					}
+				}
+			});
+			}else{
+				_.notice('missing type: ' + type, true);
+			}
+
+		}else{
+			_.notice('save_new_rates error - length',true);
+		}
+
+
+	},
+	setup_shipping:function(go){
+	if(go){
+
+		_.fd_modal(false);
+
+		$('div.span6.section-summary').eq(0).append('<p style="margin-top:1em" class="box error">There are some pretty large quirks with the copy and paste feature. When you paste over existing rates the old ones still show (thanks to Shopify cache), even though they have been removed. <br><br>Be sure to do a test first. Use at own risk.</p>');
+
 
 		var shippingSettings = $('#settings-shipping'),
-			new_buttons = $('<div class="header-right"><div class="header-action"><ul class="segmented"><li><a class="btn" href="#">Bulk Updates</a></li><li><a class="btn delete btn-separate" href="#">Delete all rates</a></li></ul></div></div>');
+			new_buttons = $('<div class="header-right"><div class="header-action"><ul class="segmented"><li><a class="btn" href="#">Bulk Updates</a></li><li><a class="btn delete btn-separate" href="#">Delete all countries</a></li></ul></div></div>');
 
 		new_buttons.find('a').eq(0).on('click',function(){
-
 			var myhtml = $('<h2 class="warning"><strong>Warning:</strong> This section can make bulk changes to your Shipping rates. There is no undo.</h2><div><div class="span1"><p>Soon...</p></div><div class="span2">'+aargh_msg+'</div></div>');
-
 			_.fd_modal(true,myhtml,'Bulk Updates',true);
-
 			return false;
-		});
+		}).hide();
 
 		new_buttons.find('a').eq(1).on('click',function(){
-			var myhtml = $('<h2 class="warning"><strong>Warning:</strong> This will delete ALL of your shipping rates. There is no undo.</h2><div><div class="span1"><a href="#" class="btn delete_all delete">Delete</a></div><div class="span2">'+aargh_msg+'</div></div>');
+			var myhtml = $('<h2 class="warning"><strong>Warning:</strong> This is a bad idea. It will delete ALL of your countries. There is no undo. Proceed at own risk!</h2><div><div class="span1"><a href="#" class="btn delete_all delete">Delete</a></div><div class="span2">'+aargh_msg+'</div></div>');
 
 			myhtml.find('a.delete_all').on('click',function(){
 
@@ -1509,8 +1555,6 @@ if(_.data('debug')){
 							v.countries = d.countries;
 							_.notice(d.countries.length + " countries returned");
 							_.shipping_remove_all(d.countries.length-1,d.countries);
-						}else{
-							_.notice("The list did not return as expected... empty?",true);
 						}
 					}
 				});
@@ -1519,7 +1563,7 @@ if(_.data('debug')){
 				return false;
 			});
 
-			_.fd_modal(true,myhtml,'Delete all shipping rates',true);
+			_.fd_modal(true,myhtml,'Delete all countries',true);
 
 			return false;
 		});
@@ -1528,33 +1572,215 @@ if(_.data('debug')){
 		shippingSettings.find('header').eq(0).append(new_buttons);
 
 
-/* the usual interface edit 
-		
-		shippingSettings.find('div.row.shipping-rates').before('<div class="row section"><div class="span6 section-summary"><h1>Bulk Updates (soon)</h1><p>Add new shipping settings to all countries at once.</p><p></p></div><div class="span18 section-content">Soon, my little shipping monkeys!</div></div>');
-*/		
-		if(_.data('debug')){
-/*
-		shippingSettings.find('a[data-modal="settings/shipping/add_country_modal"]').after('<p class="section"><a id="removeallcountries" class="btn delete" href="#">Remove all countries</a></p><p><small>Please note that after running this the page MUST reload. Remember to add this script back into the page...</small></p>');
-*/
-		/* bulk shipping stuff in here please! */
+			if($('div.shipping-rate-table').length === _.data('countries').countries.length){
 
-		function make_weight_based_shipping_rate(cid, minWeight, maxWeight, name, price) {
-			$.post('/admin/weight_based_shipping_rates.json', {
-				weight_based_shipping_rate: {
-					country_id: cid,
-					name: name,
-					offsets: [], 
-					weight_high: maxWeight,
-					weight_low: minWeight,
-					price: price
-				}
-			});
+				var shipping_rates = {
+					weight_based_shipping_rates:[],
+					price_based_shipping_rates:[],
+					carrier_shipping_rate_providers:[]
+				},
+				shipping_types = ['weight','price','carrier'];
+
+
+var create_shipping_rate = function(c,to_add,t){
+
+	
+
+	if(to_add.length){
+
+	var to_delete = [];
+
+	$.ajax({
+		type: "GET",
+		url: '/admin/countries/'+c+'.json',
+		dataType: 'json',
+		success: function(d){
+
+			var w = d.country.weight_based_shipping_rates,
+				p = d.country.price_based_shipping_rates,
+				c = d.country.carrier_shipping_rate_providers;
+
+			/* build up the delete list */
+			for (var i = 0, len = w.length; i < len; i++) {
+					to_delete.push([w[i].id,'weight']);
+			}
+
+			for (var i = 0, len = p.length; i < len; i++) {
+					to_delete.push([p[i].id,'price']);
+			}
+
+			for (var i = 0, len = c.length; i < len; i++) {
+					to_delete.push([c[i].id,'carrier']);
+			}
+
+			/* 
+				now that we have the delete list - let's delete
+				we should queue them up, but let's try mini burst 
+				This could cause issues with api limit. watch carefully.
+
+			*/
+
+			for (var i = 0, len = to_delete.length; i < len; i++) {
+				var path = '';
+				if(to_delete[i][1] == 'weight'){path='/admin/weight_based_shipping_rates/'}
+				if(to_delete[i][1] == 'price'){path='/admin/price_based_shipping_rates/'}
+				if(to_delete[i][1] == 'carrier'){path='/admin/carrier_shipping_rate_providers/'}
+
+
+				$.ajax({
+					type: "DELETE",
+					url: path+to_delete[i][0]+'.json',
+					dataType: 'json',
+					success: function(d){
+
+					}
+				});
+			} /* end delete loop */
+
+			_.save_new_rates(to_add,0,t);
+
+
+		},
+		fail:function(){
+			_.notice('I failed to get the country.json',true);
 		}
+	}); /* end ajax */
 
-		/* ============================================================= */
+	}else{
+		_.notice('Missing items to add',true)
+	}	
+}; /* end create_shipping_rate() */
+/* ================================================================================== */
+
+				$('div.shipping-rate-table').each(function(index){
+					var t=$(this);
+					var copy = $('<a/>',{
+						'href':'#',
+						'data-country':_.data('countries').countries[index].name,
+						'data-cid':_.data('countries').countries[index].id,
+						'data-index':index,
+						'class':'btn btn-slim copyrates',
+						'style':'float:right;margin-right:.5em'
+					}).text('Copy rates').on('click',function(){
+						var t=$(this),
+							i = t.attr('data-index'),
+							cname = t.attr('data-country'),
+							cid = t.attr('data-cid');
+
+						/* lazy hide all */
+						$('a.bulkpaste').hide();
+						/*
+
+						I had used the countries var to start with but I can't 
+						be sure that new ones aren't added in the meantime.
+						Sadly, more api calls needed...
+						
+						shipping_rates.weight_based_shipping_rates = _.data('countries').countries[i].weight_based_shipping_rates;
+						shipping_rates.price_based_shipping_rates = _.data('countries').countries[i].price_based_shipping_rates;
+						shipping_rates.carrier_shipping_rate_providers = _.data('countries').countries[i].carrier_shipping_rate_providers;
+						_.notice('Copy of '+cname+' ready');
+
+						*/
+
+						$.ajax({
+							type: "GET",
+							url: '/admin/countries/'+cid+'.json',
+							dataType: 'json',
+							success: function(d){
+								shipping_rates.weight_based_shipping_rates = d.country.weight_based_shipping_rates;
+								shipping_rates.price_based_shipping_rates = d.country.price_based_shipping_rates;
+								shipping_rates.carrier_shipping_rate_providers = d.country.carrier_shipping_rate_providers;
+								_.notice('Copy of '+cname+' ready');
+								/* lazy show all */
+								$('a.bulkpaste').show();
+							}
+						});
+
+
+						return false;
+					});
+
+					var paste = $('<a/>',{
+						'href':'#',
+						'data-country':_.data('countries').countries[index].name,
+						'data-cid':_.data('countries').countries[index].id,
+						'data-index':index,
+						'class':'bulkpaste btn btn-slim',
+						'style':'float:right;margin-right:.5em'
+					}).text('Paste rates').on('click',function(){			
+
+						var t=$(this),
+							cid = t.attr('data-cid'),
+							shipping_rates_copy = shipping_rates,
+							weight = shipping_rates_copy.weight_based_shipping_rates,
+							price = shipping_rates_copy.price_based_shipping_rates,
+							carrier = shipping_rates_copy.carrier_shipping_rate_providers,
+							to_add = [],
+							count = 0;
+
+							/* harsh, but may avoid conflicts */
+							t.parent().parent().find('tbody').remove();
+							t.parent().find('a.copyrates').remove();
+
+							for (var i = 0, len = weight.length; i < len; i++) {
+								weight[i].country_id=cid;
+								delete weight[i].id;
+								weight[i].type = 'weight';
+
+								/* add to add list */
+								to_add[count] = weight[i];
+								count++;
+							}
+
+							for (var i = 0, len = price.length; i < len; i++) {
+								price[i].country_id=cid;
+								delete price[i].id;
+								price[i].type = 'price';
+
+								/* add to add list */
+								to_add[count] = price[i];
+								count++;
+
+							}
+
+							for (var i = 0, len = carrier.length; i < len; i++) {
+								carrier[i].country_id=cid;
+								delete carrier[i].id;
+								carrier[i].type = 'carrier';
+
+								/* add to add list */
+								to_add[count] = carrier[i];
+								count++;
+
+							}					
+
+						/* We have the add list, let's do this */
+						create_shipping_rate(cid,to_add,t);
+
+						return false;
+					}).hide(); /* end paste button */
+					
+					/* add the buttons */
+					t.find('a[data-event-click="setupNewShippingRateForm"]').after(paste, copy);
+				});
+			}else{_.notice("Mismatch in country count. Reload this page.",true)}
+
+		}else{
+
+			/* first time page run */
+			$.ajax({
+					type: "GET",
+					url: '/admin/countries.json',
+					dataType: 'json',
+					success: function(d){
+						if(d.countries.length){
+							_.data('countries',d);
+							_.notice(d.countries.length + " countries loaded");
+							_.setup_shipping(true);
+						}
+					}
+				});
 		}
-							
-
 						},
 						setup_custom_collections:function(){
 							$('div.row.section.visibility').eq(0).after('<div class="row section" id="customer_meta_box"><div class="span12 section-summary">'+metafieldloader+'</div></div>');
@@ -1582,8 +1808,6 @@ if(_.data('debug')){
 
 							var loadinto = $('div.sub_section-summary .content');
 							_.loadmeta(loadinto,v);
-
-
 
 						},
 						setup_customers:function(){
