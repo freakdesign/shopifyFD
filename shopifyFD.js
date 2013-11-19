@@ -2023,7 +2023,7 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 							//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css
 							//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css
 							*/
-							shopifyCSS.href = "//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css";
+							shopifyCSS.href = "//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css";
 							document.body.appendChild(shopifyCSS);
 						},
 						get_theme_data:function(){
