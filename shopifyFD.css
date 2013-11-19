@@ -29,6 +29,7 @@
 #shopifyJSbar{background:#96bf48;position:fixed;top:40px;left:0;width:100%;z-index:9999;min-width: 996px;transition:top .5s}
 #shopifyJSbar ul{list-style: none;margin:0;color:#fff}
 #shopifyJSbar li, #shopifyJSbar li a{display: inline-block}
+#shopifyJSbar li {float:left}
 #shopifyJSbar li:first-child{width: 178px;background: #1E271D;font-size: 12px;line-height: 20px}
 #shopifyJSbar li:nth-child(2){background: #B6430D}
 #shopifyJSbar li a{padding:.5em;border-left:1px solid #7ea13d;transition:background .2s;color:#fff}
@@ -187,4 +188,8 @@ html.dragit{
     -moz-animation-iteration-count: infinite;
     -moz-animation-name: blink;
     -moz-animation-timing-function: ease-in-out;    
+}
+
+@media print {
+  #customer_meta_box, .noprint {display:none;}
 }

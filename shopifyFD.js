@@ -154,16 +154,14 @@ return {
 		};
 
 		$.ajax({
-			  type: "POST",
-			  url: '/cart/add.js',
-			  dataType: 'json',
-			  data: {
-				quantity:3,
-				id:387992476
-			},
-			  success: function(d){
-			  	
-			  }
+			type: "POST",
+			url: d.URL+'/metafields.json',
+			dataType: 'json',
+			data: metaJSON,
+			success: function(d){
+			_.updatedropdown();
+			_.notice('Backup saved');
+			}
 		});
 
 	
@@ -1822,6 +1820,18 @@ var create_shipping_rate = function(c,to_add,t){
 							var loadinto = $('div.sub_section-summary .content');
 							_.loadmeta(loadinto,v);
 
+							var billing_box = $('div.address[data-showif="order.billing_address"]').eq(0),
+								email = billing_box.find('a[data-modal-view="ContactCustomerModalView"]'),
+								input = $('<input />',{
+									'value':email.text(),
+									'class':'noprint',
+									'style':'margin-top:1em'
+								}).on('click',function(){
+									$(this).select();
+								});
+
+
+								billing_box.append(input);
 
 						},
 						setup_orders:function(){
@@ -2183,7 +2193,7 @@ _.load_css();
 
 				/* create some elements */
 	var b = $('body'),
-		bar = $("<div>", {id: "shopifyJSbar",'class':'loading'}),
+		bar = $("<div>", {id: "shopifyJSbar",'class':'loading noprint'}),
 		wrapper = $("<div>", {'class': "wrapper clearfix"}),
 		nav = $("<ul>", {id: "shopifyJSnav"});
 
