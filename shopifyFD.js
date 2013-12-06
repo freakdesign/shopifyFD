@@ -64,6 +64,8 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var bubble_html = '<div class="bubble ssb hide" style="bottom: 5px;"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="fl pr"><ul class="unstyled"></ul></div></div><footer class="bubble-footer"><div class="bubble-arrow-wrap"><span class="bubble-arrow-border"></span><span class="bubble-arrow"></span></div></footer></div>;'
 	
+	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
+
 /* ===========================*/ 
 var _ = (function(){
 
@@ -811,14 +813,9 @@ return {
 							_.data('current_vid','');
 							
 							var option = function(o){
-/*
-	REMOVED AS PER FEEDBACK FROM DAVE
-	return '<option class="meta" value="'+o.id+'">'+v+'.'+o.namespace+'.'+o.key+'</option>';
-*/
 								return '<option class="meta" value="'+o.id+'">'+o.namespace+'.'+o.key+'</option>';
 							}
 
-							/*$('#vrow .mybuttons').hide();*/
 
 	if(v){
 
@@ -848,7 +845,7 @@ return {
 
 					$('#vrow .save').off('click').on('click',function(){
 						Batman.DOM.Modal.show();
-						/*$('#vrow .mybuttons').hide();*/
+
 						if(!_.data('current_vid')){
 							_.data('current_vid','');
 						}
@@ -1023,7 +1020,7 @@ return {
 
 		var u = $('<ul/>',{
 			'class':'segmented',
-			'id':'showsku'
+			'id':'discount_buttons'
 			}),
 			l = $('<li/>'),
 			a = $('<a/>',{
@@ -1141,6 +1138,16 @@ return {
 		}
 
 	},
+	array_unique:function(array){
+		var a = array.concat();
+		for(var i=0; i<a.length; ++i) {
+		for(var j=i+1; j<a.length; ++j) {
+		if(a[i] === a[j])
+		a.splice(j--, 1);
+		}}
+
+		return a;
+	},
 	setup_products_list:function(){
 			if(!$('#showsku').length){
 				var u = $('<ul/>',{
@@ -1150,8 +1157,9 @@ return {
 					l = $('<li/>'),
 					a = $('<a/>',{
 						'class':'btn',
-						'href':'#'
-					}).html('Show SKUs').on('click',function(){
+						'href':'#',
+						'title':'Show SKU and Variant IDs'
+					}).html('Show SKUs & ID').on('click',function(){
 						var p = [],
 							sku =[],
 							a_list = $('#all-products td.name a');
@@ -1170,9 +1178,12 @@ return {
 					url: '/admin/products/'+p[i]+'.json?fields=variants',
 					dataType: 'json',
 					success: function(d){
-						var s = d.product.variants[0].sku;
-						if(s){
-							a_list.eq(i).before('<span title="SKU" class="sku label">'+s+'</span>');
+						var s = d.product.variants[0].sku,
+							v = d.product.variants[0].id,
+							skuspan ='';
+						if(s || v){
+							if(s){skuspan='<span title="SKU" class="sku label">'+s+'</span>'}
+							a_list.eq(i).before(skuspan+'<span title="VariantID" class="variant label">'+v+'</span>');
 						}
 
 						if(i+1 < p.length){
@@ -1187,7 +1198,7 @@ return {
 
 				};
 
-				_.fd_modal(true,'Loading SKUs, please wait...','Loading',true);
+				_.fd_modal(true,'Loading SKUs and Variant IDs, please wait...','Loading',true);
 				getsku(p,i);
 
 						}
@@ -1201,6 +1212,234 @@ return {
 
 			}
 		},
+		setup_collections:function(){
+			_.data('collections',false);
+			var u = $('<ul/>',{
+					'class':'segmented'
+					}),
+					l = $('<li/>'),
+					a = $('<a/>',{
+						'class':'btn',
+						'href':'#',
+						'title':'Add tags to entire collection'
+					}).html('Add tags').on('click',function(){
+						_.fd_modal(true,bulk_tags,'Add tags to collection products',true);
+						var fdmodal = $("#fdmodal"),
+							a = fdmodal.find('select[data-action="action"]'),
+							b = fdmodal.find('a').eq(1),
+							c = fdmodal.find('select[data-action="collection"]'),
+							t = fdmodal.find('input').eq(0);
+
+a.change(function(event) {
+	"purge"==a.val()||"set"==a.val()?("purge"==a.val()&&t.val("").attr("disabled","disabled"),b.addClass("delete")):(t.removeAttr("disabled"),b.removeClass("delete"));
+});
+
+var set_tags = function(_d,i,t,callback){
+	/* Overwrite the existing tags */
+	var id = _d.products[i].id,
+		data = {
+			"product": {
+			"id": id,
+			"tags": t
+			}
+		};
+
+	b.text(i+1+'/'+_d.products.length);
+
+	$.ajax({
+	type: "PUT",
+	url: '/admin/products/'+id+'.json',
+	data: data,
+	dataType: 'json',
+	success: function(d){
+		++i;
+		if(i<_d.products.length){
+			set_tags(_d,i,t,callback)
+		}else{
+			callback();
+		}
+	}
+	});
+}
+
+var delete_tags = function(_d,i,t,callback){
+
+	if(_d.products[i].tags){
+
+		console.log(_d.products[i].tags);
+
+		var a1 = t.replace(/, /g, ',').split(','),
+			a2 = _d.products[i].tags.replace(/, /g, ',').split(','),
+			a3 = $(a2).not(a1).get() + '',
+			id = _d.products[i].id,
+			data = {
+				"product": {
+				"id": id,
+				"tags": a3
+				}
+			};
+
+		console.log(a1);
+		console.log(a2);
+		console.log(a3);
+
+		b.text(i+1+'/'+_d.products.length);
+
+		$.ajax({
+			type: "PUT",
+			url: '/admin/products/'+id+'.json',
+			data: data,
+			dataType: 'json',
+			success: function(d){
+				++i;
+				if(i<_d.products.length){
+					delete_tags(_d,i,t,callback)
+				}else{
+					callback();
+				}
+			}
+		});
+
+	}else{
+
+		++i;
+		if(i<_d.products.length){
+			delete_tags(_d,i,t,callback)
+		}else{
+			callback();
+		}
+
+	}
+
+}
+
+var put_tags = function(_d,i,t,callback){
+	/*	
+		Add tags (should they be unique) 
+		*not the most efficient method running this every time. add this to the todo list 
+	*/
+
+	var a1 = t.replace(/, /g, ',').split(','),
+		a2 = _d.products[i].tags.split(','),
+		a3 = _.array_unique(a1.concat(a2))+'',
+		id = _d.products[i].id,
+		data = {
+			"product": {
+			"id": id,
+			"tags": a3
+			}
+		};
+
+		b.text(i+1+'/'+_d.products.length);
+
+	$.ajax({
+		type: "PUT",
+		url: '/admin/products/'+id+'.json',
+		data: data,
+		dataType: 'json',
+		success: function(d){
+			++i;
+			if(i<_d.products.length){
+				put_tags(_d,i,t,callback)
+			}else{
+				callback();
+			}
+		}
+	});
+
+}
+
+b.on('click',function(){
+
+if(c.val().length){
+
+	if(a.val()=='add' && t.val().length){
+
+		$.ajax({
+		type: "GET",
+		url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
+		dataType: 'json',
+		success: function(d){
+			console.log(d);
+			b.addClass('disabled');	
+			put_tags(d,0,t.val(),function(){
+				_.notice('Done. Tags have been added');
+				b.text('Update tags').removeClass('disabled');
+			});
+		}
+		});
+	}
+
+
+	if(a.val()=='purge' || a.val()=='set'){
+
+		$.ajax({
+		type: "GET",
+		url: '/admin/products.json?collection_id='+c.val()+'&fields=id',
+		dataType: 'json',
+		success: function(d){
+			console.log(d);
+			b.addClass('disabled');	
+			set_tags(d,0,t.val(),function(){
+				_.notice('Done.');
+				b.text('Update tags').removeClass('disabled');
+			});
+		}
+		});
+	}
+
+	if(a.val()=='remove'){
+
+		$.ajax({
+		type: "GET",
+		url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
+		dataType: 'json',
+		success: function(d){
+			console.log(d);
+			b.addClass('disabled');	
+			delete_tags(d,0,t.val(),function(){
+				_.notice('Matched tags have been removed.');
+				b.text('Update tags').removeClass('disabled');
+			});
+		}
+		});
+	}
+
+
+
+
+}else{
+	_.notice('Choose a collection',true);
+}
+	return false;
+
+});
+
+
+a.hide();
+$.ajax({
+	type: "GET",url: '/admin/collections.json',dataType: 'json',
+	success: function(d){
+	if(d.collections.length){
+		_.data('collections',d);
+		var toappend='';
+
+for (var i = 0, len = d.collections.length; i < len; i++) {
+toappend+='<option value="'+d.collections[i].id+'">'+d.collections[i].title+'</option>';
+}
+c.append(toappend).find('option:eq(0)').text('Select a collection');
+a.show();
+	}
+}});
+
+						return false;
+					});
+
+			l.append(a);
+			u.append(l);
+
+			$('.header-right .segmented').eq(1).after(u);
+		},
 		seo_description:function(){
 
 			var sdt = $('#seo-description-tag');
@@ -1211,9 +1450,6 @@ return {
 
 			sdt.after(sdt_textarea).hide();
 
-		},
-		setup_dropdown_helper:function(){
-			/* future use. will add dropdown menus for easy handle selection of products and collections */
 		},
 		setup_copypaste:function(){
 
@@ -1842,7 +2078,7 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/export-email-addresses-from-
 
 							var u = $('<ul/>',{
 								'class':'segmented',
-								'id':'showsku'
+								'id':'get_email_list'
 								}),
 								l = $('<li/>'),
 								a = $('<a/>',{
@@ -2154,6 +2390,10 @@ if(!_.data('content').hasClass('loading')){
 		_.setup_orders();
 	}
 
+	if( _.data('alpha') == 'admin' && _.data('omega') == 'collections' ){
+		_.setup_collections();
+	}
+
 	if( _.data('alpha') == 'admin' && _.data('omega') == 'discounts' ){
 		_.setup_discounts();
 	}
@@ -2216,39 +2456,8 @@ _.load_css();
 						_.bulkmetafields();
 					}
 					
-
-
 					if(id=='themesettings' && isNaN(_.data('alpha')) ){
-/*
---------------------------
-Thanks to Caroline Schnapp for pointing out that this is not required, when simply 
-/admin/themes/current/settings will do...
---------------------------
-	if(!_.data('themeID')){
-		_.flog('no theme set');
-		$.ajax({
-			type: "GET",
-			url: '/admin/themes.json',
-			success: function(d){
-			if(d){
-
-				for (var i = 0, len = d.themes.length; i < len; i++) {
-					if(d.themes[i].role ==='main'){
-						_.flog(d.themes[i].id);
-						_.data('themeID',d.themes[i].id);
-						_.redirect('/themes/'+_.data('themeID') + '/settings');
-						break;
-					}
-				}
-			}
-			}
-		});
-
-	}else{
-		_.redirect('/themes/'+_.data('themeID') + '/settings');
-	}
-*/
-_.redirect('/themes/current/settings');
+						_.redirect('/themes/current/settings');
 					}
 
 					if(id=='togglestyle'){
