@@ -1222,8 +1222,8 @@ return {
 						'class':'btn',
 						'href':'#',
 						'title':'Add tags to entire collection'
-					}).html('Add tags').on('click',function(){
-						_.fd_modal(true,bulk_tags,'Add tags to collection products',true);
+					}).html('Bulk edit tags').on('click',function(){
+						_.fd_modal(true,bulk_tags,'Edit tags for all products in a collection',true);
 						var fdmodal = $("#fdmodal"),
 							a = fdmodal.find('select[data-action="action"]'),
 							b = fdmodal.find('a').eq(1),
