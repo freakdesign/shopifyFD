@@ -54,7 +54,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var welcome_message = '<ul><li>Copy and paste for Shipping rates added.</li><li>Moved updates here rather than opening on load.</li><li>You can hover over the order number in Orders to see the actual items purchased.</li></ul>';
+	var welcome_message = '<ul><li>Bulk tag editing enabled on collections page.</li><li>Copy and paste for Shipping rates added.</li><li>Moved updates here rather than opening on load.</li></ul>';
 	
 	var welcome_title='Recent updates and news';
 
