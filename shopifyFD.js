@@ -1546,9 +1546,9 @@ a.show();
 							}else{
 								_.notice('Bug! I tried to load the content editor twice.',true);
 							}
-
+/*
 if(_.data('debug')){
-	/*
+
 	$('.rtetools-buttons ul.fr').eq(1).append(autosave_html);
 	$('#autosave').on('click',function(){
 
@@ -1571,8 +1571,8 @@ if(_.data('debug')){
 		return false;
 
 	});
-*/
-}
+
+}*/
 
 							_.btn_removealltags();
 							_.seo_description();
@@ -1613,7 +1613,100 @@ if(_.data('debug')){
 								$(this).find('td.col-remove').prepend(a);
 							});
 
+							/* add in buttons for additional bulk variant updates */
+							var bulkpanel = $('table.variants .bulk-actions').eq(0);
 
+							if(bulkpanel.length){
+								var a=$('<a/>',{
+									'href':'#',
+									'class':'btn btn-slim hidden',
+									'style':'padding-left:.5em'
+								}).text('Edit weight').on('click',function(){
+									_.fd_modal(true,'<label>New weight (grams)</label><input class="half" min="0" type="number" data-action="update-variant-weight" /><a data-action="update-variant-weight" href="#" class="btn btn-slim">Save</a><br><br><small>Note: You will need to reload this page before Shopify will show the new weight in the dashboard.</small>','Edit weight',true);
+
+									var a = $('a[data-action="update-variant-weight"]'),
+										w = $('input[data-action="update-variant-weight"]');
+
+									if(a.length && w.length){
+										a.on('click',function(){
+											
+											var checked = $('tr.variant input[type="checkbox"]:checked');
+											if(checked.length && !isNaN(w.val())){
+												var v = [];
+												checked.each(function(){
+													var id = $(this).parent().parent().find('td.vid').text();
+													if(!isNaN(id)){v.push(parseInt(id))}
+												});
+
+												var update_weight = function(i,v){
+												$.ajax({
+													type: "PUT",
+													url: '/admin/variants/'+v[i],
+													dataType: 'json',
+													data: {
+														"variant": {
+														"id": v[0],
+														"grams": w.val()
+														}
+													},
+													success: function(d){
+														++i;
+														if(i<v.length){
+															update_weight(i,v);
+														}else{
+															_.notice('Weight updated');
+															a.removeClass('is-loading').text('Save');
+														}	
+													
+													}
+												});
+
+											};
+											a.addClass('is-loading').text('');
+											update_weight(0,v);
+
+											}else{
+												_.notice('Did you set a weight?',true);
+											}
+											return !1;
+										});
+									}
+									return !1;
+								}),
+								b=$('<span/>',{
+									'class':'hidden'
+								}),
+								m=$('<a/>',{
+									'href':'#',
+									'class':'btn btn-slim hidden',
+									'style':'padding-left:.5em'
+								}).text('Edit metafields').on('click',function(){
+									var a = $('tr.variant input[type="checkbox"]:checked').eq(0);
+									a.parent().parent().find('td.vid').click();
+									return !1;
+								});
+
+								bulkpanel.append(a,m);
+
+								/* check to see if we need to show our buttons */
+								$('tr.variant input[type="checkbox"]').on('change',function(){
+									var l = $('tr.variant input[type="checkbox"]:checked').length;
+
+									if(l > 1){
+										a.removeClass("hidden");
+										m.addClass("hidden");
+									}else{
+										a.addClass("hidden");
+										if(l===1){
+											m.removeClass("hidden");
+										}else{
+											m.addClass("hidden");
+										}
+									}
+
+								});
+							}
+							
 						},
 						setup_pages:function(){
 								/* add new details box, and remove some of the extra crap we don't need to see that's taking up space... */
@@ -2415,7 +2508,7 @@ if(!_.data('content').hasClass('loading')){
 		if("undefined"===typeof b)return v[a];v[a]=b
 	},
 	toggleStyle: function(){
-		/* used to be body, by shopify changed this... */
+		/* just in case this css breaks something, allow it to be disabled... */
 		$('html').toggleClass('shopifyJSoverride');
 		_.flog('toggleStyle');
 	},
