@@ -54,7 +54,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var welcome_message = '<ul><li>Bulk tag editing enabled on collections page.</li><li>Copy and paste for Shipping rates added.</li><li>Moved updates here rather than opening on load.</li></ul>';
+	var welcome_message = '<ul><li>Added a copy function to link lists</li><li>Bulk tag editing enabled on collections page.</li><li>Copy and paste for Shipping rates added.</li></ul>';
 	
 	var welcome_title='Recent updates and news';
 
@@ -1212,6 +1212,62 @@ return {
 
 			}
 		},
+		setup_link_lists:function(){
+			/* Setup the button and actions for link list duplication */
+			var llf = $('div.linklist-container .box-footer'),
+				copy_linklist = function(linklist){
+
+					$.ajax({
+						type: "POST",
+						url: '/admin/link_lists.json',
+						data:JSON.stringify(linklist),
+						contentType: "application/json;charset=utf-8", /* requried */
+						dataType: "json",
+						success: function(d){
+							_.notice('Link list added');
+							if(d.link_list.id){
+								_.redirect('/link_lists/'+d.link_list.id); /* redirect to linklist */
+							}
+						}	
+					});
+
+				},
+				a = $('<a/>',{
+					'href':'#',
+					'class':'btn btn-slim fr',
+					'style':'margin-right:.5em'
+				}).text('Copy').on('click',function(){
+					var t = $(this),
+						a = t.parent().find('a[data-route="link_list"]').eq(0);
+						if(a.length){
+							href = a.attr('href').split('/').pop();
+							if(!isNaN(href)){
+								$.ajax({
+									type: "GET",
+									url: '/admin/link_lists/'+href+'.json',
+									dataType: 'json',
+									success: function(d){
+										delete d.link_list.id;
+										delete d.link_list['default'];
+										d.link_list.title += ' COPY';
+										d.link_list.handle += '-copy';
+										for (var i = 0, len = d.link_list.links.length; i < len; ++i) {
+											delete d.link_list.links[i].id;
+											delete d.link_list.links[i].subject;
+											delete d.link_list.links[i].subject_id;
+											delete d.link_list.links[i].subject_params;
+										}
+										copy_linklist(d);
+									}	
+								});
+							}
+						}
+					return false;
+				});
+
+				llf.append(a);
+			/* end duplication setup */
+		},
 		setup_collections:function(){
 			_.data('collections',false);
 			var u = $('<ul/>',{
@@ -2114,6 +2170,9 @@ var create_shipping_rate = function(c,to_add,t){
 							var loadinto = $('div.sub_section-summary .content');
 							_.loadmeta(loadinto,v);
 						},
+						setup_files:function(){
+							/* not in this version! */
+						},
 						setup_settings_general:function(){
 
 							var section = $("<div>", {
@@ -2439,64 +2498,38 @@ if(!_.data('content').hasClass('loading')){
 
 	if( _.data('alpha') == 'customers' && !isNaN(_.data('omega'))){
 		_.setup_customers();
-	}
-
-
-	if( _.data('alpha') == 'articles' && !isNaN(_.data('omega'))){
+	} else if( _.data('alpha') == 'articles' && !isNaN(_.data('omega'))){
 		_.setup_articles();
-	}
-
-
-	if( _.data('alpha') == 'pages' && !isNaN(_.data('omega'))){
+	} else if( _.data('alpha') == 'pages' && !isNaN(_.data('omega'))){
 		_.setup_pages();
-	}
-
-	if( _.data('alpha') == 'smart_collections' && !isNaN(_.data('omega'))){
+	} else 	if( _.data('alpha') == 'smart_collections' && !isNaN(_.data('omega'))){
 		_.setup_custom_collections(); 
-	}
-
-	if( _.data('alpha') == 'custom_collections' && !isNaN(_.data('omega'))){
+	} else if( _.data('alpha') == 'custom_collections' && !isNaN(_.data('omega'))){
 		 _.setup_custom_collections(); 
-	}
-
-	if( _.data('alpha') == 'blogs' && !isNaN(_.data('omega'))){
+	} else if( _.data('alpha') == 'blogs' && !isNaN(_.data('omega'))){
 		/*_.setup_blogs();*/
-	}
-
-	if( _.data('alpha') == 'settings' && _.data('omega') == 'general' ){
-		_.setup_settings_general();
-	}
-
-	if( _.data('alpha') == 'products'){
+	} else if( _.data('alpha') == 'products'){
 		_.setup_products();
-	}
-
-	if( _.data('alpha') == 'admin' && _.data('omega') == 'products' ){
+	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'products' ){
 		_.setup_products_list();
-	}
-	
-	if( _.data('alpha') == 'orders' && !isNaN(_.data('omega'))){
+	} else if( _.data('alpha') == 'orders' && !isNaN(_.data('omega'))){
 		_.setup_single_order();
-	}
-
-	if( _.data('alpha') == 'admin' && _.data('omega') == 'orders' ){
+	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'orders' ){
 		_.setup_orders();
-	}
-
-	if( _.data('alpha') == 'admin' && _.data('omega') == 'collections' ){
+	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'collections' ){
 		_.setup_collections();
-	}
-
-	if( _.data('alpha') == 'admin' && _.data('omega') == 'discounts' ){
+	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'link_lists' ){
+		_.setup_link_lists();
+	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'discounts' ){
 		_.setup_discounts();
-	}
-
-	if( _.data('alpha') == 'settings' && _.data('omega') == 'shipping' ){
+	} else if( _.data('alpha') == 'settings' && _.data('omega') == 'general' ){
+		_.setup_settings_general();
+	} else if( _.data('alpha') == 'settings' && _.data('omega') == 'files' ){
+		_.setup_files();
+	} else if( _.data('alpha') == 'settings' && _.data('omega') == 'shipping' ){
 		_.setup_shipping();
-	}
-
-	if( _.data('alpha') == 'settings' && _.data('omega') == 'taxes' ){
-
+	} else if( _.data('alpha') == 'settings' && _.data('omega') == 'taxes' ){
+		/*_.setup_taxes();*/
 	}
 
 
