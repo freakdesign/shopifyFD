@@ -1213,15 +1213,74 @@ return {
 			}
 		},
 		setup_link_lists:function(){
-			/* Setup the button and actions for link list duplication */
+			/* Setup the button and actions for link list duplication and creation */
 			var llf = $('div.linklist-container .box-footer'),
-				copy_linklist = function(linklist){
+				create_collection_linklist = function(){
+
+					$.ajax({
+						type: "GET",
+						url: '/admin/collections.json?limit=250',
+						dataType: "json",
+						success: function(d){
+							console.log(d);
+
+							var l = {"link_list":{"handle":"all-collections","title":"All Collections","links":[]}};
+
+							for (var i = 0, len = d.collections.length; i < len; ++i) {
+								l.link_list.links.push({
+									'position':i+1,
+									'title': d.collections[i].title,
+									'link_type':'collection'
+								})
+							}
+
+							create_a_linklist(l);
+
+						},
+						error:function(){
+							_.notice('Error! Are you sure you have access to collections?',true);
+						}
+					});
+
+					return false;
+				},
+				create_pages_linklist = function(){
+					/* get the pages */
+
+					$.ajax({
+						type: "GET",
+						url: '/admin/pages.json?limit=250',
+						dataType: "json",
+						success: function(d){
+							console.log(d);
+
+							var l = {"link_list":{"handle":"all-pages","title":"All Pages","links":[]}};
+
+							for (var i = 0, len = d.pages.length; i < len; ++i) {
+								l.link_list.links.push({
+									'position':i+1,
+									'title': d.pages[i].title,
+									'link_type':'page'
+								})
+							}
+
+							create_a_linklist(l);
+
+						},
+						error:function(){
+							_.notice('Error! Are you sure you have access to pages?',true);
+						}
+					});
+
+					return false;
+				},
+				create_a_linklist = function(linklist){
 
 					$.ajax({
 						type: "POST",
 						url: '/admin/link_lists.json',
 						data:JSON.stringify(linklist),
-						contentType: "application/json;charset=utf-8", /* requried */
+						contentType: "application/json;charset=utf-8", /* required */
 						dataType: "json",
 						success: function(d){
 							_.notice('Link list added');
@@ -1257,7 +1316,7 @@ return {
 											delete d.link_list.links[i].subject_id;
 											delete d.link_list.links[i].subject_params;
 										}
-										copy_linklist(d);
+										create_a_linklist(d);
 									}	
 								});
 							}
@@ -1266,6 +1325,28 @@ return {
 				});
 
 				llf.append(a);
+
+				var d = $('.span6.section-summary').eq(0),
+						a1 = $('<a/>',{
+							class:'btn',
+							href:'#',
+							title:'Create a linklist with every collection'
+						}).text('Create Collections linklist').on('click',function(){
+							create_collection_linklist();
+						}),
+						a2 = $('<a/>',{
+							class:'btn',
+							href:'#',
+							title:'Create a linklist with every page'
+						}).text('Create Pages linklist').on('click',function(){
+							create_pages_linklist();
+						});
+
+				if(d){
+					d.append('<br><br>',a1,'<br><br>',a2);
+				}
+
+
 			/* end duplication setup */
 		},
 		setup_collections:function(){
