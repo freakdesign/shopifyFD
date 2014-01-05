@@ -1230,7 +1230,8 @@ return {
 								l.link_list.links.push({
 									'position':i+1,
 									'title': d.collections[i].title,
-									'link_type':'collection'
+									'link_type':'collection',
+									'subject_id':d.collections[i].id
 								})
 							}
 
@@ -1260,7 +1261,8 @@ return {
 								l.link_list.links.push({
 									'position':i+1,
 									'title': d.pages[i].title,
-									'link_type':'page'
+									'link_type':'page',
+									'subject_id':d.pages[i].id
 								})
 							}
 
@@ -1310,12 +1312,16 @@ return {
 										delete d.link_list['default'];
 										d.link_list.title += ' COPY';
 										d.link_list.handle += '-copy';
+										/*
+										// Just in case we need to delete something later on
 										for (var i = 0, len = d.link_list.links.length; i < len; ++i) {
 											delete d.link_list.links[i].id;
 											delete d.link_list.links[i].subject;
 											delete d.link_list.links[i].subject_id;
 											delete d.link_list.links[i].subject_params;
+											
 										}
+										*/
 										create_a_linklist(d);
 									}	
 								});
