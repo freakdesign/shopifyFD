@@ -20,10 +20,6 @@
      freakdesign.com               
 
 
-	
-	Enjoying the tool? Consider leaving a tip:
-	http://shopify.freakdesign.com.au
-
 */
 #shopifyJSbar.loading{top:-40px}
 #shopifyJSbar{background:#96bf48;position:fixed;top:40px;left:0;width:100%;z-index:9999;min-width: 996px;transition:top .5s}
@@ -40,17 +36,14 @@
 #shopifyJSbar li:first-child a{border-left: none;width: 100%;text-align: center}
 #shopifyJSbar li:last-child a, #shopifyJSbar li:nth-child(2) a, #shopifyJSbar li:nth-child(3) a{border-left:none}
 #shopifyJSbar .ico-16{margin:2px 0 0 2px;}
-#shopifyJSbar *, #shopifyJSbar *:before, #shopifyJSbar *:after {
-  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
- }
+#shopifyJSbar *, #shopifyJSbar *:before, #shopifyJSbar *:after {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
 
 body{padding-top:40px}
 #wrapper{padding-bottom: 5em}
-.header-row {top:70px}
 #gheader.black-header {z-index:99999}
 #global-notification {z-index:999999}
 
-/* ======================================================================= */
+.header-row {top:70px}
 
 /* Useful to note what things are not Standard */
 .shopifyJSoverride .altered{color:red!important}
@@ -76,9 +69,9 @@ body{padding-top:40px}
 .shopifyJSoverride .btn.delete:hover{background:#121212;color:#fff}
 .shopifyJSoverride .btn.destroy{background:#E71414;color:#fff;text-shadow:none;border:none}
 
-/* Inventory table adjustment */
+/* table adjustment */
 .shopifyJSoverride th.inventory.tc{min-width: 50px}
-.shopifyJSoverride td.image.thumb, .shopifyJSoverride th.image { display:none!important; }
+.shopifyJSoverride td.image.thumb, .shopifyJSoverride th.image, #all-collections td.image { display:none!important; }
 
 /* Batman modal*/
 .shopifyJSoverride .modal body{overflow: hidden}
@@ -126,16 +119,10 @@ body{padding-top:40px}
 
 .shopifyJSoverride .sku.label {float:right;background: #83C96D;line-height: 1em;border: none}
 
-/* Beta or new classes will appear below */
-
-html.dragit{
-  height: 100%;overflow: hidden;opacity: .5;
-  -webkit-user-select: none; 
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
+html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none; -moz-user-select: none;-ms-user-select: none;}
 
 /* Modal window, because wrestling the built in one is a pain in the bee-hind... */
+.shopifyJSoverride .modal-bg{z-index: 99500}
 .modalWindow {
   position: fixed;top: 0;right: 0;bottom: 0;left: 0;
   background: rgba(1, 12, 2, 0.7);z-index: 99999;

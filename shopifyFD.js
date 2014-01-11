@@ -1222,7 +1222,6 @@ return {
 						url: '/admin/collections.json?limit=250',
 						dataType: "json",
 						success: function(d){
-							console.log(d);
 
 							var l = {"link_list":{"handle":"all-collections","title":"All Collections","links":[]}};
 
@@ -1253,9 +1252,6 @@ return {
 						url: '/admin/pages.json?limit=250',
 						dataType: "json",
 						success: function(d){
-							console.log(d);
-
-							var l = {"link_list":{"handle":"all-pages","title":"All Pages","links":[]}};
 
 							for (var i = 0, len = d.pages.length; i < len; ++i) {
 								l.link_list.links.push({
@@ -1346,10 +1342,15 @@ return {
 							title:'Create a linklist with every page'
 						}).text('Create Pages linklist').on('click',function(){
 							create_pages_linklist();
-						});
+						}),
+						warning = $('<p/>',{
+							class:'box warning',
+							style:"margin-top:1em"
+						}).text('If you use the trash can button to remove a linklist some ShopifyFD features will not reload. Navigate away from the page, and back again.');
 
 				if(d){
-					d.append('<br><br>',a1,'<br><br>',a2);
+					d.append('<br><br>',a1,'<br><br>',a2).find('p:eq(0)').append(warning);
+
 				}
 
 
@@ -1409,8 +1410,6 @@ var delete_tags = function(_d,i,t,callback){
 
 	if(_d.products[i].tags){
 
-		console.log(_d.products[i].tags);
-
 		var a1 = t.replace(/, /g, ',').split(','),
 			a2 = _d.products[i].tags.replace(/, /g, ',').split(','),
 			a3 = $(a2).not(a1).get() + '',
@@ -1421,10 +1420,6 @@ var delete_tags = function(_d,i,t,callback){
 				"tags": a3
 				}
 			};
-
-		console.log(a1);
-		console.log(a2);
-		console.log(a3);
 
 		b.text(i+1+'/'+_d.products.length);
 
@@ -1503,7 +1498,6 @@ if(c.val().length){
 		url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
 		dataType: 'json',
 		success: function(d){
-			console.log(d);
 			b.addClass('disabled');	
 			put_tags(d,0,t.val(),function(){
 				_.notice('Done. Tags have been added');
@@ -1521,7 +1515,6 @@ if(c.val().length){
 		url: '/admin/products.json?collection_id='+c.val()+'&fields=id',
 		dataType: 'json',
 		success: function(d){
-			console.log(d);
 			b.addClass('disabled');	
 			set_tags(d,0,t.val(),function(){
 				_.notice('Done.');
@@ -1538,7 +1531,6 @@ if(c.val().length){
 		url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
 		dataType: 'json',
 		success: function(d){
-			console.log(d);
 			b.addClass('disabled');	
 			delete_tags(d,0,t.val(),function(){
 				_.notice('Matched tags have been removed.');
@@ -1938,15 +1930,11 @@ if(_.data('debug')){
 	},
 	save_new_rates:function(to_add,i,t){
 
-		console.log(i);
-
 		if(to_add[i]){
 			var d = to_add[i],
 				o ={},
 				type = d.type,
 				path='';
-
-				console.log(d);
 
 				delete d.type; /* remove this */
 
@@ -1998,7 +1986,7 @@ if(_.data('debug')){
 
 		_.fd_modal(false);
 
-		$('div.span6.section-summary').eq(0).append('<p style="margin-top:1em" class="box error">There are some pretty large quirks with the copy and paste feature. When you paste over existing rates the old ones still show (thanks to Shopify cache), even though they have been removed. <br><br>Be sure to do a test first. Use at own risk.</p>');
+		$('div.span6.section-summary').eq(0).append('<p style="margin-top:1em" class="box warning">Warning: When you copy and paste over existing rates the old ones still show until the page is refreshed, even though they have been removed. <br><br>Be sure to do a test first. <strong>Use at own risk.</strong></p>');
 
 
 		var shippingSettings = $('#settings-shipping'),
@@ -2545,10 +2533,6 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 
 		*/
 
-						
-
-
-
 setInterval(function(){
 
 /* do nothing whilst the shopify is in loading mode. This is not the greatest method but it seems reliable enough to detect when Shopify has finished loading its stuff...
@@ -2561,12 +2545,6 @@ if(!_.data('content').hasClass('loading')){
 	clearInterval(_.data('autosave'));
 	*/
 
-	/*
-	Added support to remove the hash from the equation.
-	It was break when a javascript errors forced a true return for the button actions...
-
-	*/
-
 	var u_array = d.URL.split('#')[0].split('?')[0].split('/'),
 		alpha = u_array[u_array.length - 2],
 		omega = d.URL.split('/').pop();
@@ -2576,12 +2554,9 @@ if(!_.data('content').hasClass('loading')){
 
 		_.data('alpha',alpha);
 		_.data('omega',omega);
-
 		_.flog(_.data('alpha')+','+_.data('omega'));
 
 /* ========================================================================= */
-
-
 
 	if( _.data('alpha') == 'customers' && !isNaN(_.data('omega'))){
 		_.setup_customers();
@@ -2630,78 +2605,56 @@ if(!_.data('content').hasClass('loading')){
 	toggleStyle: function(){
 		/* just in case this css breaks something, allow it to be disabled... */
 		$('html').toggleClass('shopifyJSoverride');
-		_.flog('toggleStyle');
-	},
-	getMetafields: function(){
-		/* old */
-		alert('getMetafields');
 	},
 	isloading:function(){
 		return _.data('content').hasClass('loading');
 	}
 }}());
 				
-
 _.load_css();
 
-				/* create some elements */
+	/* create some elements */
 	var b = $('body'),
 		bar = $("<div>", {id: "shopifyJSbar",'class':'loading noprint'}),
 		wrapper = $("<div>", {'class': "wrapper clearfix"}),
 		nav = $("<ul>", {id: "shopifyJSnav"});
 
+		nav.html(appnav);
 
-				/* create some elements */
-				nav.html(appnav);
+		nav.find('a').on('click',function(){
+			if(!_.isloading()){
 
-				nav.find('a').on('click',function(){
-					if(!_.isloading()){ 
+			var t = $(this),
+				id=t.prop('id');
 
-					var t = $(this),
-						id=t.prop('id');
-					if(id){
+			if(id){
 
-					if( id=='manageinventory' && _.data('alpha') !== 'inventory' ){
-						_.redirect('/variants');
-					}
+			if(id=='manageinventory' && _.data('alpha') !== 'inventory'){_.redirect('/variants')}
+			else if(id=='bulkmetafields'){_.bulkmetafields();}
+			else if(id=='themesettings' && isNaN(_.data('alpha')) ){_.redirect('/themes/current/settings')}
+			else if(id=='togglestyle'){_.toggleStyle();t.toggleClass('active')}
+			else if(id=='aboutapp'){_.about_app()}
+			else if(id=='getnotifications'){_.show_notification()}
 
-					if(id=='bulkmetafields'){
-						_.bulkmetafields();
-					}
-					
-					if(id=='themesettings' && isNaN(_.data('alpha')) ){
-						_.redirect('/themes/current/settings');
-					}
+			}else{return true}
+			}else{_.notice("We better wait for this page to load first...",true);
+			} /* end loading check */
 
-					if(id=='togglestyle'){
-						_.toggleStyle();
-						t.toggleClass('active');
-					}
+			return false;
+		});
 
-					if(id=='aboutapp'){_.about_app()}
-					if(id=='getnotifications'){_.show_notification()}
+			/* put the jigsaw together*/
+			wrapper.append(nav);
+			bar.append(wrapper);
+			
+			/* add to page */
+			b.append(bar);
+			bar.removeClass('loading');
 
-				}else{
-					return true;
-				}
-					}else{
-						Shopify.Flash.error("We better wait for this page to load first...");
-					} /* end loading check */
-
-					return false;
-				});
-
-				/* put the jigsaw together*/
-				wrapper.append(nav);
-				bar.append(wrapper);
-				
-				/* add to page */
-				b.append(bar);
-				bar.removeClass('loading');
-				/* for developers */
-				_.notice("ShopifyFD loaded");
-				Batman.DOM.Modal.hide();
-				_.init();
+			/* for developers */
+			_.notice("ShopifyFD loaded");
+			Batman.DOM.Modal.hide();
+			_.init();
 
 		}else{
 			alert('Error. This should be run within the Shopify Admin page.');
