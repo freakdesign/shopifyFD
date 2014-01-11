@@ -54,7 +54,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var welcome_message = '<ul><li>Added a copy function to link lists</li><li>Bulk tag editing enabled on collections page.</li><li>Copy and paste for Shipping rates added.</li></ul>';
+	var welcome_message = '<ul><li>Added linklist creator for collections, pages and vendors</li><li>Added a copy function to link lists</li><li>Bulk tag editing enabled on collections page.</li><li>Copy and paste for Shipping rates added.</li></ul>';
 	
 	var welcome_title='Recent updates and news';
 
@@ -1253,6 +1253,8 @@ return {
 						dataType: "json",
 						success: function(d){
 
+							var l = {"link_list":{"handle":"all-pages","title":"All Pages","links":[]}};
+
 							for (var i = 0, len = d.pages.length; i < len; ++i) {
 								l.link_list.links.push({
 									'position':i+1,
@@ -1272,7 +1274,34 @@ return {
 
 					return false;
 				},
+				create_vendors_linklist = function(){
+
+					$.ajax({
+						type: "GET",
+						url: '/admin/products/vendors.json',
+						dataType: "json",
+						success: function(d){
+
+							var l = {"link_list":{"handle":"all-vendors","title":"All Vendors","links":[]}};
+
+							for (var i = 0, len = d.vendors.length; i < len; ++i) {
+								l.link_list.links.push({
+									'position':i+1,
+									'title': d.vendors[i],
+									'link_type':'http',
+									'subject':'/collections/vendors?q='+(encodeURIComponent(d.vendors[i].toLowerCase()).replace(/%20/g, '+'))
+								})
+							}
+
+							create_a_linklist(l);
+
+						}	
+					});
+
+				},
 				create_a_linklist = function(linklist){
+
+					console.log(JSON.stringify(linklist));
 
 					$.ajax({
 						type: "POST",
@@ -1335,6 +1364,7 @@ return {
 							title:'Create a linklist with every collection'
 						}).text('Create Collections linklist').on('click',function(){
 							create_collection_linklist();
+							return false;
 						}),
 						a2 = $('<a/>',{
 							class:'btn',
@@ -1342,6 +1372,15 @@ return {
 							title:'Create a linklist with every page'
 						}).text('Create Pages linklist').on('click',function(){
 							create_pages_linklist();
+							return false;
+						}),
+						a3 = $('<a/>',{
+							class:'btn',
+							href:'#',
+							title:'Create a linklist with all vendors'
+						}).text('Create Vendor linklist').on('click',function(){
+							create_vendors_linklist();
+							return false;
 						}),
 						warning = $('<p/>',{
 							class:'box warning',
@@ -1349,7 +1388,7 @@ return {
 						}).text('If you use the trash can button to remove a linklist some ShopifyFD features will not reload. Navigate away from the page, and back again.');
 
 				if(d){
-					d.append('<br><br>',a1,'<br><br>',a2).find('p:eq(0)').append(warning);
+					d.append('<br><br>',a1,'<br><br>',a2,'<br><br>',a3).find('p:eq(0)').append(warning);
 
 				}
 
