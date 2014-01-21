@@ -438,6 +438,16 @@ return {
 				  success: function(d){
 				  	_.updatedropdown();
 				  	_.notice('Metafield saved');
+				  },
+				  error: function(d){
+				  	var r = JSON.parse(d.responseText),
+				  	e = '';
+				  	
+				  	if (r.errors.namespace){e+='Namespace '+_.escape(r.errors.namespace[0])+'. '}
+				  	if (r.errors.key){e+='Key '+_.escape(r.errors.key[0])+'. '}
+				  	if (r.errors.value){e+='Value '+_.escape(r.errors.value[0])+'. '}
+
+				  	_.notice('Metafield failed to save: ' + e,true);
 				  }
 			});
 
