@@ -2438,8 +2438,9 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 									order_timer = false; /* we should add a slight timeout to the box load */
 
 								visible_orders.append(bubble_html).css({'position':'relative'}).hover(function(){
-									var t = $(this),
-										l = t.find('ul').eq(0),
+									var t = $(this);
+									order_timer = setTimeout(function(){
+									var l = t.find('ul').eq(0),
 										a = t.attr('href');
 
 										$('div.bubble').addClass('hide');
@@ -2451,12 +2452,17 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 									success: function(d){
 										if(d){
 											var line_items = d.order.line_items,
-												tracking_number=d.order.fulfillments[0].tracking_number,
+												tracking_number=d.order.fulfillments,
 												order_list = '';
+
 											for (var i = 0, len = line_items.length; i < len; i++) {
 												order_list +='<li style="white-space:normal">'+line_items[i].quantity + ' x '+line_items[i].name+'</li>';
 											}
-											if(tracking_number){order_list +='<li style="white-space:normal;border-top: 1px solid #ccc;margin-top: .5em;padding-top: .5em;">Tracking#: <b>'+tracking_number+'</b></li>'}
+
+											if(d.order.fulfillment_status && tracking_number.length){
+												order_list +='<li style="white-space:normal;border-top: 1px solid #ccc;margin-top: .5em;padding-top: .5em;">Tracking#: <b>'+tracking_number[0].tracking_number+'</b></li>';
+											}
+
 											t.data('order',order_list);
 											l.html(order_list);
 											t.find('div.bubble').removeClass('hide');
@@ -2466,7 +2472,10 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 										t.find('div.bubble').removeClass('hide');	
 									}
 
+								},200);
+
 								},function(){
+									clearTimeout(order_timer);
 									var t = $(this);
 									t.find('div.bubble').addClass('hide');
 								});
