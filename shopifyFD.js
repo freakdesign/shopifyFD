@@ -62,7 +62,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var aargh_msg = '<p>Do note that once you run this you are going to have to manually refresh to see the updates. Annoying I know, but I have not found a way around this...</p>';
 
-	var bubble_html = '<div class="bubble ssb hide" style="bottom: 5px;"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="fl pr"><ul class="unstyled"></ul></div></div><footer class="bubble-footer"><div class="bubble-arrow-wrap"><span class="bubble-arrow-border"></span><span class="bubble-arrow"></span></div></footer></div>;'
+	var bubble_html = '<div class="bubble ssb hide" style="bottom: 5px;"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="fl pr"><ul class="unstyled"></ul></div></div><footer class="bubble-footer"><div class="bubble-arrow-wrap"><span class="bubble-arrow-border"></span><span class="bubble-arrow"></span></div></footer></div>';
 	
 	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
 
@@ -2441,7 +2441,9 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 									var t = $(this),
 										l = t.find('ul').eq(0),
 										a = t.attr('href');
-	
+
+										$('div.bubble').addClass('hide');
+
 									if(!t.data('order')){
 									$.ajax({
 									type: "GET",
@@ -2449,10 +2451,12 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 									success: function(d){
 										if(d){
 											var line_items = d.order.line_items,
+												tracking_number=d.order.fulfillments[0].tracking_number,
 												order_list = '';
 											for (var i = 0, len = line_items.length; i < len; i++) {
 												order_list +='<li style="white-space:normal">'+line_items[i].quantity + ' x '+line_items[i].name+'</li>';
 											}
+											if(tracking_number){order_list +='<li style="white-space:normal;border-top: 1px solid #ccc;margin-top: .5em;padding-top: .5em;">Tracking#: <b>'+tracking_number+'</b></li>'}
 											t.data('order',order_list);
 											l.html(order_list);
 											t.find('div.bubble').removeClass('hide');
