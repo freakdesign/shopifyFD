@@ -22,15 +22,15 @@
 
 */
 #shopifyJSbar.loading{top:-40px}
-#shopifyJSbar{background:#96bf48;position:fixed;top:40px;left:0;width:100%;z-index:9999;min-width: 996px;transition:top .5s}
+#shopifyJSbar{background:#57666f;position:fixed;top:0;left:0;width:100%;z-index:9999;min-width: 996px;transition:top .5s}
 #shopifyJSbar ul{list-style: none;margin:0;color:#fff}
 #shopifyJSbar li, #shopifyJSbar li a{display: inline-block}
 #shopifyJSbar li {float:left}
-#shopifyJSbar li:first-child{width: 178px;background: #1E271D;font-size: 12px;line-height: 20px}
-#shopifyJSbar li:nth-child(2){background: #B6430D}
-#shopifyJSbar li a{padding:.5em;border-left:1px solid #7ea13d;transition:background .2s;color:#fff}
-#shopifyJSbar li a.active{background:#658626;-webkit-box-shadow: inset 3px 3px 8px rgba(0,0,0,.3)}
-#shopifyJSbar li a:hover{background:#fff;text-decoration: none;color:#96bf48}
+#shopifyJSbar li:first-child{width: 197px;background: #34545C;font-size: 12px;line-height: 20px}
+#shopifyJSbar li:nth-child(2){background: #57666f}
+#shopifyJSbar li a{padding:.5em;border-left:1px solid #829291;transition:background .2s;color:#fff}
+#shopifyJSbar li a.active{background:#1C1E1F;-webkit-box-shadow: inset 3px 3px 8px rgba(0,0,0,.3)}
+#shopifyJSbar li a:hover{background:#1C1E1F;text-decoration: none;color:#fff}
 #shopifyJSbar li:nth-child(2) a:hover{background: #65A827}
 #shopifyJSbar li:last-child{float:right}
 #shopifyJSbar li:first-child a{border-left: none;width: 100%;text-align: center}
@@ -38,12 +38,12 @@
 #shopifyJSbar .ico-16{margin:2px 0 0 2px;}
 #shopifyJSbar *, #shopifyJSbar *:before, #shopifyJSbar *:after {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
 
-body{padding-top:40px}
+body{padding-top:32px}
 #wrapper{padding-bottom: 5em}
 #gheader.black-header {z-index:99999}
 #global-notification {z-index:999999}
 
-.header-row {top:70px}
+.header-row {top:32px}
 
 /* Useful to note what things are not Standard */
 .shopifyJSoverride .altered{color:red!important}
@@ -76,13 +76,13 @@ body{padding-top:40px}
 /* Batman modal*/
 .shopifyJSoverride .modal body{overflow: hidden}
 .shopifyJSoverride #metacount {background: #ADB498;display: inline-block;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff}
-.shopifyJSoverride #metacount.active {background: #686965}
+.shopifyJSoverride #metacount.active {background: #38DFD8}
 
 /* do we really need to see the rate box all the time? nope. */
 .shopifyJSoverride div[data-showif='showNetPromoterScore'] {display:none!important}
 
 /* Sub section - mostly for the metafield box */
-.shopifyJSoverride .sub_section-summary{margin-bottom:.5em;background: #F7F8F5;padding: 1em;border: 1px solid #ddd;transition:border-color .25s}
+.shopifyJSoverride .sub_section-summary{margin-bottom:.5em;background: #F3F5F5;padding: 1em;border: 1px solid #ddd;transition:border-color .25s}
 .shopifyJSoverride .sub_section-summary:hover{border: 1px solid #bbb}
 .shopifyJSoverride .sub_section-summary .content{padding-left:0;padding-bottom:0;margin-bottom:0}
 .sub_section-summary h1, .sub_section-summary h2 {font-size: 18px!important;margin-bottom: 10px!important;font-weight: 300!important}
@@ -103,7 +103,7 @@ body{padding-top:40px}
 .shopifyJSoverride .nav-secondary.is-active {margin-top:30px}
 
 /* loading... */
-.shopifyJSoverride #content.loading .header-row {top:70px!important}
+.shopifyJSoverride #content.loading .header-row {top:32px!important}
 
 /* variant editing... */
 .shopifyJSoverride .vbox {background: #efefef;padding: 1em;border-bottom: 2px solid #212121}
