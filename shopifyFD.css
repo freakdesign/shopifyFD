@@ -26,14 +26,14 @@
 #shopifyJSbar ul{list-style: none;margin:0;color:#fff}
 #shopifyJSbar li, #shopifyJSbar li a{display: inline-block}
 #shopifyJSbar li {float:left}
-#shopifyJSbar li:first-child{width: 197px;background: #34545C;font-size: 12px;line-height: 20px}
+#shopifyJSbar li:first-child{width: 197px;background: #21C2A8;font-size: 12px;line-height: 20px}
 #shopifyJSbar li:nth-child(2){background: #57666f}
-#shopifyJSbar li a{padding:.5em;border-left:1px solid #829291;transition:background .2s;color:#fff}
-#shopifyJSbar li a.active{background:#1C1E1F;-webkit-box-shadow: inset 3px 3px 8px rgba(0,0,0,.3)}
-#shopifyJSbar li a:hover{background:#1C1E1F;text-decoration: none;color:#fff}
-#shopifyJSbar li:nth-child(2) a:hover{background: #65A827}
+#shopifyJSbar li a{padding:.5em;border-left:1px solid #3F4645;transition:background .2s;color:#C8D1D1;height: 32px;}
+#shopifyJSbar li a.active{background:#1C1E1F;}
+#shopifyJSbar li a:hover{background:#139989;text-decoration: none;color:#fff}
+#shopifyJSbar li:nth-child(2) a:hover{background: #139989}
 #shopifyJSbar li:last-child{float:right}
-#shopifyJSbar li:first-child a{border-left: none;width: 100%;text-align: center}
+#shopifyJSbar li:first-child a{border-left: none;width: 100%;text-align: center;color:#fff;}
 #shopifyJSbar li:last-child a, #shopifyJSbar li:nth-child(2) a, #shopifyJSbar li:nth-child(3) a{border-left:none}
 #shopifyJSbar .ico-16{margin:2px 0 0 2px;}
 #shopifyJSbar *, #shopifyJSbar *:before, #shopifyJSbar *:after {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
@@ -51,9 +51,9 @@ body{padding-top:32px}
 .shopifyJSoverride #sidebar{top: 36px}
 
 /* Open orders count has a new action on it. Make that obvious. */
-.shopifyJSoverride .main-nav-count{background: #129BDB;color: #FFFFFF; border:none!important}
-.shopifyJSoverride .selected .main-nav-count{background: #fff;color: #129BDB; border:none!important}
-.shopifyJSoverride .main-nav-count:hover{background: #121212;color: #FFFFFF; border:none!important}
+.shopifyJSoverride .main-nav-count{background: #21C2A8;color: #FFFFFF; border:none!important}
+.shopifyJSoverride .selected .main-nav-count{background: #fff;color: #21C2A8; border:none!important}
+.shopifyJSoverride .main-nav-count:hover{background: #fff;color: #111; border:none!important}
 
 /* you know, for hiding stuff... */
 .shopifyJSoverride .hidden{display:none}
@@ -75,8 +75,8 @@ body{padding-top:32px}
 
 /* Batman modal*/
 .shopifyJSoverride .modal body{overflow: hidden}
-.shopifyJSoverride #metacount {background: #ADB498;display: inline-block;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff}
-.shopifyJSoverride #metacount.active {background: #38DFD8}
+.shopifyJSoverride #metacount {background: #90A5A7;display: inline-block;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff}
+.shopifyJSoverride #metacount.active {background: #21C2A8}
 
 /* do we really need to see the rate box all the time? nope. */
 .shopifyJSoverride div[data-showif='showNetPromoterScore'] {display:none!important}
@@ -98,9 +98,6 @@ body{padding-top:32px}
 .shopifyJSoverride #rte_extra{background: #eee;padding: 3px;border-top: 1px solid #ccc}
 .shopifyJSoverride #rte_extra a{background: #E2DFDF;padding: .15em .8em;line-height: 2;text-decoration: none;color: #121212;display: inline-block;border-radius: 3px;border: 1px solid #ccc;transition:background .2s}
 .shopifyJSoverride #rte_extra a:hover{background:#96bf48;color:#fff;border-color: #6B8569}
-
-/* Admin menu */
-.shopifyJSoverride .nav-secondary.is-active {margin-top:30px}
 
 /* loading... */
 .shopifyJSoverride #content.loading .header-row {top:32px!important}
@@ -137,7 +134,7 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 .modalWindow > div {width: 500px;position: relative;margin: 10% auto;background: #fff;border-radius: 3px;padding:1em;text-align: left;box-shadow: 0 0 15px rgba(0,0,0,.5)}
 .modalWindow .content li{margin-bottom: 1em}
 .modalWindow .content > div {max-height:400px;overflow:auto}
-.modalWindow .close-modal{position:absolute;color:#000;border:1px solid #000;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:.7em;right:.7em;border-radius:50%}
+.modalWindow .close-modal{position:absolute;color:#000;border:1px solid #000;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:1em;right:1em;border-radius:50%;font-weight: bold;font-size: .75em;}
 .modalWindow .close-modal:hover{background:#121212;color:#fff}
 .modalWindow header{border-bottom:1px solid #ccc;margin:0 0 .5em;padding:0 2em .25em 0;min-height: .25em}
 .modalWindow td{vertical-align: top}

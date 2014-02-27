@@ -994,7 +994,7 @@ return {
 					_.fd_modal(false);
 				});
 			}else{
-				var mclose = $('<a href="#" class="close-modal">x</a>');
+				var mclose = $('<a href="#" class="close-modal">X</a>');
 				mclose.on('click',function(){
 					_.fd_modal(false);
 					return false;
