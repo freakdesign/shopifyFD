@@ -87,9 +87,6 @@ body{padding-top:32px}
 .shopifyJSoverride .sub_section-summary .content{padding-left:0;padding-bottom:0;margin-bottom:0}
 .sub_section-summary h1, .sub_section-summary h2 {font-size: 18px!important;margin-bottom: 10px!important;font-weight: 300!important}
 
-/* Page selector */
-.shopifyJSoverride #shopifyjs_pageselect {margin-top:3px}
-
 .shopifyJSoverride .section>.section-summary { padding-left:1.5em; } /* just a little bit smaller */
 .shopifyJSoverride .row-attached-to-top { position: relative;top: -40px; }
 .shopifyJSoverride .view-in-store {background-position: 100% -2561px}
@@ -116,6 +113,9 @@ body{padding-top:32px}
 
 .shopifyJSoverride .sku.label {float:right;background: #83C96D;line-height: 1em;border: none}
 
+.shopifyJSoverride .header-select {height:32px;border-radius:3px;color:#479ccf;max-width: 250px;}
+.shopifyJSoverride .header-select:focus {color:#121212;}
+
 html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none; -moz-user-select: none;-ms-user-select: none;}
 
 /* Modal window, because wrestling the built in one is a pain in the bee-hind... */
@@ -134,8 +134,8 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 .modalWindow > div {width: 500px;position: relative;margin: 10% auto;background: #fff;border-radius: 3px;padding:1em;text-align: left;box-shadow: 0 0 15px rgba(0,0,0,.5)}
 .modalWindow .content li{margin-bottom: 1em}
 .modalWindow .content > div {max-height:400px;overflow:auto}
-.modalWindow .close-modal{position:absolute;color:#000;border:1px solid #000;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:1em;right:1em;border-radius:50%;font-weight: bold;font-size: .75em;}
-.modalWindow .close-modal:hover{background:#121212;color:#fff}
+.modalWindow .close-modal{position:absolute;background:#121212;color:#fff;border:1px solid #000;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:1em;right:1em;border-radius:50%;font-weight: bold;font-size: .75em;}
+.modalWindow .close-modal:hover{background:red;color:#fff;border-color:red;}
 .modalWindow header{border-bottom:1px solid #ccc;margin:0 0 .5em;padding:0 2em .25em 0;min-height: .25em}
 .modalWindow td{vertical-align: top}
 .modalWindow .warning{background:red;padding:.25em;color:#fff;line-height:1.3;margin:0 0 .5em}

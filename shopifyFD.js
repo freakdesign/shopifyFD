@@ -50,13 +50,13 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var bulk_html_box = '<h2 class="warning"><strong>Warning:</strong> This section can make bulk changes to your product metafields. There is no undo should something go wrong so be very sure you want to attempt this.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten. Have I given you enough warning?</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
-	var autosave_html = '<li> <a id="autosave" tabindex="-1" class="btn slim tooltip" href="#"><span class="tooltip-container"><span class="tooltip-label">Enable Autosave</span></span>Autosave</a></li>';
+	var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim tooltip tooltip-bottom" href="#"><span class="tooltip-container"><span class="tooltip-label">Enable Autosave</span></span>Autosave</a></li>';
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var welcome_message = '<ul><li>Added linklist creator for collections, pages and vendors</li><li>Added a copy function to link lists</li><li>Bulk tag editing enabled on collections page.</li><li>Copy and paste for Shipping rates added.</li></ul>';
+	var welcome_message = '<ul><li>Jump quickly between editor for product and linklists via a dropdown menu</li><li>Autosave added for products RTE</li><li>Added linklist creator for collections, pages and vendors</li><li>Added a copy function to link lists</li><li>Bulk tag editing enabled on collections page.</li><li>Copy and paste for Shipping rates added.</li></ul>';
 	
-	var welcome_title='Recent updates and news';
+	var welcome_title='ShopifyFD: Recent updates and news';
 
 	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopify.freakdesign.com.au/#donate">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://shopify.freakdesign.com.au" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
 
@@ -1159,6 +1159,7 @@ return {
 		return a;
 	},
 	setup_products_list:function(){
+
 			if(!$('#showsku').length){
 				var u = $('<ul/>',{
 					'class':'segmented',
@@ -1221,6 +1222,46 @@ return {
 				$('.header-right .segmented').eq(1).after(u);
 
 			}
+		},
+		setup_link_lists_edit:function(){
+
+
+			$.ajax({
+				type: "GET",
+				url: '/admin/link_lists.json',
+				dataType: 'json',
+				success: function(d){
+					if(d){
+						link_lists = d.link_lists;
+						var response = '';
+						for (var i = 0, len = link_lists.length; i < len; i++) {
+
+							if(_.data('omega') !== link_lists[i].id.toString()){
+								response +='<option value="'+link_lists[i].id+'">'+link_lists[i].title+'</option>';
+							}
+						}
+
+						var llselect = $('<select />',{
+							id:'shopifyjs_llselect',
+							class:'header-select'
+						}).append('<option>Choose another linklist to edit</option>',response).change(function(){
+							var v = $(this).val();
+							if(v){
+								 _.redirect('/link_lists/'+v);
+							}
+						});
+
+						$('.header-row .header-right').prepend(llselect);
+						
+					}
+					
+				},
+				error:function(d){
+					_.notice('Error loading linklist data',true);
+				}
+			});
+
+
 		},
 		setup_link_lists:function(){
 			/* Setup the button and actions for link list duplication and creation */
@@ -1720,43 +1761,93 @@ a.show();
 						},
 						setup_products:function(){
 
-							$('div.span6.section-summary').eq(0).append(metafieldloader).find('div:first-child').remove();
-							
+						clearInterval(_.data('autosave'));
 
-							/*$('iframe')*/
-							if ($('#rte_extra').length == 0){
-								$('#product-body-html_ifr').eq(0).after(rte_menu);
-								_.setup_rte();
-							}else{
-								_.notice('Bug! I tried to load the content editor twice.',true);
+						$.ajax({
+							type: "GET",
+							url: '/admin/products.json?limit=25',
+							dataType: 'json',
+							success: function(d){
+								if(d){
+									products = d.products;
+									var response = '',
+									len = products.length;
+									if(len <= 25){
+										for (var i = 0; i < len; i++) {
+
+											if(_.data('omega') !== products[i].id.toString()){
+												response +='<option value="'+products[i].id+'">'+products[i].title+'</option>';
+											}
+										}
+
+										var pselect = $('<select />',{
+											id:'shopifyjs_pselect',
+											class:'header-select'
+										}).append('<option>Choose another product to edit</option>',response).change(function(){
+											var v = $(this).val();
+											if(v){
+												 _.redirect('/products/'+v);
+											}
+										});
+
+										$('.header-row .header-right').prepend(pselect);
+									}
+								}
+								
+							},
+							error:function(d){
+								_.notice('Error loading linklist data',true);
 							}
-/*
-if(_.data('debug')){
+						});
 
-	$('.rtetools-buttons ul.fr').eq(1).append(autosave_html);
-	$('#autosave').on('click',function(){
 
-	
+						$('div.span6.section-summary').eq(0).append(metafieldloader).find('div:first-child').remove();
 
-		var t = $(this);
-		if(t.hasClass('rte-command-active')){
-			Shopify.Flash.notice("Autosave disabled");
-			clearInterval(_.data('autosave'));
-		}else{
-			Shopify.Flash.notice("Autosave enabled");
-			_.data('autosave',setInterval(function(){
-				$('header input[type="submit"]').click()
-			},30000));
-		
-		}
+						/*$('iframe')*/
+						if ($('#rte_extra').length == 0){
 
-		$(this).toggleClass('rte-command-active');
-	
-		return false;
+							$('#product-body-html_ifr').eq(0).after(rte_menu);
+							_.setup_rte();
+							$('.rtetools-buttons ul.fr').eq(1).append(autosave_html);
 
-	});
+							$('#autosave').on('click',function(){
 
-}*/
+								var t = $(this),
+								rte_save_btn = false;
+
+								if(t.hasClass('rte-command-active')){
+
+									Shopify.Flash.notice("Autosave disabled");
+									clearInterval(_.data('autosave'));
+
+								}else{
+
+									rte_save_btn = $('#products-show header input[type="submit"]');
+									Shopify.Flash.notice("Autosave enabled");
+									_.data('autosave',setInterval(function(){
+										if(rte_save_btn.length){
+											rte_save_btn.click();
+										}else{
+											clearInterval(_.data('autosave'));
+											rte_save_btn = null;
+											Shopify.Flash.notice("Autosave disabled");
+										}
+									},30000));
+
+								}
+
+								/* toggle class - not the nicest method */
+								$(this).toggleClass('rte-command-active');
+
+
+								return false;
+							});
+
+						}else{
+
+							_.notice('Bug! I tried to load the content editor twice.',true);
+
+						}
 
 							_.btn_removealltags();
 							_.seo_description();
@@ -1933,7 +2024,7 @@ if(_.data('debug')){
 											}
 										}
 
-										$('.header-row .header-right').prepend('<select id="shopifyjs_pageselect"><option>Choose another page to edit</option>'+response+'</select>');
+										$('.header-row .header-right').prepend('<select id="shopifyjs_pageselect" class="header-select"><option>Choose another page to edit</option>'+response+'</select>');
 										$('#shopifyjs_pageselect').change(function(){
 											var v = $(this).val();
 											if(v){
@@ -2548,7 +2639,7 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 							//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css
 							//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css
 							*/
-							shopifyCSS.href = "//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css";
+							shopifyCSS.href = "//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css";
 							document.body.appendChild(shopifyCSS);
 						},
 						get_theme_data:function(){
@@ -2644,6 +2735,8 @@ if(!_.data('content').hasClass('loading')){
 		_.setup_collections();
 	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'link_lists' ){
 		_.setup_link_lists();
+	} else if( _.data('alpha') == 'link_lists' && !isNaN(_.data('omega'))){
+		_.setup_link_lists_edit();
 	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'discounts' ){
 		_.setup_discounts();
 	} else if( _.data('alpha') == 'settings' && _.data('omega') == 'general' ){
