@@ -2386,7 +2386,13 @@ var create_shipping_rate = function(c,to_add,t){
 							_.loadmeta(loadinto,v);
 						},
 						setup_files:function(){
-							/* not in this version! */
+							/* not in this version! 
+							var table = $('#settings-general table'),
+							trhead = table.find('thead tr');
+							trbody = table.find('tbody tr');
+							trhead.prepend('<th><input type="checkbox" /></th>');
+							trbody.prepend('<th><input type="checkbox" /></th>');
+							*/
 						},
 						setup_settings_general:function(){
 
@@ -2639,7 +2645,7 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 							//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css
 							//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css
 							*/
-							shopifyCSS.href = "//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css";
+							shopifyCSS.href = "//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css";
 							document.body.appendChild(shopifyCSS);
 						},
 						get_theme_data:function(){
