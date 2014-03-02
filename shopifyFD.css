@@ -73,6 +73,11 @@ body{padding-top:32px}
 .shopifyJSoverride th.inventory.tc{min-width: 50px}
 .shopifyJSoverride td.image.thumb, .shopifyJSoverride th.image, #all-collections td.image { display:none!important; }
 
+/* file listing */
+.shopifyJSoverride #settings-general td.image.thumb, .shopifyJSoverride #settings-general th.image {display:table-cell!important}
+.shopifyJSoverride .file_row {background:#E7F3F3;}
+.shopifyJSoverride .file_row td{border-bottom: 1px solid #ABBEBD}
+
 /* Batman modal*/
 .shopifyJSoverride .modal body{overflow: hidden}
 .shopifyJSoverride #metacount {background: #90A5A7;display: inline-block;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff}
@@ -100,7 +105,7 @@ body{padding-top:32px}
 .shopifyJSoverride #content.loading .header-row {top:32px!important}
 
 /* variant editing... */
-.shopifyJSoverride .vbox {background: #efefef;padding: 1em;border-bottom: 2px solid #212121}
+.shopifyJSoverride .vbox {background:#E2E9E9;padding: 1em;border-bottom: 2px solid #21C2A8}
 .shopifyJSoverride .vbox fieldset {padding:0;display:block;width:100%}
 .shopifyJSoverride .vbox input, .shopifyJSoverride .vbox select {width:24.24%; display:inline-block;margin:0 1% 0 0}
 .shopifyJSoverride .vbox fieldset input:last-child{margin-right:0}
@@ -108,8 +113,7 @@ body{padding-top:32px}
 .shopifyJSoverride td.vid{cursor:pointer;font-size: .9em;text-decoration: underline}
 .shopifyJSoverride .vbox .mybuttons {display: block;margin-top:.25em}
 .shopifyJSoverride .vbox .mybuttons a.delete {color: #C71919;float:right}
-.shopifyJSoverride .vbox .mybuttons a:first-child{margin-right:2em}
-.shopifyJSoverride tr.variant.active {background: #efefef}
+.shopifyJSoverride tr.variant.active {background: #F3F5F5}
 
 .shopifyJSoverride .sku.label {float:right;background: #83C96D;line-height: 1em;border: none}
 

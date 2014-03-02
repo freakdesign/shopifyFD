@@ -44,9 +44,9 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var rte_menu = '<div id="rte_extra" style="background:#efefef"><a title="Careful, this method is brutal..." id="clearformatting" href="#">Purge html</a> <a id="createbackup" href="#">Create Backup</a> <a style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a title="Add any images in the description to a Metafield" id="save_images_to_meta" href="#">Images to Metafields</a></div>';
 
-	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save" href="#">'+_savelabel+'</a> <a class="saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
+	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a title="About this tool" id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a title="View recent news" id="getnotifications" href="'+jsvoid+'"><i class="ico ico-16 ico-announcements-inactive"></i></a></li><li><a id="togglestyle" href="'+jsvoid+'">Toggle CSS</a></li><li><a id="themesettings" href="'+jsvoid+'">Theme Settings</a></li><li><a id="manageinventory" href="'+jsvoid+'">Manage Inventory</a></li><li><a id="bulkmetafields" href="'+jsvoid+'">Bulk Metafields</a></li><li><a title="This tool is free, consider leaving a tip" href="http://shopify.freakdesign.com.au/#donate" target="_blank">Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a title="About this tool" id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a title="View recent news" id="getnotifications" href="'+jsvoid+'"><i class="ico ico-16 ico-announcements-inactive"></i></a></li><li><a id="togglestyle" href="'+jsvoid+'">Toggle CSS</a></li><li><a id="themesettings" href="'+jsvoid+'">Theme Settings</a></li><li><a id="manageinventory" href="'+jsvoid+'">Manage Inventory</a></li><li><a id="bulkmetafields" href="'+jsvoid+'">Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank">Help</a></li><li><a title="This tool is free, consider leaving a tip" href="http://shopify.freakdesign.com.au/#donate" target="_blank">Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>Warning:</strong> This section can make bulk changes to your product metafields. There is no undo should something go wrong so be very sure you want to attempt this.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten. Have I given you enough warning?</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
@@ -1243,7 +1243,7 @@ return {
 
 						var llselect = $('<select />',{
 							id:'shopifyjs_llselect',
-							class:'header-select'
+							'class':'header-select'
 						}).append('<option>Choose another linklist to edit</option>',response).change(function(){
 							var v = $(this).val();
 							if(v){
@@ -1352,8 +1352,6 @@ return {
 				},
 				create_a_linklist = function(linklist){
 
-					console.log(JSON.stringify(linklist));
-
 					$.ajax({
 						type: "POST",
 						url: '/admin/link_lists.json',
@@ -1410,7 +1408,7 @@ return {
 
 				var d = $('.span6.section-summary').eq(0),
 						a1 = $('<a/>',{
-							class:'btn',
+							'class':'btn',
 							href:'#',
 							title:'Create a linklist with every collection'
 						}).text('Create Collections linklist').on('click',function(){
@@ -1418,7 +1416,7 @@ return {
 							return false;
 						}),
 						a2 = $('<a/>',{
-							class:'btn',
+							'class':'btn',
 							href:'#',
 							title:'Create a linklist with every page'
 						}).text('Create Pages linklist').on('click',function(){
@@ -1426,7 +1424,7 @@ return {
 							return false;
 						}),
 						a3 = $('<a/>',{
-							class:'btn',
+							'class':'btn',
 							href:'#',
 							title:'Create a linklist with all vendors'
 						}).text('Create Vendor linklist').on('click',function(){
@@ -1434,7 +1432,7 @@ return {
 							return false;
 						}),
 						warning = $('<p/>',{
-							class:'box warning',
+							'class':'box warning',
 							style:"margin-top:1em"
 						}).text('If you use the trash can button to remove a linklist some ShopifyFD features will not reload. Navigate away from the page, and back again.');
 
@@ -1782,7 +1780,7 @@ a.show();
 
 										var pselect = $('<select />',{
 											id:'shopifyjs_pselect',
-											class:'header-select'
+											'class':'header-select'
 										}).append('<option>Choose another product to edit</option>',response).change(function(){
 											var v = $(this).val();
 											if(v){
@@ -2385,14 +2383,125 @@ var create_shipping_rate = function(c,to_add,t){
 							var loadinto = $('div.sub_section-summary .content');
 							_.loadmeta(loadinto,v);
 						},
+						get_files:function(i,pic_pages){
+							var table = $('#settings-general table');
+							_.notice('Loading files...');
+							$.ajax({
+								type: "GET",
+								url: '/admin/files.json?limit=50&direction=next&page='+i,
+								success: function(d,textStatus, request){
+									if(d){
+
+										var rows = $('');
+
+										for (var i = 0, len = d.files.length; i < len; i++) {
+											var row = $('<tr />',{
+												'class':'file_row'
+											}),
+											td_image = $('<td />'),
+											td_src = $('<td />'),
+											td_path = $('<td />'),
+											td_size = $('<td />',{
+												'class':'tr'
+											}),
+											td_delete = $('<td />'),
+											file_link = $('<a />',{
+												href:'#',
+												'data-src':d.files[i].public_url.replace('http:','')
+											});
+
+											if(d.files[i].content_type.indexOf('image')>-1){
+
+												file_link.on('click',function(){
+													var t = $(this);
+													_.fd_modal(true,'<img src="'+ t.attr('data-src') +'" />','Image Preview',true);
+													return false;
+												}).text(d.files[i].key.replace('files/',''));
+
+												var thumb = d.files[i].public_url.replace(/(\.[^\.]+)$/, '_thumb$1').replace('http:','');
+
+												td_image.html('<img src="'+thumb+'" />');
+												td_src.append(file_link);
+												td_path.html('<input class="select-all-on-focus" value="'+ d.files[i].public_url +'">');
+												
+
+											}else{
+
+												file_link.attr('href',d.files[i].public_url).attr('target','_blank').text(d.files[i].key.replace('files/',''));
+
+											}
+
+											td_size.html(Math.floor(d.files[i].size/1024)+' kB');
+											row.append(td_image,td_src,td_path,td_size,td_delete);
+											table.append(row);
+										}
+
+
+										if(i >= pic_pages){
+											_.notice('All loaded');
+											$('.header-right .segmented').hide();
+											/*
+											var table = $('#settings-general table'),
+											trhead = table.find('thead tr');
+											trbody = table.find('tbody tr');
+											trhead.prepend('<th><input type="checkbox" /></th>');
+											trbody.prepend('<th><input type="checkbox" /></th>');
+											*/
+
+										}else{
+											++i;
+											_.get_files(i,pic_pages);
+										}
+									}
+								}
+							});	
+
+						},
 						setup_files:function(){
-							/* not in this version! 
-							var table = $('#settings-general table'),
-							trhead = table.find('thead tr');
-							trbody = table.find('tbody tr');
-							trhead.prepend('<th><input type="checkbox" /></th>');
-							trbody.prepend('<th><input type="checkbox" /></th>');
-							*/
+							/* not in this version! */
+							var u = $('<ul/>',{
+								'class':'segmented',
+								'id':'get_all_images'
+								}),
+								l = $('<li/>'),
+								a = $('<a/>',{
+									'class':'btn',
+									'href':'#',
+									'style':'margin-left:1em'
+								}).html('Show all files').on('click',function(){
+
+									var t = $(this);
+									t.addClass('is-loading').attr('style','margin-left:1em;text-indent: -9999px;')
+									$.ajax({
+										type: "GET",
+										url: '/admin/files.json?limit=2&fields=id',
+										success: function(d,textStatus, request){
+											if(d){
+												var limit = 50,
+												total_pics = request.getResponseHeader('X-Total-Results');
+												if(total_pics > limit){
+													var pic_pages = Math.ceil(total_pics/limit);
+													_.get_files(2,pic_pages);
+												}else{
+													_.notice('There are no more to load',true);
+												}
+											}
+
+										},
+										error:function(){
+											t.removeClass('is-loading').attr('style','margin-left:1em');
+											_.notice('Error loading files',true);
+										}
+									});
+
+									return false;
+
+								});
+							l.append(a);
+							u.append(l);
+							$('.header-right .segmented').eq(0).after(u);
+							$('#settings-general .info-message').prepend('<p class="box notice"><b>Bulk file deletion is coming soon to ShopifyFD...</b></p>');
+
 						},
 						setup_settings_general:function(){
 
