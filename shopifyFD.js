@@ -816,7 +816,7 @@ return {
 
 	},
 	setup_vrow:function(v){
-							Batman.DOM.Modal.show();
+
 							$('#mv_namespace').val('').prop("disabled", false);
 							$('#mv_key').val('').prop("disabled", false);
 							$('#mv_value').val('');
@@ -854,7 +854,7 @@ return {
 					$('#vrow .delete').hide();
 
 					$('#vrow .save').off('click').on('click',function(){
-						Batman.DOM.Modal.show();
+
 
 						if(!_.data('current_vid')){
 							_.data('current_vid','');
@@ -864,7 +864,7 @@ return {
 					});
 
 					$('#vrow .saveinteger').off('click').on('click',function(){
-						Batman.DOM.Modal.show();
+
 						/*$('#vrow .mybuttons').hide();*/
 						if(!_.data('current_vid')){
 							_.data('current_vid','');
@@ -874,7 +874,7 @@ return {
 					});
 
 					$('#vrow .delete').off('click').on('click',function(){
-						Batman.DOM.Modal.show();
+
 						/*$('#vrow .mybuttons').hide();*/
 						_.delete_variant_metafield(v,_.data('current_vid'));
 						return false;
@@ -906,14 +906,14 @@ return {
 					});
 
 					$('#vrow .mybuttons').fadeIn(function(){
-						Batman.DOM.Modal.hide();
+						/*Batman.DOM.Modal.hide();*/
 					});
 
 					
 				},
 				error:function(d){
 					Shopify.Flash.error("Error grabbing metafields");
-					Batman.DOM.Modal.hide();
+					/*Batman.DOM.Modal.hide();*/
 				}
 			});
 							}else{
@@ -923,20 +923,18 @@ return {
 						},
 						panel_editvariantmeta:function(){
 
-							$('.row.section.inventory .section-summary p').after('<p class="box notice">To edit metafields for the variant click on the variant ID number.</p>');
-							$('td.vid').on('click', function() {
-								Batman.DOM.Modal.show();
+							$('.row.section.inventory .section-summary p').after('<p class="box notice">To edit metafields for the variant click in the variant ID number field.</p>');
+							$('td.vid input').on('click', function() {
 								$('#vrow').remove();
-
-								var v = $(this).text();
+								var t = $(this),
+								v = t.attr('data-val');
+								t.select();
 
 								_.flog(v);
-
 								_.data('currentvrow',v);
 
 								$('tr.variant.active').removeClass('active');
-								$(this).parent().addClass('active').after('<tr id="vrow"><td colspan="8">'+vbox+'</td></tr>');
-									/*_.data('current_vid',v);*/
+								t.parent().parent().addClass('active').after('<tr id="vrow"><td colspan="8">'+vbox+'</td></tr>');
 									_.setup_vrow(v);
 							});
 
@@ -1865,9 +1863,11 @@ a.show();
 							$('th.inventory.tc').text('#').prop('title', 'Quantity');
 							
 							$('tr.variant').each(function(i){
+
 								var variant_id = $('td.sku input.mock-edit-on-hover').eq(i).prop('id').split(/[- ]+/).pop();
 								variants_ids['variant_'+i] = {'id':variant_id};
-								$(this).find('td:last-child').before('<td class="vid">'+variant_id+'</td>');
+								/*$(this).find('td:last-child ul').before('<td class="vid">'+variant_id+'</td>');*/
+								$(this).find('td:last-child').before('<td class="vid"><input data-action="selectall" data-val="'+variant_id+'" type="text" value="'+variant_id+'" /></td>');
 							}).promise().done(function(){
 								_.panel_editvariantmeta();
 							});
