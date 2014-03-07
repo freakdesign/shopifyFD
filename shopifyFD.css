@@ -109,11 +109,12 @@ body{padding-top:32px}
 .shopifyJSoverride .vbox fieldset {padding:0;display:block;width:100%}
 .shopifyJSoverride .vbox input, .shopifyJSoverride .vbox select {width:24.24%; display:inline-block;margin:0 1% 0 0}
 .shopifyJSoverride .vbox fieldset input:last-child{margin-right:0}
-.shopifyJSoverride .vbox select.active{border: 1px solid rgb(35, 116, 42);background: #8BBD21;color: #fff}
+.shopifyJSoverride .vbox select.active{border: 1px solid #479286;background: #21C2A8;color:#fff}
+.shopifyJSoverride .vbox select.active:focus {background: #fff;color: #121212;}
 .shopifyJSoverride td.vid{cursor:pointer;font-size: .9em;text-decoration: underline}
 .shopifyJSoverride .vbox .mybuttons {display: block;margin-top:.25em}
 .shopifyJSoverride .vbox .mybuttons a.delete {color: #C71919;float:right}
-.shopifyJSoverride tr.variant.active {background: #F3F5F5}
+/*.shopifyJSoverride tr.variant.active {background: #F3F5F5}*/
 
 .shopifyJSoverride .sku.label {float:right;background: #83C96D;line-height: 1em;border: none}
 

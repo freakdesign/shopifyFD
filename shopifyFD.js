@@ -913,7 +913,6 @@ return {
 				},
 				error:function(d){
 					Shopify.Flash.error("Error grabbing metafields");
-					/*Batman.DOM.Modal.hide();*/
 				}
 			});
 							}else{
@@ -924,6 +923,14 @@ return {
 						panel_editvariantmeta:function(){
 
 							$('.row.section.inventory .section-summary p').after('<p class="box notice">To edit metafields for the variant click in the variant ID number field.</p>');
+
+							/* simple function to return val to default */
+							$('td.vid input').on('change', function() {
+								var t = $(this);
+								t.val(t.attr('data-val'));
+							});
+
+							/* fire setup when field is clicked */
 							$('td.vid input').on('click', function() {
 								$('#vrow').remove();
 								var t = $(this),
@@ -934,7 +941,10 @@ return {
 								_.data('currentvrow',v);
 
 								$('tr.variant.active').removeClass('active');
-								t.parent().parent().addClass('active').after('<tr id="vrow"><td colspan="8">'+vbox+'</td></tr>');
+								var tp = t.parent().parent();
+								tp_td = tp.find('td').length+1;
+
+								tp.addClass('active').after('<tr id="vrow"><td colspan="'+tp_td+'">'+vbox+'</td></tr>');
 									_.setup_vrow(v);
 							});
 
@@ -1867,7 +1877,7 @@ a.show();
 								var variant_id = $('td.sku input.mock-edit-on-hover').eq(i).prop('id').split(/[- ]+/).pop();
 								variants_ids['variant_'+i] = {'id':variant_id};
 								/*$(this).find('td:last-child ul').before('<td class="vid">'+variant_id+'</td>');*/
-								$(this).find('td:last-child').before('<td class="vid"><input data-action="selectall" data-val="'+variant_id+'" type="text" value="'+variant_id+'" /></td>');
+								$(this).find('td:last-child').before('<td class="vid tooltip tooltip-bottom"><input class="mock-edit-on-hover" data-action="selectall" data-val="'+variant_id+'" type="text" value="'+variant_id+'" /><span class="tooltip-container"><span class="tooltip-label">Click to edit Metafields</span></span></td>');
 							}).promise().done(function(){
 								_.panel_editvariantmeta();
 							});
