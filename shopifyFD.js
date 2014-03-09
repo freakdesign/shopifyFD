@@ -34,15 +34,15 @@ if(url.indexOf("myshopify.com/admin")>1){
 		_deletelabel = 'Delete',
 		jsvoid = 'javascript:void(0)';
 
-	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace"><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key"><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a class="btn hidden delete" id="shopifyjs_deletemetafield">'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="'+jsvoid+'">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="'+jsvoid+'">Clear cache</a></p><p><a id="adv_get_collections" class="btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
+	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace"><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key"><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn btn-slim savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a class="btn btn-slim hidden delete" id="shopifyjs_deletemetafield">'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="'+jsvoid+'">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p><a class="btn btn-slim hidden" data-action="convert_mf_type">Convert type</a></p><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="'+jsvoid+'">Clear cache</a></p><p><a id="adv_get_collections" class="btn btn-slim" href="">Get collections</a></p><p><a id="adv_get_products" class="btn btn-slim" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
 
 	var metafieldloader = '<div class="sub_section-summary"><h1><strong>Metafields</strong> <span id="metacount">0</span></h1><div class="content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
 
 	var metafield_default = '<option value="">Select or create a metafield</option>';
 
-	var metafield_copybox = '<div><a class="btn" id="fd_copymetafields">Copy Metafields</a> <a class="btn" id="fd_pastemetafields">Paste Metafields</a> <a class="btn" title="What have I copied?" href="#" id="fd_whatmetafields">?</a></div>';
+	var metafield_copybox = '<div><a class="btn btn-slim" id="fd_copymetafields">Copy Metafields</a> <a class="btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim" title="What have I copied?" href="#" id="fd_whatmetafields">?</a></div>';
 
-	var rte_menu = '<div id="rte_extra" style="background:#efefef"><a title="Careful, this method is brutal..." id="clearformatting" href="#">Purge html</a> <a id="createbackup" href="#">Create Backup</a> <a style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a title="Add any images in the description to a Metafield" id="save_images_to_meta" href="#">Images to Metafields</a></div>';
+	var rte_menu = '<div id="rte_extra"><a class="btn btn-slim" title="Careful, this method is brutal..." id="clearformatting" href="#">Purge html</a> <a class="btn btn-slim" id="createbackup" href="#">Create Backup</a> <a class="btn btn-slim" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn btn-slim" title="Add any images in the description to a Metafield" id="save_images_to_meta" href="#">Images to Metafields</a></div>';
 
 	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
@@ -161,8 +161,12 @@ return {
 			dataType: 'json',
 			data: metaJSON,
 			success: function(d){
-			_.updatedropdown();
-			_.notice('Backup saved');
+				_.updatedropdown();
+				_.notice('Backup saved');
+			},
+			error: function(d){
+				var err = JSON.parse(d.responseText);
+				_.notice(err.errors.value[0],true);
 			}
 		});
 
@@ -197,7 +201,7 @@ return {
 			}
 
 			for (var i = 0, len = m.length; i < len; i++) {
-				h+= '<option data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
+				h+= '<option data-type="' +m[i].value_type + '" data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
 				v.metafields[m[i].id] = { namespace: m[i].namespace, value: m[i].value, key: m[i].key };
 				if (m[i].namespace == "backups"){
 
@@ -332,7 +336,12 @@ return {
 			var t = $(this).find(':selected');
 			if(t.attr('data-id')){
 
-				var m = v.metafields[t.attr('data-id')];
+				var m = v.metafields[t.attr('data-id')],
+				mtype = 'string',
+				mtype_text ='Convert to integer';
+
+				if(t.attr('data-type')==='integer'){mtype = 'integer';mtype_text ='Convert to string'}
+				$('a[data-action="convert_mf_type"]').text(mtype_text).attr('data-type',mtype);
 
 				$('#metafield_namespace').val(m.namespace).prop("disabled", true);
 				$('#metafield_key').val(m.key).prop("disabled", true);
@@ -340,7 +349,8 @@ return {
 				$('#metafield_id').val(t.attr('data-id'));
 
 				$('#shopifyjs_deletemetafield').removeClass('hidden');
-				/*$('#shopifyjs_savemetafield').text(_editlabel);*/
+				$('a[data-action="convert_mf_type"]').removeClass('hidden');
+
 			}else{
 				_.clearmetaform();
 			}
@@ -372,7 +382,46 @@ return {
 			}
 		});
 
+		$('a[data-action="convert_mf_type"]').off('click').on('click',function(){
 
+			var t = $(this),
+			mf_type = 'string';
+
+			if(t.attr('data-type')==='string'){mf_type='integer'}
+
+			var	metafield_namespace = $('#metafield_namespace').val(),
+			metafield_key = $('#metafield_key').val(),
+			metafield_id = $('#metafield_id').val(),
+			metaJSON = {
+				"metafield": {
+					"value_type": mf_type
+				}
+			};
+
+		if(metafield_key && metafield_namespace){
+			var url = d.URL+'/metafields/'+metafield_id+'.json';
+
+			$.ajax({
+				type: "PUT",
+				url: url,
+				dataType: 'json',
+				data: metaJSON,
+				success: function(d){
+				  	_.updatedropdown();
+				  	_.flog(d);
+				  	_.notice('Metafield switched to '+mf_type);
+				 },
+				error: function(d){
+					var err = JSON.parse(d.responseText);
+					_.notice(err.errors.value[0],true);
+				}
+			});
+		}else{
+			_.notice('No metafield found',true);
+		}
+			return false;
+
+		});
 
 		$('div.sub_section-summary a.savemymeta').off('click').on('click',function(){
 
@@ -581,6 +630,7 @@ return {
 		$('#metafield_value').val('');
 		$('#metafield_id').val('');
 		$('#shopifyjs_deletemetafield').addClass('hidden');
+		$('a[data-action="convert_mf_type"]').addClass('hidden');
 	},
 	supports_html5_storage:function(){
 		try {
@@ -2392,6 +2442,13 @@ var create_shipping_rate = function(c,to_add,t){
 							$('div.row.section.visibility').eq(0).after('<div class="row section" id="customer_meta_box"><div class="span12 section-summary">'+metafieldloader+'</div></div>');
 							var loadinto = $('div.sub_section-summary .content');
 							_.loadmeta(loadinto,v);
+
+
+							if ($('#rte_extra').length == 0){
+								$('#collection-body-html_ifr').eq(0).after(rte_menu);
+								_.setup_rte();
+							}
+
 						},
 						get_files:function(i,pic_pages){
 							var table = $('#settings-general table');
@@ -2721,8 +2778,8 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 
 								$.getJSON(url, function(data) {
 									
-								var response = '';
-								var m = data.metafields;
+								var response = '',
+								m = data.metafields;
 								
 
 								if(m.length){
@@ -2730,7 +2787,7 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 									_.data('m',m);
 									$('#metacount').text(m.length).addClass('active');
 									for (var i = 0, len = m.length; i < len; i++) {
-										response+= '<option data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
+										response+= '<option data-type="' +m[i].value_type + '" data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
 										v.metafields[m[i].id] = { namespace: m[i].namespace, value: m[i].value, key: m[i].key };
 
 										if (m[i].namespace == 'backups'){

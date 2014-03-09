@@ -97,10 +97,11 @@ body{padding-top:32px}
 .shopifyJSoverride .view-in-store {background-position: 100% -2561px}
 
 /* Editor extra */
-.shopifyJSoverride #rte_extra{background: #eee;padding: 3px;border-top: 1px solid #ccc}
+.shopifyJSoverride #rte_extra{background: #fafcfc;padding: 5px;border-top: 1px solid #CBD3D3;}
+/*
 .shopifyJSoverride #rte_extra a{background: #E2DFDF;padding: .15em .8em;line-height: 2;text-decoration: none;color: #121212;display: inline-block;border-radius: 3px;border: 1px solid #ccc;transition:background .2s}
 .shopifyJSoverride #rte_extra a:hover{background:#96bf48;color:#fff;border-color: #6B8569}
-
+*/
 /* loading... */
 .shopifyJSoverride #content.loading .header-row {top:32px!important}
 
