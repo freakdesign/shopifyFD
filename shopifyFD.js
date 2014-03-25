@@ -1134,12 +1134,19 @@ return {
 		_.loadmeta(loadinto,v);
 	},
 	setup_blogs:function(){
+		var view_in_store = $('div.span6.section-summary a.view-in-store'),
+		blog_title = $('h1.header-main span[data-bind="blog.title"]');
 
-		$('div.span6.section-summary a.view-in-store').remove();
+		blog_title.addClass('view-in-store').html('<a target="shopify_storeview" href="'+view_in_store.prop('href')+'">'+blog_title.text()+'</a>').prop('title', 'View in store');
+		view_in_store.remove();
 		$('div.span6.section-summary').eq(0).find('p, h1').remove().end().append(metafieldloader);
 		var loadinto = $('div.sub_section-summary .content');
 
-		/* Blogs load slower in the admin that other sections - weird... */
+		/* 
+		Blogs load slower in the admin that other sections - weird... 
+		[update] this may not longer be true. Testing is required. 
+		*/
+
 		window.setTimeout(function(){
 			_.loadmeta(loadinto,v);
 		},250);
@@ -2904,7 +2911,7 @@ if(!_.data('content').hasClass('loading')){
 	} else if( _.data('alpha') == 'custom_collections' && !isNaN(_.data('omega'))){
 		 _.setup_custom_collections(); 
 	} else if( _.data('alpha') == 'blogs' && !isNaN(_.data('omega'))){
-		/*_.setup_blogs();*/
+		_.setup_blogs();
 	} else if( _.data('alpha') == 'products'){
 		_.setup_products();
 	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'products' ){
