@@ -98,8 +98,10 @@ return {
 	    .replace(/[\t]/g, '\\t');
 	},
 	redirect:function(p){
-		if(p){
+		if(p && 'function' === typeof Batman){
 			Batman.redirect(p);
+		}else{
+			_.notice('Can not redirect',true);
 		}
 	},
 	createCookie:function(name,value,days) {
@@ -125,11 +127,14 @@ return {
 		/*
 		Show message at bottom of the screen
 		*/
-		if(err){
-			Shopify.Flash.error(m);
-		}else{
-			Shopify.Flash.notice(m);
+		if('function' === typeof Shopify.Flash.error && 'function' === typeof Shopify.Flash.notice){
+			if(err){
+				Shopify.Flash.error(m);
+			}else{
+				Shopify.Flash.notice(m);
+			}
 		}
+
 	},
 	about_app:function(){
 		_.fd_modal(true,html_about,'About this tool',true);
@@ -182,35 +187,36 @@ return {
 
 	$.getJSON(url, function(data) {
 		var h = '',
-			m = data.metafields;
+		m = data.metafields;
 
 			if(m){
 
-			_.data('m',m);
+				_.data('m',m);
 
-			if(_.data('alpha')=='products'){
-				_.setup_copypaste();	
-			}
-
-			$('#metacount').text(m.length).addClass('active');
-
-			if(m.length === 0){
-				$('#metacount').removeClass('active');
-			}else{
-				$('#metacount').addClass('active');
-			}
-
-			for (var i = 0, len = m.length; i < len; i++) {
-				h+= '<option data-type="' +m[i].value_type + '" data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
-				v.metafields[m[i].id] = { namespace: m[i].namespace, value: m[i].value, key: m[i].key };
-				if (m[i].namespace == "backups"){
-
-					_.flog('hasbackup!');
-					$('#restorebackup').show();
-					_.data('hasbackup',true);
-
+				if(_.data('alpha')=='products'){
+					_.setup_copypaste();	
 				}
-			}
+
+				var metacount = $('#metacount');
+				metacount.text(m.length).addClass('active');
+
+				if(m.length === 0){
+					metacount.removeClass('active');
+				}else{
+					metacount.addClass('active');
+				}
+
+				for (var i = 0, len = m.length; i < len; i++) {
+					h+= '<option data-type="' +m[i].value_type + '" data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
+					v.metafields[m[i].id] = { namespace: m[i].namespace, value: m[i].value, key: m[i].key };
+					if (m[i].namespace == "backups"){
+
+						_.flog('hasbackup!');
+						$('#restorebackup').show();
+						_.data('hasbackup',true);
+
+					}
+				}
 				h = '<select id="metafieldselect">' + metafield_default + h +'</select>';
 			}else{
 				h ='<select id="metafieldselect">' + metafield_default + '</select>';
@@ -468,7 +474,6 @@ return {
 				  	_.updatedropdown();
 				  	_.flog(d);
 				  	_.notice('Metafield updated');
-				  	Batman.DOM.Modal.hide();
 				  }
 			});
 
@@ -529,7 +534,7 @@ return {
 			  		 	_.updatedropdown();
 			  		 }
 
-			  		Shopify.Flash.notice("Bulk changes done!");
+			  		_.notice("Bulk changes done!");
 			  	}
 			  }
 		});
@@ -955,18 +960,16 @@ return {
 
 					});
 
-					$('#vrow .mybuttons').fadeIn(function(){
-						/*Batman.DOM.Modal.hide();*/
-					});
+					$('#vrow .mybuttons').fadeIn();
 
 					
 				},
 				error:function(d){
-					Shopify.Flash.error("Error grabbing metafields");
+					_.notice("Error grabbing metafields",true);
 				}
 			});
 							}else{
-								Shopify.Flash.error("Could not find ID");
+								_.notice("Could not find ID",true);
 							}
 
 						},
@@ -1064,10 +1067,6 @@ return {
 		}else{
 			my_fdmodal.off('click').remove();
 		}
-
-	},
-	create_discounts:function(quantity){
-
 
 	},
 	restorebackup:function(id){
@@ -1816,7 +1815,7 @@ a.show();
 								  	}else{
 								  		 _.updatedropdown();
 								  		 _.fd_modal(false);
-								  		Shopify.Flash.notice("Pasted!");
+								  		_.notice("Pasted!");
 								  	}
 								  }
 							});		
@@ -1880,20 +1879,20 @@ a.show();
 
 								if(t.hasClass('rte-command-active')){
 
-									Shopify.Flash.notice("Autosave disabled");
+									_.notice("Autosave disabled");
 									clearInterval(_.data('autosave'));
 
 								}else{
 
 									rte_save_btn = $('#products-show header input[type="submit"]');
-									Shopify.Flash.notice("Autosave enabled");
+									_.notice("Autosave enabled");
 									_.data('autosave',setInterval(function(){
 										if(rte_save_btn.length){
 											rte_save_btn.click();
 										}else{
 											clearInterval(_.data('autosave'));
 											rte_save_btn = null;
-											Shopify.Flash.notice("Autosave disabled");
+											_.notice("Autosave disabled");
 										}
 									},30000));
 
@@ -2113,7 +2112,7 @@ a.show();
 					url: '/admin/countries/'+c[i].id+'.json',
 					dataType: 'json',
 					success: function(d){
-						Shopify.Flash.notice('removed '+c[i].name);
+						_.notice('removed '+c[i].name);
 						i = i-1;
 						_.shipping_remove_all(i,c);
 					}
@@ -2997,7 +2996,6 @@ _.load_css();
 
 			/* for developers */
 			_.notice("ShopifyFD loaded");
-			Batman.DOM.Modal.hide();
 			_.init();
 
 		}else{
@@ -3005,7 +3003,9 @@ _.load_css();
 		}
 
 	}else{
-		_.notice("Error. ShopifyFD already loaded!",true);
+		if('function' === typeof Shopify.Flash.error){
+			Shopify.Flash.error('Error. ShopifyFD already loaded!');
+		}
 	}
 }else{
 	alert('Error. jQuery not found.')
