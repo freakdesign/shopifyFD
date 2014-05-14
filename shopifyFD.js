@@ -2922,6 +2922,10 @@ if(!_.data('content').hasClass('loading')){
 	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'collections' ){
 		_.setup_collections();
 	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'link_lists' ){
+		/* shopify may be changing the url for linklists */
+		_.setup_link_lists();
+	} else if( _.data('alpha') == 'admin' && _.data('omega') == 'links' ){
+		/* new path included here */
 		_.setup_link_lists();
 	} else if( _.data('alpha') == 'link_lists' && !isNaN(_.data('omega'))){
 		_.setup_link_lists_edit();
