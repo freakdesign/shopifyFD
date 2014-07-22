@@ -1,4 +1,4 @@
-/*
+/*!
 
 
 
@@ -23,18 +23,18 @@
 
 */
 (function(){
-if(typeof Shopify != 'undefined'){
-if (typeof jQuery != 'undefined') {	
+if(typeof Shopify !== 'undefined'){
+if (typeof jQuery !== 'undefined') {	
 if(!$('#shopifyjs').length){
 var d = document,url = d.URL;
 if(url.indexOf("myshopify.com/admin")>1){
 
 	var _savelabel = 'Save',
-		_editlabel = 'Edit',
-		_deletelabel = 'Delete',
-		jsvoid = 'javascript:void(0)';
+	_editlabel = 'Edit',
+	_deletelabel = 'Delete',
+	jsvoid = 'javascript:void(0)';
 
-	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace"><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key"><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn btn-slim savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a class="btn btn-slim hidden delete" id="shopifyjs_deletemetafield">'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="'+jsvoid+'">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p><a class="btn btn-slim hidden" data-action="convert_mf_type">Convert type</a></p><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="'+jsvoid+'">Clear cache</a></p><p><a id="adv_get_collections" class="btn btn-slim" href="">Get collections</a></p><p><a id="adv_get_products" class="btn btn-slim" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
+	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace"><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key"><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn btn-slim savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a class="btn btn-slim hidden delete" id="shopifyjs_deletemetafield">'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="'+jsvoid+'">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="'+jsvoid+'">Clear cache</a></p><p><a id="adv_get_collections" class="btn btn-slim" href="">Get collections</a></p><p><a id="adv_get_products" class="btn btn-slim" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
 
 	var metafieldloader = '<div class="sub_section-summary"><h1><strong>Metafields</strong> <span id="metacount">0</span></h1><div class="content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
 
@@ -46,7 +46,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a title="About this tool" id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a title="View recent news" id="getnotifications" href="'+jsvoid+'"><i class="ico ico-16 ico-announcements-inactive"></i></a></li><li><a id="togglestyle" href="'+jsvoid+'">Toggle CSS</a></li><li><a id="themesettings" href="'+jsvoid+'">Theme Settings</a></li><li><a id="manageinventory" href="'+jsvoid+'">Manage Inventory</a></li><li><a id="bulkmetafields" href="'+jsvoid+'">Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank">Help</a></li><li><a title="This tool is free, consider leaving a tip" href="http://shopify.freakdesign.com.au/#donate" target="_blank">Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a title="About this tool" id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a title="View recent news" id="getnotifications" href="'+jsvoid+'"><i class="ico ico-16 ico-announcements-inactive"></i></a></li><li><a id="togglestyle" href="'+jsvoid+'">Toggle CSS</a></li><!--<li><a id="themesettings" href="'+jsvoid+'">Theme Settings</a></li><li><a id="manageinventory" href="'+jsvoid+'">Manage Inventory</a></li>--><li><a id="bulkmetafields" href="'+jsvoid+'">Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank">Help</a></li><li><a title="This tool is free, consider leaving a tip" href="http://shopify.freakdesign.com.au/#donate" target="_blank">Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>Warning:</strong> This section can make bulk changes to your product metafields. There is no undo should something go wrong so be very sure you want to attempt this.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten. Have I given you enough warning?</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
@@ -54,7 +54,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var welcome_message = '<ul><li>Jump quickly between editor for product and linklists via a dropdown menu</li><li>Autosave added for products RTE</li><li>Added linklist creator for collections, pages and vendors</li><li>Added a copy function to link lists</li><li>Bulk tag editing enabled on collections page.</li><li>Copy and paste for Shipping rates added.</li></ul>';
+	var welcome_message = '<ul><li>REMOVED: Jump quickly between editor for product and linklists via a dropdown menu</li><li>DISABLED: Autosave added for products RTE</li><li>Added linklist creator for collections, pages and vendors</li><li>Added a copy function to link lists</li><li>Bulk tag editing enabled on collections page.</li><li>Copy and paste for Shipping rates added.</li></ul>';
 	
 	var welcome_title='ShopifyFD: Recent updates and news';
 
@@ -82,11 +82,15 @@ var _ = (function(){
 		api_limit:250,
 		metafields:{},
 		autosave: false,
-		content: $('#content')
+		content: $('#content'),
+		body:$('body')
 	};
 
 return {
 	escape:function (str) {
+		/*
+		Escapes a string
+		*/
 		return str
 	    .replace(/[\\]/g, '\\\\')
 	    .replace(/[\"]/g, '\\\"')
@@ -98,13 +102,20 @@ return {
 	    .replace(/[\t]/g, '\\t');
 	},
 	redirect:function(p){
+		/*
+		No longer required now that Batman is not used.
+		Retain for legacy dashboard and error reporting
+		*/
 		if(p && 'function' === typeof Batman){
 			Batman.redirect(p);
 		}else{
-			_.notice('Can not redirect',true);
+			_.notice('Unable to redirect',true);
 		}
 	},
 	createCookie:function(name,value,days) {
+		/*
+		Creates a cookie.
+		*/
 		if (days) {
 			var date = new Date();
 			date.setTime(date.getTime()+(days*24*60*60*1000));
@@ -114,6 +125,9 @@ return {
 		document.cookie = name+"="+value+expires+"; path=/";
 	},
 	readCookie:function(name) {
+		/*
+		Reads a cookie.
+		*/
 		var nameEQ = name + "=",
 			ca = document.cookie.split(';');
 		for(var i=0;i < ca.length;i++) {
@@ -137,19 +151,31 @@ return {
 
 	},
 	about_app:function(){
+		/*
+		Show the about modal box
+		*/
 		_.fd_modal(true,html_about,'About this tool',true);
 		return false;
 	},
 	show_notification:function(){
+		/*
+		Show news modal box
+		*/
 		_.fd_modal(true,welcome_message,welcome_title);
 		$('#getnotifications').find('i').removeClass('blinker');
 	},
 	flash_notification:function(){
+		/*
+		Add simple visual blinked to the bell icon
+		*/
 		$('#getnotifications').find('i').addClass('blinker');
 	},
 	createbackup:function(id){
-	if(id){
-		var mycontent = $("iframe").contents().find("#tinymce"),
+		/*
+		Create a backup of the current RTE html
+		*/
+		if(id){
+			var mycontent = $("iframe").contents().find("#tinymce"),
 			myhtml = mycontent.html(),
 			metaJSON = {
 				"metafield": {
@@ -158,26 +184,25 @@ return {
 					"value": myhtml,
 					"value_type": "string"
 				}
-		};
+			};
 
-		$.ajax({
-			type: "POST",
-			url: d.URL+'/metafields.json',
-			dataType: 'json',
-			data: metaJSON,
-			success: function(d){
-				_.updatedropdown();
-				_.notice('Backup saved');
-			},
-			error: function(d){
-				var err = JSON.parse(d.responseText);
-				_.notice(err.errors.value[0],true);
-			}
-		});
+			$.ajax({
+				type: "POST",
+				url: d.URL+'/metafields.json',
+				dataType: 'json',
+				data: metaJSON,
+				success: function(d){
+					_.updatedropdown();
+					_.notice('Backup saved');
+				},
+				error: function(d){
+					var err = JSON.parse(d.responseText);
+					_.notice(err.errors.value[0],true);
+				}
+			});
 
-	
-	}
-},
+		}
+	},
 	loadmeta:function(loadinto,v){
 
 	var url = '/admin/'+_.data('alpha')+'/'+_.data('omega')+'/metafields.json';
@@ -247,7 +272,7 @@ return {
 			if(!_.data('products')){
 			$.ajax({
 			type: "GET",
-			url: '/admin/products.json',
+			url: '/admin/products.json?limit=250',
 			dataType: 'json',
 			success: function(d){
 				if(d.products.length){
@@ -295,7 +320,7 @@ return {
 			if(!_.data('collections')){
 			$.ajax({
 			type: "GET",
-			url: '/admin/collections.json',
+			url: '/admin/collections.json?limit=250',
 			dataType: 'json',
 			success: function(d){
 				if(d.collections.length){
@@ -347,7 +372,7 @@ return {
 				mtype_text ='Convert to integer';
 
 				if(t.attr('data-type')==='integer'){mtype = 'integer';mtype_text ='Convert to string'}
-				$('a[data-action="convert_mf_type"]').text(mtype_text).attr('data-type',mtype);
+
 
 				$('#metafield_namespace').val(m.namespace).prop("disabled", true);
 				$('#metafield_key').val(m.key).prop("disabled", true);
@@ -355,7 +380,7 @@ return {
 				$('#metafield_id').val(t.attr('data-id'));
 
 				$('#shopifyjs_deletemetafield').removeClass('hidden');
-				$('a[data-action="convert_mf_type"]').removeClass('hidden');
+
 
 			}else{
 				_.clearmetaform();
@@ -386,47 +411,6 @@ return {
 					}
 				});
 			}
-		});
-
-		$('a[data-action="convert_mf_type"]').off('click').on('click',function(){
-
-			var t = $(this),
-			mf_type = 'string';
-
-			if(t.attr('data-type')==='string'){mf_type='integer'}
-
-			var	metafield_namespace = $('#metafield_namespace').val(),
-			metafield_key = $('#metafield_key').val(),
-			metafield_id = $('#metafield_id').val(),
-			metaJSON = {
-				"metafield": {
-					"value_type": mf_type
-				}
-			};
-
-		if(metafield_key && metafield_namespace){
-			var url = d.URL+'/metafields/'+metafield_id+'.json';
-
-			$.ajax({
-				type: "PUT",
-				url: url,
-				dataType: 'json',
-				data: metaJSON,
-				success: function(d){
-				  	_.updatedropdown();
-				  	_.flog(d);
-				  	_.notice('Metafield switched to '+mf_type);
-				 },
-				error: function(d){
-					var err = JSON.parse(d.responseText);
-					_.notice(err.errors.value[0],true);
-				}
-			});
-		}else{
-			_.notice('No metafield found',true);
-		}
-			return false;
-
 		});
 
 		$('div.sub_section-summary a.savemymeta').off('click').on('click',function(){
@@ -635,7 +619,6 @@ return {
 		$('#metafield_value').val('');
 		$('#metafield_id').val('');
 		$('#shopifyjs_deletemetafield').addClass('hidden');
-		$('a[data-action="convert_mf_type"]').addClass('hidden');
 	},
 	supports_html5_storage:function(){
 		try {
@@ -723,8 +706,6 @@ return {
 	},
 	do_upload:function(d){if(_.data('drag_on')){
 
-
-
 		var files = d,
 			files_count = Object.keys(d).length,
 			files_index = 0,
@@ -733,11 +714,7 @@ return {
 		if(_.data('alpha') == 'themes'){tid = _.data('omega');}
 		if(_.data('omega') == 'settings' && !isNaN(_.data('alpha'))){tid = _.data('alpha');}
 
-		
-
 		if(tid){
-
-		
 
 		var doajax = function(){
 
@@ -1002,26 +979,26 @@ return {
 							});
 
 						},
-						btn_removealltags:function(){
-							$('div.row.section.tags div.section-summary').eq(0).append('<a id="addalltags" href="#" class="btn">Add all tags</a> <a id="removealltags" href="#" class="btn">Remove all tags</a>');
+	btn_removealltags:function(){
+		$('div.row.section.tags div.section-summary').eq(0).append('<a id="addalltags" href="#" class="btn">Add all tags</a> <a id="removealltags" href="#" class="btn">Remove all tags</a>');
 
-							$('#removealltags').on('click',function(){
-								$('ul.tokenized-list').eq(0).find('a').click();
-								return false;
-							});
+		$('#removealltags').on('click',function(){
+			$('ul.tokenized-list').eq(0).find('a').click();
+			return false;
+		});
 
-							$('#addalltags').on('click',function(){
-								$('ul.addtags').eq(0).find('span:not(.inactive)').click();
-								return false;
-							});
+		$('#addalltags').on('click',function(){
+			$('ul.addtags').eq(0).find('span:not(.inactive)').click();
+			return false;
+		});
 
-						},
-						flog:function(o){
-							/* wrapper for a console - makes it easier to kill off the calls this way. */
-							if(_.data('debug')){
-								console.log(o);
-							}
-						},
+	},
+	flog:function(o){
+		/* wrapper for a console - makes it easier to kill off the calls this way. */
+		if(_.data('debug')){
+			console.log(o);
+		}
+	},
 	fd_modal_update:function(hide,content,title){
 		/* hide gives us a chance to toggle content -- useful for hold states */
 		var my_fdmodal = $('#fdmodal');
@@ -1070,17 +1047,17 @@ return {
 
 	},
 	restorebackup:function(id){
-		var mycontent = $("iframe").contents().find("#tinymce");
-		var m = _.data('m');
+		var mycontent = $("iframe").contents().find("#tinymce"),
+		m = _.data('m');
 
 		if(m){
 			for (var i = 0, len = m.length; i < len; i++) {
-			if(m[i].namespace == 'backups'){
-			mycontent.html(m[i].value);
-			_.notice('Backup restored');
+				if(m[i].namespace == 'backups'){
+				mycontent.html(m[i].value);
+				_.notice('Backup restored');
 			}}
 		}else{
-			_.notice('Error, nothing to restore');
+			_.notice('Error, nothing to restore',true);
 		}
 	},
 	setup_discounts:function(){
@@ -1304,7 +1281,7 @@ return {
 								response +='<option value="'+link_lists[i].id+'">'+link_lists[i].title+'</option>';
 							}
 						}
-
+					/*
 						var llselect = $('<select />',{
 							id:'shopifyjs_llselect',
 							'class':'header-select'
@@ -1316,7 +1293,7 @@ return {
 						});
 
 						$('.header-row .header-right').prepend(llselect);
-						
+					*/	
 					}
 					
 				},
@@ -1424,9 +1401,11 @@ return {
 						dataType: "json",
 						success: function(d){
 							_.notice('Link list added');
+							/*
 							if(d.link_list.id){
-								_.redirect('/link_lists/'+d.link_list.id); /* redirect to linklist */
+								_.redirect('/link_lists/'+d.link_list.id);
 							}
+							*/
 						}	
 					});
 
@@ -1841,7 +1820,7 @@ a.show();
 												response +='<option value="'+products[i].id+'">'+products[i].title+'</option>';
 											}
 										}
-
+/*
 										var pselect = $('<select />',{
 											id:'shopifyjs_pselect',
 											'class':'header-select'
@@ -1851,8 +1830,9 @@ a.show();
 												 _.redirect('/products/'+v);
 											}
 										});
-
 										$('.header-row .header-right').prepend(pselect);
+*/
+
 									}
 								}
 								
@@ -2073,7 +2053,7 @@ a.show();
 							_.loadmeta(loadinto,v);
 
 
-							$.ajax({
+							/*$.ajax({
 								type: "GET",
 								url: '/admin/pages.json',
 								dataType: 'json',
@@ -2101,7 +2081,7 @@ a.show();
 								error:function(d){
 									_.notice('Error loading page data',true);
 								}
-							});
+							});*/
 
 						},
 	shipping_remove_all:function(i,c){
@@ -2123,10 +2103,10 @@ a.show();
 					'url': url,
 					'success': function(){
 						$('div.shipping-rate-table').remove();
-						_.redirect('/settings');
+						/*_.redirect('/settings');
 						setTimeout(function(){
 							_.redirect('/settings/shipping');
-						},2000);
+						},2000);*/
 					}
 					});
 			}
@@ -2852,7 +2832,7 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 
 						},
 	init:function(){
-		_.shortcut_to_open_orders();
+		/*_.shortcut_to_open_orders();*/
 		_.set_drag_drop();
 		_.get_theme_data();
 		if(!_.data('debug')){
@@ -2905,10 +2885,12 @@ if(!_.data('content').hasClass('loading')){
 		_.setup_articles();
 	} else if( _.data('alpha') == 'pages' && !isNaN(_.data('omega'))){
 		_.setup_pages();
-	} else 	if( _.data('alpha') == 'smart_collections' && !isNaN(_.data('omega'))){
+	} else 	if( _.data('alpha') === 'smart_collections' && !isNaN(_.data('omega'))){
 		_.setup_custom_collections(); 
-	} else if( _.data('alpha') == 'custom_collections' && !isNaN(_.data('omega'))){
-		 _.setup_custom_collections(); 
+	} else if( _.data('alpha') === 'custom_collections' && !isNaN(_.data('omega'))){
+		 _.setup_custom_collections();
+	} else if( _.data('alpha') === 'collections' && !isNaN(_.data('omega'))){
+		 _.setup_custom_collections();
 	} else if( _.data('alpha') == 'blogs' && !isNaN(_.data('omega'))){
 		_.setup_blogs();
 	} else if( _.data('alpha') == 'products'){
@@ -2976,7 +2958,7 @@ _.load_css();
 
 			if(id){
 
-			if(id=='manageinventory' && _.data('alpha') !== 'inventory'){_.redirect('/variants')}
+			if(id=='manageinventory' && _.data('alpha') !== 'inventory'){/*_.redirect('/variants')*/}
 			else if(id=='bulkmetafields'){_.bulkmetafields();}
 			else if(id=='themesettings' && isNaN(_.data('alpha')) ){_.redirect('/themes/current/settings')}
 			else if(id=='togglestyle'){_.toggleStyle();t.toggleClass('active')}
