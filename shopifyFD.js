@@ -2817,10 +2817,6 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 							shopifyCSS.type = "text/css";
 							shopifyCSS.rel = "stylesheet";
 							shopifyCSS.id = "shopifyjs";
-							/* mirrors:
-							//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css
-							//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css
-							*/
 							shopifyCSS.href = "//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css";
 							document.body.appendChild(shopifyCSS);
 						},
