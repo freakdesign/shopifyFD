@@ -40,13 +40,13 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var metafield_default = '<option value="">Select or create a metafield</option>';
 
-	var metafield_copybox = '<div><a class="btn btn-slim" id="fd_copymetafields">Copy Metafields</a> <a class="btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim" title="What have I copied?" href="#" id="fd_whatmetafields">?</a></div>';
+	var metafield_copybox = '<div><a class="hidden btn btn-slim" id="fd_copymetafields">Copy Metafields</a> <a class="btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim" title="What have I copied?" href="#" id="fd_whatmetafields">?</a></div>';
 
 	var rte_menu = '<div id="rte_extra"><a class="btn btn-slim" title="Careful, this method is brutal..." id="clearformatting" href="#">Purge html</a> <a class="btn btn-slim" id="createbackup" href="#">Create Backup</a> <a class="btn btn-slim" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn btn-slim" title="Add any images in the description to a Metafield" id="save_images_to_meta" href="#">Images to Metafields</a></div>';
 
 	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a title="About this tool" id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a title="View recent news" id="getnotifications" href="'+jsvoid+'"><i class="ico ico-16 ico-announcements-inactive"></i></a></li><li><a id="togglestyle" href="'+jsvoid+'">Toggle CSS</a></li><!--<li><a id="themesettings" href="'+jsvoid+'">Theme Settings</a></li><li><a id="manageinventory" href="'+jsvoid+'">Manage Inventory</a></li>--><li><a id="bulkmetafields" href="'+jsvoid+'">Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank">Help</a></li><li><a title="This tool is free, consider leaving a tip" href="http://shopify.freakdesign.com.au/#donate" target="_blank">Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a title="About this tool" id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a title="View recent news" id="getnotifications" href="'+jsvoid+'"><i style="background-size: contain;" class="ico ico-16 ico-sidebar-bottom-announcements-inactive"></i></a></li><li><a id="togglestyle" href="'+jsvoid+'">Toggle CSS</a></li><!--<li><a id="themesettings" href="'+jsvoid+'">Theme Settings</a></li><li><a id="manageinventory" href="'+jsvoid+'">Manage Inventory</a></li>--><li><a id="bulkmetafields" href="'+jsvoid+'">Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank">Help</a></li><li><a title="This tool is free, consider leaving a tip" href="http://shopify.freakdesign.com.au/#donate" target="_blank">Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>Warning:</strong> This section can make bulk changes to your product metafields. There is no undo should something go wrong so be very sure you want to attempt this.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten. Have I given you enough warning?</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
@@ -54,7 +54,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var welcome_message = '<ul><li>REMOVED: Jump quickly between editor for product and linklists via a dropdown menu</li><li>DISABLED: Autosave added for products RTE</li><li>Added linklist creator for collections, pages and vendors</li><li>Added a copy function to link lists</li><li>Bulk tag editing enabled on collections page.</li><li>Copy and paste for Shipping rates added.</li></ul>';
+	var welcome_message = '<ul><li>With recent updates to the Shopify Dashboard many features have been lost, or no longer work as well. If you find a bug, report it!</li></ul>';
 	
 	var welcome_title='ShopifyFD: Recent updates and news';
 
@@ -1706,17 +1706,6 @@ a.show();
 
 			$('.header-right .segmented').eq(1).after(u);
 		},
-		seo_description:function(){
-
-			var sdt = $('#seo-description-tag');
-			var sdt_textarea = $('<textarea/>');
-			sdt_textarea.val(sdt.val()).keyup(function(){
-				sdt.val($(this).val());
-			});
-
-			sdt.after(sdt_textarea).hide();
-
-		},
 		setup_copypaste:function(){
 
 							var a = $(metafield_copybox),
@@ -1841,16 +1830,20 @@ a.show();
 								_.notice('Error loading linklist data',true);
 							}
 						});
+						
+						var divSummary = $('div.span6.section-summary').eq(0);
+						var productViewLink = divSummary.find('a').eq(0).attr('href');
 
+						divSummary.html('').append(metafieldloader);
 
-						$('div.span6.section-summary').eq(0).append(metafieldloader).find('div:first-child').remove();
 
 						/*$('iframe')*/
 						if ($('#rte_extra').length == 0){
 
-							$('#product-body-html_ifr').eq(0).after(rte_menu);
-							_.setup_rte();
+							$('#product-description_iframecontainer').eq(0).after(rte_menu);
 							$('.rtetools-buttons ul.fr').eq(1).append(autosave_html);
+
+							_.setup_rte();
 
 							$('#autosave').on('click',function(){
 
@@ -1881,7 +1874,6 @@ a.show();
 								/* toggle class - not the nicest method */
 								$(this).toggleClass('rte-command-active');
 
-
 								return false;
 							});
 
@@ -1891,16 +1883,26 @@ a.show();
 
 						}
 
-							_.btn_removealltags();
-							_.seo_description();
+						_.btn_removealltags();
+						/*_.seo_description();*/
 
-							var view_in_store = $('div.span6.section-summary a.view-in-store'),
-								page_title = $('h1.header-main span[data-bind="product.title"]'),
-								loadinto = $('div.sub_section-summary .content'),
-								variants_ids = {};
+/*view_in_store = $('div.span6.section-summary a.view-in-store'),*/
 
-							page_title.addClass('view-in-store').html('<a target="shopify_storeview" href="'+view_in_store.prop('href')+'">'+page_title.text()+'</a>').prop('title', 'View in store');
-							view_in_store.remove();
+						var page_title = $('h1.header-main'),
+							loadinto = $('div.sub_section-summary .content'),
+							variants_ids = {};
+
+							var viewInStore = $('<a />',{
+								href:productViewLink,
+								target:'_blank',
+								style:'display: inline-block;vertical-align: top;',
+								title:'View in Store'
+							});
+
+							viewInStore.append('<i class="ico ico-20-svg ico-sidebar-bottom-website"></i>');
+							page_title.append(viewInStore);
+							/*page_title.addClass('view-in-store').html('<a target="shopify_storeview" href="'+view_in_store.prop('href')+'">'+page_title.text()+'</a>').prop('title', 'View in store');*/
+							/*view_in_store.remove();*/
 
 							/* load away! */
 							_.loadmeta(loadinto,v);
@@ -2028,23 +2030,35 @@ a.show();
 							
 						},
 						setup_pages:function(){
-								/* add new details box, and remove some of the extra crap we don't need to see that's taking up space... */
 
-							var view_in_store = $('div.span6.section-summary a.view-in-store'),
-								page_title = $('h1.header-main span[data-bind="page.title"]');
+							var divSummary = $('div.span6.section-summary').eq(0),
+								page_title = $('h1.header-main');
 
+							var pageViewLink = divSummary.find('a').eq(0).attr('href');
+
+							var viewInStore = $('<a />',{
+								href:pageViewLink,
+								target:'_blank',
+								style:'display: inline-block;vertical-align: top;',
+								title:'View in Store'
+							});
+
+							viewInStore.append('<i class="ico ico-20-svg ico-sidebar-bottom-website"></i>');
+							page_title.append(viewInStore);
 
 							
 							$('#page-content_ifr').eq(0).after(rte_menu);
 							
 							_.setup_rte();
 
-							page_title.addClass('view-in-store').html('<a target="shopify_storeview" href="'+view_in_store.prop('href')+'">'+page_title.text()+'</a>').prop('title', 'View in store');
+							/*page_title.addClass('view-in-store').html('<a target="shopify_storeview" href="'+view_in_store.prop('href')+'">'+page_title.text()+'</a>').prop('title', 'View in store');*/
 
-							_.seo_description();
-							view_in_store.remove();
+							/*_.seo_description();*/
+							/*view_in_store.remove();*/
 
-							$('div.span6.section-summary').eq(0).find('p, h1').remove().end().append(metafieldloader);
+							divSummary.html('').append(metafieldloader);
+
+							/*$('div.span6.section-summary').eq(0).find('p, h1').remove().end().append(metafieldloader);*/
 
 							/* defined what we are loading into */
 							var loadinto = $('div.sub_section-summary .content');
@@ -2430,8 +2444,8 @@ var create_shipping_rate = function(c,to_add,t){
 							_.loadmeta(loadinto,v);
 
 
-							if ($('#rte_extra').length == 0){
-								$('#collection-body-html_ifr').eq(0).after(rte_menu);
+							if ($('#rte_extra').length === 0){
+								$('#collection-description_iframecontainer').eq(0).after(rte_menu);
 								_.setup_rte();
 							}
 
@@ -2844,8 +2858,10 @@ http://ecommerce.shopify.com/c/shopify-discussion/t/break-dance-in-public-for-ho
 				_.createCookie('shopifyfd','loaded',3);
 			}
 		}
+
+		$('html').addClass('shopifyJSoverride');
 		/* enable the styles */
-		$('#togglestyle').click(); 
+		/*$('#togglestyle').click(); */
 
 		/* 
 
