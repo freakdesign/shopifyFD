@@ -125,7 +125,7 @@ body{padding-top:32px}
 html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none; -moz-user-select: none;-ms-user-select: none;}
 
 /* Modal window, because wrestling the built in one is a pain in the bee-hind... */
-.shopifyJSoverride .modal-bg{z-index: 99500}
+.shopifyJSoverride .modal-bg{z-index: 500}
 .modalWindow {
   position: fixed;top: 0;right: 0;bottom: 0;left: 0;
   background: rgba(1, 12, 2, 0.7);z-index: 99999;
