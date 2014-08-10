@@ -430,7 +430,7 @@ return {
 					t.after(select).hide();
 				}
 			},
-			fail: function(){
+			error: function(){
 				_.notice('Failed to load collections',true);
 			}
 			});
@@ -2148,13 +2148,50 @@ a.show();
 
 			var tpc = $('table.product-collections').eq(0);
 			tpc.find('tr').each(function(){
+				var t = $(this);
+				var collectionID = t.find('a').eq(0).attr('href').split('/').pop();
 				var a=$('<a/>',{
-					'class':'btn',
-					'href':'#',
-					'title':'Set a metafield with this collection handle'
-				}).text('Set as preferred').on('click',function(){
-					_.fd_modal(true,'soon...','Future function');
-					return false;
+					'class':'btn tooltip tooltip-bottom',
+					'href':'#'
+				}).html('<span class="tooltip-container"><span class="tooltip-label">Set a metafield with this collection handle</span></span>Set as preferred').on('click',function(e){
+					e.preventDefault();
+					if('undefined' !== collectionID){
+						$.ajax({
+							type: "GET",
+							url: '/admin/collections/'+collectionID+'.json?fields=handle',
+							dataType: 'json',
+							success: function(data){
+								if (typeof data !== 'undefined' && typeof d.URL !== 'undefined'){
+									var collectionHandle = data.collection.handle;
+									$.ajax({
+										type: "POST",
+										url: d.URL+'/metafields.json',
+										dataType: 'json',
+										data: {
+											"metafield": {
+												"namespace": 'collection',
+												"key": 'preferred',
+												"value": collectionHandle,
+												"value_type": "string"
+											}
+										},
+										success: function(d){
+											_.updatedropdown();
+											_.notice('Preferred collection metafield saved');
+										},
+										error: function(d){
+											var err = JSON.parse(d.responseText);
+											_.notice(err.errors.value[0],true);
+										}
+									});	
+								}
+							},
+							error: function(){
+								_.notice('Failed to load collection',true);
+							}
+						});
+					}
+					
 				});
 				$(this).find('td.col-remove').prepend(a);
 			});
@@ -3140,7 +3177,7 @@ a.show();
 
 	/* create some elements */
 	var b = $('body'),
-	bar = $("<div>", {id: "shopifyJSbar",'class':'loading noprint'}),
+	bar = $("<div>", {id: "shopifyJSbar",'class':'loading noprint fadein'}),
 	wrapper = $("<div>", {'class': "wrapper clearfix"}),
 	nav = $("<ul>", {id: "shopifyJSnav"});
 
