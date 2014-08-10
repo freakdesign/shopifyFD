@@ -1633,6 +1633,28 @@ return {
 					'class':'segmented'
 					}),
 					l = $('<li/>'),
+					getCountBtn = $('<a/>',{
+						'class':'btn',
+						style:'margin-left:.5em',
+						href:'#'
+					}).text('Show Product Count').on('click',function(e){
+						e.preventDefault();
+						$.ajax({
+							type: "GET",url: '/admin/collections.json?limit=250',dataType: 'json',
+							success: function(d){
+							if(d.collections.length){
+								_.data('collections',d);
+								for (var i = d.collections.length - 1; i >= 0; i--) {
+									var collectionTable = $('#collections-results');
+									var collectionLink = collectionTable.find('a[href="/admin/collections/'+d.collections[i].id+'"]');
+									if(collectionLink.find('span').length === 0){
+										collectionLink.append('<span class="sku label">'+d.collections[i].products_count+'</span>');
+									}
+								};
+							}
+							}
+						});
+					}),
 					a = $('<a/>',{
 						'class':'btn',
 						'href':'#',
@@ -1640,211 +1662,214 @@ return {
 					}).html('Bulk edit tags').on('click',function(){
 						_.fd_modal(true,bulk_tags,'Edit tags for all products in a collection',true);
 						var fdmodal = $("#fdmodal"),
-							a = fdmodal.find('select[data-action="action"]'),
-							b = fdmodal.find('a').eq(1),
-							c = fdmodal.find('select[data-action="collection"]'),
-							t = fdmodal.find('input').eq(0);
+						a = fdmodal.find('select[data-action="action"]'),
+						b = fdmodal.find('a').eq(1),
+						c = fdmodal.find('select[data-action="collection"]'),
+						t = fdmodal.find('input').eq(0);
 
-a.change(function(event) {
-	"purge"==a.val()||"set"==a.val()?("purge"==a.val()&&t.val("").attr("disabled","disabled"),b.addClass("delete")):(t.removeAttr("disabled"),b.removeClass("delete"));
-});
+						a.change(function(event) {
+							"purge"==a.val()||"set"==a.val()?("purge"==a.val()&&t.val("").attr("disabled","disabled"),b.addClass("delete")):(t.removeAttr("disabled"),b.removeClass("delete"));
+						});
 
-var set_tags = function(_d,i,t,callback){
-	/* Overwrite the existing tags */
-	var id = _d.products[i].id,
-		data = {
-			"product": {
-			"id": id,
-			"tags": t
-			}
-		};
+						var set_tags = function(_d,i,t,callback){
+							/* Overwrite the existing tags */
+							var id = _d.products[i].id,
+								data = {
+									"product": {
+									"id": id,
+									"tags": t
+									}
+								};
 
-	b.text(i+1+'/'+_d.products.length);
+							b.text(i+1+'/'+_d.products.length);
 
-	$.ajax({
-	type: "PUT",
-	url: '/admin/products/'+id+'.json',
-	data: data,
-	dataType: 'json',
-	success: function(d){
-		++i;
-		if(i<_d.products.length){
-			set_tags(_d,i,t,callback)
-		}else{
-			callback();
-		}
-	}
-	});
-}
+							$.ajax({
+							type: "PUT",
+							url: '/admin/products/'+id+'.json',
+							data: data,
+							dataType: 'json',
+							success: function(d){
+								++i;
+								if(i<_d.products.length){
+									set_tags(_d,i,t,callback)
+								}else{
+									callback();
+								}
+							}
+							});
+						}
 
-var delete_tags = function(_d,i,t,callback){
+						var delete_tags = function(_d,i,t,callback){
 
-	if(_d.products[i].tags){
+							if(_d.products[i].tags){
 
-		var a1 = t.replace(/, /g, ',').split(','),
-			a2 = _d.products[i].tags.replace(/, /g, ',').split(','),
-			a3 = $(a2).not(a1).get() + '',
-			id = _d.products[i].id,
-			data = {
-				"product": {
-				"id": id,
-				"tags": a3
-				}
-			};
+								var a1 = t.replace(/, /g, ',').split(','),
+									a2 = _d.products[i].tags.replace(/, /g, ',').split(','),
+									a3 = $(a2).not(a1).get() + '',
+									id = _d.products[i].id,
+									data = {
+										"product": {
+										"id": id,
+										"tags": a3
+										}
+									};
 
-		b.text(i+1+'/'+_d.products.length);
+								b.text(i+1+'/'+_d.products.length);
 
-		$.ajax({
-			type: "PUT",
-			url: '/admin/products/'+id+'.json',
-			data: data,
-			dataType: 'json',
-			success: function(d){
-				++i;
-				if(i<_d.products.length){
-					delete_tags(_d,i,t,callback)
-				}else{
-					callback();
-				}
-			}
-		});
+								$.ajax({
+									type: "PUT",
+									url: '/admin/products/'+id+'.json',
+									data: data,
+									dataType: 'json',
+									success: function(d){
+										++i;
+										if(i<_d.products.length){
+											delete_tags(_d,i,t,callback)
+										}else{
+											callback();
+										}
+									}
+								});
 
-	}else{
+							}else{
 
-		++i;
-		if(i<_d.products.length){
-			delete_tags(_d,i,t,callback)
-		}else{
-			callback();
-		}
+								++i;
+								if(i<_d.products.length){
+									delete_tags(_d,i,t,callback)
+								}else{
+									callback();
+								}
 
-	}
+							}
 
-}
+						}
 
-var put_tags = function(_d,i,t,callback){
-	/*	
-		Add tags (should they be unique) 
-		*not the most efficient method running this every time. add this to the todo list 
-	*/
+						var put_tags = function(_d,i,t,callback){
+							/*	
+								Add tags (should they be unique) 
+								*not the most efficient method running this every time. add this to the todo list 
+							*/
 
-	var a1 = t.replace(/, /g, ',').split(','),
-		a2 = _d.products[i].tags.split(','),
-		a3 = _.array_unique(a1.concat(a2))+'',
-		id = _d.products[i].id,
-		data = {
-			"product": {
-			"id": id,
-			"tags": a3
-			}
-		};
+							var a1 = t.replace(/, /g, ',').split(','),
+								a2 = _d.products[i].tags.split(','),
+								a3 = _.array_unique(a1.concat(a2))+'',
+								id = _d.products[i].id,
+								data = {
+									"product": {
+									"id": id,
+									"tags": a3
+									}
+								};
 
-		b.text(i+1+'/'+_d.products.length);
+								b.text(i+1+'/'+_d.products.length);
 
-	$.ajax({
-		type: "PUT",
-		url: '/admin/products/'+id+'.json',
-		data: data,
-		dataType: 'json',
-		success: function(d){
-			++i;
-			if(i<_d.products.length){
-				put_tags(_d,i,t,callback)
-			}else{
-				callback();
-			}
-		}
-	});
+							$.ajax({
+								type: "PUT",
+								url: '/admin/products/'+id+'.json',
+								data: data,
+								dataType: 'json',
+								success: function(d){
+									++i;
+									if(i<_d.products.length){
+										put_tags(_d,i,t,callback)
+									}else{
+										callback();
+									}
+								}
+							});
 
-}
+						}
 
-b.on('click',function(){
+						b.on('click',function(){
 
-if(c.val().length){
+						if(c.val().length){
 
-	if(a.val()=='add' && t.val().length){
+							if(a.val()=='add' && t.val().length){
 
-		$.ajax({
-		type: "GET",
-		url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
-		dataType: 'json',
-		success: function(d){
-			b.addClass('disabled');	
-			put_tags(d,0,t.val(),function(){
-				_.notice('Done. Tags have been added');
-				b.text('Update tags').removeClass('disabled');
-			});
-		}
-		});
-	}
-
-
-	if(a.val()=='purge' || a.val()=='set'){
-
-		$.ajax({
-		type: "GET",
-		url: '/admin/products.json?collection_id='+c.val()+'&fields=id',
-		dataType: 'json',
-		success: function(d){
-			b.addClass('disabled');	
-			set_tags(d,0,t.val(),function(){
-				_.notice('Done.');
-				b.text('Update tags').removeClass('disabled');
-			});
-		}
-		});
-	}
-
-	if(a.val()=='remove'){
-
-		$.ajax({
-		type: "GET",
-		url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
-		dataType: 'json',
-		success: function(d){
-			b.addClass('disabled');	
-			delete_tags(d,0,t.val(),function(){
-				_.notice('Matched tags have been removed.');
-				b.text('Update tags').removeClass('disabled');
-			});
-		}
-		});
-	}
+								$.ajax({
+								type: "GET",
+								url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
+								dataType: 'json',
+								success: function(d){
+									b.addClass('disabled');	
+									put_tags(d,0,t.val(),function(){
+										_.notice('Done. Tags have been added');
+										b.text('Update tags').removeClass('disabled');
+									});
+								}
+								});
+							}
 
 
+							if(a.val()=='purge' || a.val()=='set'){
+
+								$.ajax({
+								type: "GET",
+								url: '/admin/products.json?collection_id='+c.val()+'&fields=id',
+								dataType: 'json',
+								success: function(d){
+									b.addClass('disabled');	
+									set_tags(d,0,t.val(),function(){
+										_.notice('Done.');
+										b.text('Update tags').removeClass('disabled');
+									});
+								}
+								});
+							}
+
+							if(a.val()=='remove'){
+
+								$.ajax({
+								type: "GET",
+								url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
+								dataType: 'json',
+								success: function(d){
+									b.addClass('disabled');	
+									delete_tags(d,0,t.val(),function(){
+										_.notice('Matched tags have been removed.');
+										b.text('Update tags').removeClass('disabled');
+									});
+								}
+								});
+							}
 
 
-}else{
-	_.notice('Choose a collection',true);
-}
-	return false;
-
-});
 
 
-a.hide();
-$.ajax({
-	type: "GET",url: '/admin/collections.json',dataType: 'json',
-	success: function(d){
-	if(d.collections.length){
-		_.data('collections',d);
-		var toappend='';
+						}else{
+								_.notice('Choose a collection',true);
+							}
+								return false;
 
-for (var i = 0, len = d.collections.length; i < len; i++) {
-toappend+='<option value="'+d.collections[i].id+'">'+d.collections[i].title+'</option>';
-}
-c.append(toappend).find('option:eq(0)').text('Select a collection');
-a.show();
-	}
-}});
+						});
+
+
+						a.hide();
+
+						$.ajax({
+							type: "GET",url: '/admin/collections.json?limit=250',dataType: 'json',
+							success: function(d){
+							if(d.collections.length){
+								_.data('collections',d);
+								var toappend='';
+
+								for (var i = 0, len = d.collections.length; i < len; i++) {
+									toappend+='<option value="'+d.collections[i].id+'">'+d.collections[i].title+'</option>';
+								}
+
+								c.append(toappend).find('option:eq(0)').text('Select a collection');
+								a.show();
+							}
+							}
+						});
 
 						return false;
 					});
 
-			l.append(a);
+			l.append(a,getCountBtn);
 			u.append(l);
 
-			$('.header-right .segmented').eq(1).after(u);
+			$('.header-right .segmented').eq(0).after(u);
 		},
 		setup_copypaste:function(){
 
