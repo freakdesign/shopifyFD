@@ -871,6 +871,34 @@ return {
 		}
 
 	}},
+	updateVariant:function(data,count,callback){
+
+		_.notice('Updating Variant '+(count+1)+'/'+data.length+'...');
+
+		if(typeof count === 'undefined'){var count = 0}
+		if(typeof callback === 'undefined'){var callback = false}
+
+		$.ajax({
+			type: "PUT",
+			url: '/admin/variants/'+data[count].variant.id,
+			dataType: 'json',
+			data: data[count],
+			success: function(d){
+				++count;
+				if(count<data.length){
+					_.updateVariant(data,count,callback);
+				}else{
+					_.notice('Variants updated');
+					if(typeof callback === 'function'){
+						callback();
+					}
+				}	
+			},
+			error:function(){
+				_.notice('Update failed',true);
+			}
+		});
+	},
 	save_variant_metafield:function(id,namespace,key,value,vid,type){
 
 		/*
@@ -2033,22 +2061,57 @@ a.show();
 				bulkPriceEdit.toggleClass('hidden');
 			});
 
-			bulkPriceEdit.html('<h3>Edit all variants</h3><p style="margin: .5em 0 1em;font-size: 12px;border-bottom: 1px solid #ccc;padding-bottom: .5em;">Do not use this if you have unsaved changes. <b>Bulk Editing comes with risk - be careful.</b></p><label style="margin-top:1.5em">Set Compare at Price</label><input type="number" style="width:50%"> <a class="bulk-compare-save tooltip tooltip-bottom btn btn-slim"><span class="tooltip-container"><span class="tooltip-label">Save Compare at Price for all variants</span></span>Save</a>');
+			bulkPriceEdit.html('<h3>Edit all variants</h3><p style="margin: .5em 0 1em;font-size: 12px;border-bottom: 1px solid #ccc;padding-bottom: .5em;">Bulk Editing comes with risks.</p><label style="margin-top:1.5em">Set Compare at Price<br><small>0 will clear the compare at price</small></label><input type="number" style="width:50%" value="0"> <a class="bulk-compare-save tooltip tooltip-bottom btn btn-slim"><span class="tooltip-container"><span class="tooltip-label">Save Compare at Price for all variants</span></span>Save</a>');
 
 			bulkCompareSaveBtn = bulkPriceEdit.find('a.bulk-compare-save');
 			bulkCompareFields = bulkPriceEdit.find('input');
 
 			bulkCompareSaveBtn.on('click',function(e){
 				e.preventDefault();
-				if(typeof variants_ids ==='object'){
-					if(Object.keys(variants_ids).length > 1){
 
-						_.notice('New feature coming soon...',true);
+				var t = $(this);
+				t.addClass('is-loading').attr('style','margin-left:1em;text-indent: -9999px;');
+				var isDone = function(){
+					t.removeClass('is-loading').attr('style','margin-left:1em');
+				};
 
-					}else{
-						_.notice('You only have 1 variant. No need to bulk edit',true);
+				var comparePrice = bulkCompareFields.val();
+				if(isNaN(comparePrice) || comparePrice === '0' || comparePrice === ''){comparePrice = null;}
+
+
+
+				if(comparePrice || comparePrice === null){
+					if(typeof variants_ids ==='object'){
+						if(Object.keys(variants_ids).length > 1){
+							if(Object.keys(variants_ids).length === $('tr.variant').length){ /* sanity check */
+								var data = [];
+								for (var key in variants_ids) {
+									var obj = variants_ids[key];
+									for (var prop in obj) {
+										if(obj.hasOwnProperty(prop)){
+											var o = {
+												"variant": {
+													id: obj[prop],
+													compare_at_price: comparePrice
+												}
+											}
+											data.push(o);
+
+										}
+									}
+								}
+								if(data.length){
+									_.updateVariant(data,0,isDone);
+								}
+							}else{
+								_.notice('Unexpected variant found.',true);
+							}
+						}else{
+							_.notice('You only have 1 variant. No need to bulk edit',true);
+						}
 					}
 				}
+
 			});
 
 			inventorySummary.append(bulkPriceEdit);

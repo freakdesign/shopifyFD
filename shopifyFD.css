@@ -55,6 +55,8 @@ body{padding-top:32px}
 .shopifyJSoverride .selected .main-nav-count{background: #fff;color: #21C2A8; border:none!important}
 .shopifyJSoverride .main-nav-count:hover{background: #fff;color: #111; border:none!important}
 
+.shopifyJSoverride tr.variant td:last-child {min-width:70px;}
+
 /* you know, for hiding stuff... */
 .shopifyJSoverride .hidden{display:none}
 
