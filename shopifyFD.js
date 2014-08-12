@@ -1422,6 +1422,28 @@ return {
 
 			}
 		},
+		setup_themes:function(){
+			var publishedTitle = $('.published-theme-title'),
+			customiseBtn = $('.btn.btn-primary').eq(1),
+			customiseHREF = customiseBtn.attr('href'),
+			themeBoxes = $('div.unpublished-box');
+
+			for (var i = 0; i < themeBoxes.length; i++) {
+				var themeID = themeBoxes[i].id.split('_').pop(),
+				contentBox = themeBoxes.eq(i).find('.box-content'),
+				div = $('<div />',{
+					style:'color: #ccc;font-family: monospace;'
+				}).text(themeID);
+				contentBox.append(div);
+			};
+
+			if(customiseHREF.indexOf('/admin/themes')>-1){
+				var span = $('<span />',{
+					style:'margin:0 1em;color:#479ccf;font-family: monospace;'
+				}).text(customiseHREF.split('/')[3]);
+				publishedTitle.append(span);
+			}
+		},
 		setup_link_lists_edit:function(){
 
 
@@ -3167,6 +3189,8 @@ return {
 							_.setup_link_lists();
 						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'links' ){
 							_.setup_link_lists();
+						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'themes' ){
+							_.setup_themes();
 						} else if( _.data('alpha') == 'link_lists' && !isNaN(_.data('omega'))){
 							_.setup_link_lists_edit();
 						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'discounts' ){
@@ -3179,7 +3203,7 @@ return {
 							_.setup_shipping();
 						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'taxes' ){
 							/*_.setup_taxes();*/
-						}
+						} 
 
 					} /* end page change check */
 				} /* end hasclass loading */
