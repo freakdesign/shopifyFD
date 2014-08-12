@@ -93,7 +93,7 @@ var _ = (function(){
 		api_limit:250,
 		metafields:{},
 		autosave: false,
-		content: $('#content'),
+		content: $('#content'), /* must be refreshed on each load */
 		body:$('body')
 	};
 
@@ -1423,6 +1423,7 @@ return {
 			}
 		},
 		setup_themes:function(){
+			$('.theme-store-cta-section').remove(); /* page is big enough without a giant ad */
 			var publishedTitle = $('.published-theme-title'),
 			customiseBtn = $('.btn.btn-primary').eq(1),
 			customiseHREF = customiseBtn.attr('href'),
@@ -3091,6 +3092,48 @@ return {
 			});		
 
 		},
+		add_ui:function(){
+
+			if($('#shopifyJSbar').length === 0){
+
+				var b = $('body'),
+				bar = $("<div>", {id: "shopifyJSbar",'class':'loading noprint fadein'}),
+				wrapper = $("<div>", {'class': "wrapper clearfix"}),
+				nav = $("<ul>", {id: "shopifyJSnav"});
+
+				nav.html(appnav);
+
+				nav.find('a').on('click',function(){
+
+					if(!_.isloading()){
+
+					var t = $(this),
+						id=t.prop('id');
+
+					if(id){
+
+					if(id=='bulkmetafields'){_.bulkmetafields();}
+					else if(id=='togglestyle'){_.toggleStyle();t.toggleClass('active')}
+					else if(id=='aboutapp'){_.about_app()}
+					else if(id=='getnotifications'){_.show_notification()}
+
+					}else{return true}
+					}else{_.notice("We better wait for this page to load first...",true);
+					} /* end loading check */
+
+					return false;
+
+				});
+
+				/* put the jigsaw together*/
+				wrapper.append(nav);
+				bar.append(wrapper);
+				
+				/* add to page */
+				b.append(bar);
+				bar.removeClass('loading');
+			}
+		},
 		load_css:function(){
 
 			/* Load the CSS */
@@ -3099,7 +3142,7 @@ return {
 			shopifyCSS.rel = "stylesheet";
 			shopifyCSS.id = "shopifyjs";
 			shopifyCSS.href = "//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css";
-			document.body.appendChild(shopifyCSS);
+			document.getElementsByTagName('head')[0].appendChild(shopifyCSS);
 
 		},
 		get_theme_data:function(){
@@ -3148,12 +3191,15 @@ return {
 
 			setInterval(function(){
 
+				_.data('content',$('#content'));
+
 				if(!_.data('content').hasClass('loading')){
+
+					_.add_ui();
 
 					var u_array = d.URL.split('#')[0].split('?')[0].split('/'),
 					alpha = u_array[u_array.length - 2],
 					omega = d.URL.split('/').pop();
-
 
 					if( alpha !== _.data('alpha') || omega !== _.data('omega') ){
 
@@ -3208,6 +3254,9 @@ return {
 					} /* end page change check */
 				} /* end hasclass loading */
 			}, _.data('wait')); /* end interval */
+
+			_.notice("ShopifyFD loaded");
+
 		},
 		data: function(a,b){
 			if("undefined"===typeof b)return v[a];v[a]=b
@@ -3223,47 +3272,6 @@ return {
 }());
 				
 	_.load_css();
-
-	/* create some elements */
-	var b = $('body'),
-	bar = $("<div>", {id: "shopifyJSbar",'class':'loading noprint fadein'}),
-	wrapper = $("<div>", {'class': "wrapper clearfix"}),
-	nav = $("<ul>", {id: "shopifyJSnav"});
-
-	nav.html(appnav);
-
-	nav.find('a').on('click',function(){
-
-		if(!_.isloading()){
-
-		var t = $(this),
-			id=t.prop('id');
-
-		if(id){
-
-		if(id=='bulkmetafields'){_.bulkmetafields();}
-		else if(id=='togglestyle'){_.toggleStyle();t.toggleClass('active')}
-		else if(id=='aboutapp'){_.about_app()}
-		else if(id=='getnotifications'){_.show_notification()}
-
-		}else{return true}
-		}else{_.notice("We better wait for this page to load first...",true);
-		} /* end loading check */
-
-		return false;
-
-	});
-
-	/* put the jigsaw together*/
-	wrapper.append(nav);
-	bar.append(wrapper);
-	
-	/* add to page */
-	b.append(bar);
-	bar.removeClass('loading');
-
-	/* for developers */
-	_.notice("ShopifyFD loaded");
 	_.init();
 
 }else{
