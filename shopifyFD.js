@@ -57,7 +57,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a title="About this tool" id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a title="View recent news" id="getnotifications" href="'+jsvoid+'"><i style="background-size: contain;" class="ico ico-16 ico-sidebar-bottom-announcements-inactive"></i></a></li><li><a id="togglestyle" href="'+jsvoid+'">Toggle CSS</a></li><!--<li><a id="themesettings" href="'+jsvoid+'">Theme Settings</a></li><li><a id="manageinventory" href="'+jsvoid+'">Manage Inventory</a></li>--><li><a id="bulkmetafields" href="'+jsvoid+'">Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank">Help</a></li><li><a title="This tool is free, consider leaving a tip" href="http://shopify.freakdesign.com.au/#donate" target="_blank">Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a id="aboutapp" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">About this tool</span></span>About ShopifyFD</a></li><li><a id="getnotifications" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">View news and announcements</span></span><i style="background-size: contain;" class="ico ico-16 ico-sidebar-bottom-announcements-inactive"></i></a></li><li><a id="togglestyle" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
@@ -111,6 +111,11 @@ return {
 	    .replace(/[\n]/g, '\\n')
 	    .replace(/[\r]/g, '\\r')
 	    .replace(/[\t]/g, '\\t');
+	},
+	stripHTML:function(dirtyString) {
+    	var container = document.createElement('div');
+    	container.innerHTML = dirtyString;
+    	return container.textContent || container.innerText;
 	},
 	supportsHTML5Storage:function(){
 		try {
@@ -1939,7 +1944,8 @@ return {
 						m = JSON.parse(localStorage["metafieldCopy"]);
 
 						for (var i = 0, len = m.length; i < len; i++) {
-								h+= '<p><strong>'+m[i].namespace+'.'+m[i].key+' ('+m[i].value_type+')</strong><br>'+m[i].value+'</p><hr>';
+							var metafieldValue = _.stripHTML(m[i].value);
+							h+= '<p><strong>'+m[i].namespace+'.'+m[i].key+' ('+m[i].value_type+')</strong><br>'+metafieldValue+'</p><hr>';
 						}
 						_.fd_modal(true,h,'In the virtual clipboard...');
 
@@ -2391,6 +2397,38 @@ return {
 			/* defined what we are loading into */
 			var loadinto = $('div.sub_section-summary .content');
 			_.loadmeta(loadinto,v);
+
+			/*
+			$.ajax({
+				type: "GET",
+				url: '/admin/pages.json',
+				dataType: 'json',
+				success: function(d){
+					if(d){
+						pages = d.pages;
+						var response = '';
+						for (var i = 0, len = pages.length; i < len; i++) {
+
+							if(_.data('omega') !== pages[i].id.toString()){
+								response +='<option value="'+pages[i].id+'">'+pages[i].title+'</option>';
+							}
+						}
+
+						$('.header-row .header-right').prepend('<select id="shopifyjs_pageselect" class="header-select"><option>Choose another page to edit</option>'+response+'</select>');
+						$('#shopifyjs_pageselect').change(function(){
+							var v = $(this).val();
+							if(v){
+								 
+							}
+						});
+					}
+					
+				},
+				error:function(d){
+					_.notice('Error loading page data',true);
+				}
+			});
+			*/
 
 		},
 		shipping_remove_all:function(i,c){
