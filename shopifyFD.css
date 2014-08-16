@@ -34,9 +34,11 @@
 #shopifyJSbar li:nth-child(2) a:hover{background: #139989}
 #shopifyJSbar li:last-child{float:right}
 #shopifyJSbar li:first-child a{border-left: none;width: 100%;text-align: center;color:#fff;}
-#shopifyJSbar li:last-child a, #shopifyJSbar li:nth-child(2) a, #shopifyJSbar li:nth-child(3) a{border-left:none}
+#shopifyJSbar li:last-child a, #shopifyJSbar li:nth-child(2) a{border-left:none}
 #shopifyJSbar .ico-16{margin:2px 0 0 2px;}
 #shopifyJSbar *, #shopifyJSbar *:before, #shopifyJSbar *:after {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
+
+#shopifyJSnav .btn.is-loading, #shopifyJSnav .btn.is-loading:hover{background-color: #FAFAFA!important;border-radius: 0;color: rgba(0,0,0,0);}
 
 body{padding-top:32px}
 
@@ -124,13 +126,6 @@ body{padding-top:32px}
 
 .shopifyJSoverride .header-select {height:32px;border-radius:3px;color:#479ccf;max-width: 250px;}
 .shopifyJSoverride .header-select:focus {color:#121212;}
-
-/* theme title font is too large. changing case shouldn't happen */
-.shopifyJSoverride .unpublished-theme-title {
-    font-size: 12px;
-    color: #121212;
-    text-transform: none;
-}
 
 html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none; -moz-user-select: none;-ms-user-select: none;}
 

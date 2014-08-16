@@ -57,17 +57,13 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a id="aboutapp" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">About this tool</span></span>About ShopifyFD</a></li><li><a id="getnotifications" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">View news and announcements</span></span><i style="background-size: contain;" class="ico ico-16 ico-sidebar-bottom-announcements-inactive"></i></a></li><li><a id="togglestyle" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a id="togglestyle" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
 	var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim tooltip tooltip-bottom" href="#"><span class="tooltip-container"><span class="tooltip-label">Enable Autosave</span></span>Autosave</a></li>';
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
-
-	var welcome_message = '<ul><li>With recent updates to the Shopify Dashboard many features have been lost, or no longer work as well. If you find a bug, report it!</li></ul>';
-	
-	var welcome_title='ShopifyFD: Recent updates and news';
 
 	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopify.freakdesign.com.au/#donate">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://shopify.freakdesign.com.au" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
 
@@ -84,7 +80,6 @@ var _ = (function(){
 		debug: false,
 		drag_on:true,
 		author: 'freakdesign',
-		version: 20131111,
 		alpha: false,
 		omega: false,
 		countries:false,
@@ -207,40 +202,6 @@ return {
 
 		_.fd_modal(true,html_about,'About this tool',true);
 		return false;
-
-	},
-	show_notification:function(){
-
-		/*
-
-		 ____  _                                 _   _  __ _           _   _
-		/ ___|| |__   _____      __  _ __   ___ | |_(_)/ _(_) ___ __ _| |_(_) ___  _ __
-		\___ \| '_ \ / _ \ \ /\ / / | '_ \ / _ \| __| | |_| |/ __/ _` | __| |/ _ \| '_ \
-		 ___) | | | | (_) \ V  V /  | | | | (_) | |_| |  _| | (_| (_| | |_| | (_) | | | |
-		|____/|_| |_|\___/ \_/\_/   |_| |_|\___/ \__|_|_| |_|\___\__,_|\__|_|\___/|_| |_|
-
-		Opens the notifcation box
-
-		*/
-
-		_.fd_modal(true,welcome_message,welcome_title);
-		$('#getnotifications').find('i').removeClass('blinker');
-
-	},
-	flash_notification:function(){
-
-		/*
-		 ____  _ _       _
-		| __ )| (_)_ __ | | _____  ___
-		|  _ \| | | '_ \| |/ / _ \/ _ \
-		| |_) | | | | | |   <  __/  __/
-		|____/|_|_|_| |_|_|\_\___|\___|
-
-		Flash the icon
-
-		*/
-
-		$('#getnotifications').find('i').addClass('blinker');
 
 	},
 	createbackup:function(id){
@@ -1443,11 +1404,13 @@ return {
 				contentBox.append(div);
 			};
 
-			if(customiseHREF.indexOf('/admin/themes')>-1){
-				var span = $('<span />',{
-					style:'margin:0 1em;color:#479ccf;font-family: monospace;'
-				}).text(customiseHREF.split('/')[3]);
-				publishedTitle.append(span);
+			if(typeof customiseHREF !== 'undefined'){
+				if(customiseHREF.indexOf('/admin/themes')>-1){
+					var span = $('<span />',{
+						style:'margin:0 1em;color:#479ccf;font-family: monospace;'
+					}).text(customiseHREF.split('/')[3]);
+					publishedTitle.append(span);
+				}
 			}
 		},
 		setup_link_lists_edit:function(){
@@ -1673,8 +1636,8 @@ return {
 							if(d.collections.length){
 								_.data('collections',d);
 								for (var i = d.collections.length - 1; i >= 0; i--) {
-									var collectionTable = $('#collections-results');
-									var collectionLink = collectionTable.find('a[href="/admin/collections/'+d.collections[i].id+'"]');
+									var collectionTable = $('#collections-results'),
+									collectionLink = collectionTable.find('a[href="/admin/collections/'+d.collections[i].id+'"]');
 									if(collectionLink.find('span').length === 0){
 										collectionLink.append('<span class="sku label">'+d.collections[i].products_count+'</span>');
 									}
@@ -1702,12 +1665,12 @@ return {
 						var set_tags = function(_d,i,t,callback){
 							/* Overwrite the existing tags */
 							var id = _d.products[i].id,
-								data = {
-									"product": {
-									"id": id,
-									"tags": t
-									}
-								};
+							data = {
+								"product": {
+								"id": id,
+								"tags": t
+								}
+							};
 
 							b.text(i+1+'/'+_d.products.length);
 
@@ -1721,7 +1684,9 @@ return {
 								if(i<_d.products.length){
 									set_tags(_d,i,t,callback)
 								}else{
-									callback();
+									if(typeof callback === 'function'){
+										callback();
+									}
 								}
 							}
 							});
@@ -1754,7 +1719,9 @@ return {
 										if(i<_d.products.length){
 											delete_tags(_d,i,t,callback)
 										}else{
-											callback();
+											if(typeof callback === 'function'){
+												callback();
+											}
 										}
 									}
 								});
@@ -1765,7 +1732,9 @@ return {
 								if(i<_d.products.length){
 									delete_tags(_d,i,t,callback)
 								}else{
-									callback();
+									if(typeof callback === 'function'){
+										callback();
+									}
 								}
 
 							}
@@ -2469,7 +2438,7 @@ return {
 		},
 		save_new_rates:function(to_add,i,t){
 
-			if(to_add[i]){
+			if('undefined' !== typeof to_add[i]){
 
 				var d = to_add[i],
 				o ={},
@@ -2478,7 +2447,7 @@ return {
 
 				delete d.type; /* remove this */
 
-				if(type){
+				if('string' === typeof type){
 
 					if(type === 'weight'){
 						o = {weight_based_shipping_rate:{}};
@@ -2503,7 +2472,7 @@ return {
 						data: o,
 						success: function(d){
 
-							t.parent().parent().find('table').append('<tbody><tr style="background:#efefef"><td>'+to_add[i].name+'</td><td>Pasted a custom shipping rate. <a href=".">Refresh page</a> to view</td><td>'+to_add[i].price+'</td></tr></tbody>');
+							t.parent().parent().find('table').append('<tbody><tr style="background:#efefef"><td>'+to_add[i].name+'</td><td>New rate pasted.</td><td>'+to_add[i].price+'</td></tr></tbody>');
 
 							if(i === (to_add.length-1)){
 								_.notice('Paste complete');
@@ -2512,6 +2481,9 @@ return {
 								_.save_new_rates(to_add,i,t);
 							}
 
+						},
+						error:function(){
+							_.notice('Error pasting.', true);
 						}
 					});
 
@@ -2525,23 +2497,15 @@ return {
 		},
 		setup_shipping:function(go){
 
-			if(go){
+			if('undefined' !== typeof go){
 
-				_.fd_modal(false);
-
-				$('div.span6.section-summary').eq(0).append('<p style="margin-top:1em" class="box warning">Warning: When you copy and paste over existing rates the old ones still show until the page is refreshed, even though they have been removed. <br><br>Be sure to do a test first. <strong>Use at own risk.</strong></p>');
+				$('div.span6.section-summary').eq(0).append('<p style="margin-top:1em" class="fadein box warning">Warning: When you copy and paste over existing rates the old ones still show until the page is refreshed, even though they have been removed. <br><br>Be sure to do a test first. <strong>Use at own risk.</strong></p>');
 
 
 				var shippingSettings = $('#settings-shipping'),
-				new_buttons = $('<div class="header-right"><div class="header-action"><ul class="segmented"><li><a class="btn" href="#">Bulk Updates</a></li><li><a class="btn delete btn-separate" href="#">Delete all countries</a></li></ul></div></div>');
+				new_buttons = $('<div class="header-right"><div class="header-action"><a class="btn btn-separate tooltip-bottom tooltip" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a></div></div>');
 
 				new_buttons.find('a').eq(0).on('click',function(){
-					var myhtml = $('<h2 class="warning"><strong>Warning:</strong> This section makes bulk changes to your Shipping rates. There is no undo.</h2><div><div class="span1"><p>Soon...</p></div><div class="span2">'+aargh_msg+'</div></div>');
-					_.fd_modal(true,myhtml,'Bulk Updates',true);
-					return false;
-				}).hide();
-
-				new_buttons.find('a').eq(1).on('click',function(){
 
 					var myhtml = $('<h2 class="warning"><strong>Warning:</strong> This is a bad idea. It will delete ALL of your countries. There is no undo. Proceed at own risk!</h2><div><div class="span1"><a href="#" class="btn delete_all delete">Delete</a></div><div class="span2">'+aargh_msg+'</div></div>');
 
@@ -2557,6 +2521,9 @@ return {
 									_.notice(d.countries.length + " countries returned");
 									_.shipping_remove_all(d.countries.length-1,d.countries);
 								}
+							},
+							error:function(){
+								_.notice('Error removing country. Process stopped.',true);
 							}
 						});
 
@@ -2610,7 +2577,7 @@ return {
 
 									/* 
 										now that we have the delete list - let's delete
-										we should queue them up, but let's try mini burst 
+										we should queue them up, but let's try a mini burst 
 										This could cause issues with api limit. watch carefully.
 
 									*/
@@ -2618,15 +2585,23 @@ return {
 									for (var i = 0, len = to_delete.length; i < len; i++) {
 
 										var path = '';
-										if(to_delete[i][1] == 'weight'){path='/admin/weight_based_shipping_rates/'}
-										if(to_delete[i][1] == 'price'){path='/admin/price_based_shipping_rates/'}
-										if(to_delete[i][1] == 'carrier'){path='/admin/carrier_shipping_rate_providers/'}
+
+										if(to_delete[i][1] === 'weight'){
+											path='/admin/weight_based_shipping_rates/';
+										}else if(to_delete[i][1] === 'price'){
+											path='/admin/price_based_shipping_rates/';
+										}else if(to_delete[i][1] === 'carrier'){
+											path='/admin/carrier_shipping_rate_providers/';
+										}
 
 										$.ajax({
 											type: "DELETE",
 											url: path+to_delete[i][0]+'.json',
 											dataType: 'json',
-											success: function(d){}
+											success: function(d){},
+											error: function(d){
+												_.notice('Failed to replace rate',true);
+											}
 										});
 
 									} /* end delete loop */
@@ -2647,23 +2622,28 @@ return {
 
 					$('div.shipping-rate-table').each(function(index){
 
+
 						var t=$(this);
+
 						var copy = $('<a/>',{
 							'href':'#',
 							'data-country':_.data('countries').countries[index].name,
 							'data-cid':_.data('countries').countries[index].id,
 							'data-index':index,
-							'class':'btn btn-slim copyrates',
+							'class':'fadein btn btn-slim copyrates tooltip tooltip-bottom',
 							'style':'float:right;margin-right:.5em'
-						}).text('Copy rates').on('click',function(){
+						}).html('<span class="tooltip-container"><span class="tooltip-label">Copy Rates to Memory</span></span>Copy rates').on('click',function(){
 
 							var t=$(this),
 								i = t.attr('data-index'),
 								cname = t.attr('data-country'),
 								cid = t.attr('data-cid');
 
+							$('a.copyrates').removeClass('btn-primary');
+							t.addClass('btn-primary');
+
 							/* lazy hide all */
-							$('a.bulkpaste').hide();
+							$('a.bulkpaste').removeClass('hidden').addClass('disabled');
 
 							$.ajax({
 								type: "GET",
@@ -2673,9 +2653,13 @@ return {
 									shipping_rates.weight_based_shipping_rates = d.country.weight_based_shipping_rates;
 									shipping_rates.price_based_shipping_rates = d.country.price_based_shipping_rates;
 									shipping_rates.carrier_shipping_rate_providers = d.country.carrier_shipping_rate_providers;
-									_.notice('Copy of '+cname+' ready');
+									_.notice('Ready to paste '+cname+'.');
+
 									/* lazy show all */
-									$('a.bulkpaste').show();
+									$('a.bulkpaste').removeClass('disabled');
+								},
+								error:function(){
+									_.notice('Error copying rates',true);
 								}
 							});
 
@@ -2687,7 +2671,7 @@ return {
 							'data-country':_.data('countries').countries[index].name,
 							'data-cid':_.data('countries').countries[index].id,
 							'data-index':index,
-							'class':'bulkpaste btn btn-slim',
+							'class':'hidden fadein bulkpaste btn btn-slim',
 							'style':'float:right;margin-right:.5em'
 						}).text('Paste rates').on('click',function(){			
 
@@ -2702,7 +2686,9 @@ return {
 
 							/* harsh, but may avoid conflicts */
 							t.parent().parent().find('tbody').remove();
-							t.parent().find('a.copyrates').remove();
+							/*t.parent().find('a.copyrates').remove();*/
+
+							t.parent().find('a').addClass('hidden');
 
 							for (var i = 0, len = weight.length; i < len; i++) {
 								weight[i].country_id=cid;
@@ -2741,10 +2727,17 @@ return {
 
 							return false;
 
-						}).hide(); /* end paste button */
+						}); /* end paste button */
 					
 						/* add the buttons */
-						t.find('a[data-event-click="setupNewShippingRateForm"]').after(paste, copy);
+						var appendAfter = t.find('a[bind-event-click="addShippingRateModal.show()"]');
+						if(appendAfter.length){
+							appendAfter.after(copy,paste);
+						}else{
+							_.notice('Error. Unable to add copy button.',true);
+							return false;
+						}
+
 
 					});
 
@@ -2754,7 +2747,8 @@ return {
 
 			}else{
 
-				/* first time page run */
+				_.notice('Loading current country list');
+
 				$.ajax({
 					type: "GET",
 					url: '/admin/countries.json',
@@ -2765,6 +2759,9 @@ return {
 							_.notice(d.countries.length + " countries loaded");
 							_.setup_shipping(true);
 						}
+					},
+					error:function(){
+						_.notice('Loading failed',true);
 					}
 				});
 			}
@@ -3153,7 +3150,6 @@ return {
 					if(id=='bulkmetafields'){_.bulkmetafields();}
 					else if(id=='togglestyle'){_.toggleStyle();t.toggleClass('active')}
 					else if(id=='aboutapp'){_.about_app()}
-					else if(id=='getnotifications'){_.show_notification()}
 
 					}else{return true}
 					}else{_.notice("We better wait for this page to load first...",true);
@@ -3204,19 +3200,63 @@ return {
 			};
 
 		},
+		setup_announcements:function(){
+
+			var insertionPoint = $('.section.first-section').eq(0);
+			if(insertionPoint.length){
+				var announcementPanel = insertionPoint.clone();
+				var summary= announcementPanel.find('.section-summary');
+				var title = summary.find('h1').eq(0);
+				var summaryp = summary.find('p');
+				var content = announcementPanel.find('.span18');
+
+				var box = $('<div />',{
+					'class':'box box-details'
+				});
+
+				var ol = $('<ol />',{
+					'class':'content-index content-index-img-icons'
+				});
+
+				$.ajax({
+					type: "GET",
+					url:'https://freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/s/announcements.json',
+					dataType: 'json',
+					cache:false,
+					xhrFields: {
+						withCredentials: true
+					},
+					crossDomain: true,
+					success:function(d){
+
+						for (var i = 0; i < d.announcements.length; i++) {
+
+							var li = $('<li />',{
+								'class':'content-index__item'
+							}).html('<small>'+ d.announcements[i].date +'</small><br><strong>'+d.announcements[i].title+'</strong><p>'+d.announcements[i].description+'</p>');
+							ol.append(li);
+						};
+
+						title.text('ShopifyFD updates');
+						summaryp.text('Keep up to date with the latest edits and notes.');
+						announcementPanel.removeClass('first-section').addClass('fadein');
+						content.html('').append(box);
+						box.append(ol);
+						insertionPoint.after(announcementPanel);
+
+					},
+					error:function(xhr, status, error){
+						_.notice(error,true);
+					}
+				});
+
+			}
+
+		},
 		init:function(){
 
-			/*_.set_drag_drop();*/
+			_.set_drag_drop();
 			_.get_theme_data();
-			if(!_.data('debug')){
-				if(!_.readCookie('shopifyfd')){
-					/*
-					notification flash
-					*/
-					_.flash_notification();
-					_.createCookie('shopifyfd','loaded',3);
-				}
-			}
 
 			$('html').addClass('shopifyJSoverride');
 
@@ -3239,6 +3279,7 @@ return {
 					alpha = u_array[u_array.length - 2],
 					omega = d.URL.split('/').pop();
 
+					if(omega !== 'next' && omega !== 'prev' ){
 					if( alpha !== _.data('alpha') || omega !== _.data('omega') ){
 
 						_.data('alpha',alpha);
@@ -3287,9 +3328,12 @@ return {
 							_.setup_shipping();
 						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'taxes' ){
 							/*_.setup_taxes();*/
-						} 
+						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'announcements' ){
+							_.setup_announcements();
+						}
 
 					} /* end page change check */
+					}
 				} /* end hasclass loading */
 			}, _.data('wait')); /* end interval */
 
