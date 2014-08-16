@@ -10,7 +10,7 @@ A seperate tool is being made that allows easy ways for store owners to edit met
 Latest Builds
 -------------
 
-For the latest version refer to the [Project Homepage](http://shopify.freakdesign.com.au). For an endless commentary on the progress of this tool jump over to the [Shopify forums](https://ecommerce.shopify.com/c/ecommerce-design/t/tool-to-add-new-dashboard-features-metafields-bulk-edits-time-saving-awesomeness-151067).
+For the latest version refer to the [Project Homepage](http://shopifyfd.com). For an endless commentary on the progress of this tool jump over to the [Shopify forums](https://ecommerce.shopify.com/c/ecommerce-design/t/tool-to-add-new-dashboard-features-metafields-bulk-edits-time-saving-awesomeness-151067).
 
 Already using this tool? [Leave a tip](http://shopify.freakdesign.com.au/#donate) to support the development! Those energy drinks aren't cheap - keep me caffeinated so I can keep working on the tool.
 
