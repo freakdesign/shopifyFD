@@ -51,7 +51,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var metafield_default = '<option value="">Select or create a metafield</option>';
 
-	var metafield_copybox = '<div><a class="btn btn-slim" id="fd_copymetafields">Copy Metafields</a> <a class="btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
+	var metafield_copybox = '<div><a class="btn btn-slim" id="fd_copymetafields">Copy All Metafields</a> <a class="btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
 
 	var rte_menu = '<div id="rte_extra"><a class="btn btn-slim tooltip tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Careful, this method is brutal...</span></span>Purge html</a> <a class="btn btn-slim tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn btn-slim tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
 
@@ -1907,25 +1907,36 @@ return {
 
 				q.on('click',function(){
 
-					if('undefined' !== localStorage["metafieldCopy"]){
+					if('undefined' !== typeof localStorage["metafieldCopy"]){
 
-						var h = '',
-						m = JSON.parse(localStorage["metafieldCopy"]);
-
-						for (var i = 0, len = m.length; i < len; i++) {
-							var metafieldValue = _.stripHTML(m[i].value);
-							h+= '<p><strong>'+m[i].namespace+'.'+m[i].key+' ('+m[i].value_type+')</strong><br>'+metafieldValue+'</p><hr>';
+						var h = '';
+						try {
+							m = JSON.parse(localStorage["metafieldCopy"]);
+						} catch (e) {
+							m = false;
 						}
-						_.fd_modal(true,h,'In the virtual clipboard...');
+						
+						if(m){
+							for (var i = 0, len = m.length; i < len; i++) {
+								var metafieldValue = _.stripHTML(m[i].value);
+								h+= '<p><strong>'+m[i].namespace+'.'+m[i].key+' ('+m[i].value_type+')</strong><br>'+metafieldValue+'</p><hr>';
+							}
+							_.fd_modal(true,h,'In the virtual clipboard...');
+						}else{
+							_.notice('Error reading virtual clipboard. Empty?',true);
+						}
+						
 
 					}
 
 					return false;
 				});
 
-				p.on('click',function(){
+				p.on('click',function(e){
+
+					e.preventDefault();
 					
-					if('undefined' !== localStorage["metafieldCopy"]){
+					if('undefined' !== typeof localStorage["metafieldCopy"]){
 						var copyData = JSON.parse(localStorage["metafieldCopy"]);
 						if(copyData.length){
 							_.data('m-copy',copyData);
@@ -1933,12 +1944,13 @@ return {
 						}else{
 							_.notice('Nothing to paste',true);
 						}
-					}						
+					}else{
+						_.notice('Nothing to paste',true);
+					}		
 
-					return false;
 				});
 
-				if('undefined' === localStorage["metafieldCopy"]){
+				if('undefined' === typeof localStorage["metafieldCopy"]){
 					p.hide();
 					q.hide();
 				}
