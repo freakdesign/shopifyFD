@@ -145,7 +145,7 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 .modalWindow > div {width: 500px;position: relative;margin: 10% auto;background: #fff;border-radius: 3px;padding:1em;text-align: left;box-shadow: 0 0 15px rgba(0,0,0,.5)}
 .modalWindow .content li{margin-bottom: 1em}
 .modalWindow .content > div {max-height:400px;overflow:auto}
-.modalWindow .close-modal{position:absolute;background:#121212;color:#fff;border:1px solid #000;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:1em;right:1em;border-radius:50%;font-weight: bold;font-size: .75em;}
+.modalWindow .close-modal{position:absolute;background:#121212;color:#fff;border:1px solid #000;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:1em;right:1em;border-radius:50%;font-weight: bold;font-size: 1em;}
 .modalWindow .close-modal:hover{background:red;color:#fff;border-color:red;}
 .modalWindow header{border-bottom:1px solid #ccc;margin:0 0 .5em;padding:0 2em .25em 0;min-height: .25em}
 .modalWindow td{vertical-align: top}
