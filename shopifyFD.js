@@ -45,7 +45,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	*/
 
-	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn btn-slim savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><a class="btn btn-slim hidden delete tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy Metafield</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="'+jsvoid+'">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="'+jsvoid+'">Clear cache</a></p><p><a id="adv_get_collections" class="btn btn-slim" href="">Get collections</a></p><p><a id="adv_get_products" class="btn btn-slim" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
+	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn btn-slim savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="'+jsvoid+'">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="'+jsvoid+'">Clear cache</a></p><p><a id="adv_get_collections" class="btn btn-slim" href="">Get collections</a></p><p><a id="adv_get_products" class="btn btn-slim" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
 
 	var metafieldloader = '<div class="sub_section-summary fadein"><h1><strong>Metafields</strong> <span id="metacount">0</span></h1><div class="content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
 
@@ -464,6 +464,7 @@ return {
 				$('#metafield_id').val(t.attr('data-id'));
 
 				$('#shopifyjs_deletemetafield').removeClass('hidden');
+				/*$('#shopifyjs_copymetafield').removeClass('hidden');*/
 
 
 			}else{
@@ -714,6 +715,8 @@ return {
 		$('#metafield_value').val('');
 		$('#metafield_id').val('');
 		$('#shopifyjs_deletemetafield').addClass('hidden');
+		/*$('#shopifyjs_copymetafield').addClass('hidden');*/
+
 	},
 	supports_html5_storage:function(){
 		try {
@@ -1564,17 +1567,21 @@ return {
 						dataType: "json",
 						success: function(d){
 							_.notice('Link list added');
-						}	
+						},
+						error:function(){
+							_.notice('Error creating linklist',true);
+						}
 					});
 
 				},
 				a = $('<a/>',{
 					'href':'#',
-					'class':'btn btn-slim fr',
+					'class':'btn btn-slim fr tooltip-bottom tooltip',
 					'style':'margin-right:.5em'
-				}).text('Copy').on('click',function(){
+				}).html('<span class="tooltip-container"><span class="tooltip-label">Make a copy of this linklist</span></span>Copy').on('click',function(e){
+					e.preventDefault();
 					var t = $(this),
-						a = t.parent().find('a[data-route="link_list"]').eq(0);
+						a = t.parent().find('a[href^="/admin/link_lists"]').eq(0);
 						if(a.length){
 							href = a.attr('href').split('/').pop();
 							if(!isNaN(href)){
@@ -1587,48 +1594,39 @@ return {
 										delete d.link_list['default'];
 										d.link_list.title += ' COPY';
 										d.link_list.handle += '-copy';
-										/*
-										// Just in case we need to delete something later on
-										for (var i = 0, len = d.link_list.links.length; i < len; ++i) {
-											delete d.link_list.links[i].id;
-											delete d.link_list.links[i].subject;
-											delete d.link_list.links[i].subject_id;
-											delete d.link_list.links[i].subject_params;
-											
-										}
-										*/
 										create_a_linklist(d);
-									}	
+									},
+									error:function(){
+										_.notice('Error creating linklist',true);
+									}
 								});
 							}
+						}else{
+							_.notice('Can not copy this linklist. ID was not found',true);
 						}
-					return false;
 				});
 
 				llf.append(a);
 
 				var d = $('.span6.section-summary').eq(0),
 						a1 = $('<a/>',{
-							'class':'btn',
-							href:'#',
-							title:'Create a linklist with every collection'
-						}).text('Create Collections linklist').on('click',function(){
+							'class':'btn tooltip-bottom tooltip',
+							href:'#'
+						}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every collection</span></span>Create Collections linklist').on('click',function(){
 							create_collection_linklist();
 							return false;
 						}),
 						a2 = $('<a/>',{
-							'class':'btn',
-							href:'#',
-							title:'Create a linklist with every page'
-						}).text('Create Pages linklist').on('click',function(){
+							'class':'btn tooltip-bottom tooltip',
+							href:'#'
+						}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every page</span></span>Create Pages linklist').on('click',function(){
 							create_pages_linklist();
 							return false;
 						}),
 						a3 = $('<a/>',{
-							'class':'btn',
-							href:'#',
-							title:'Create a linklist with all vendors'
-						}).text('Create Vendor linklist').on('click',function(){
+							'class':'btn tooltip-bottom tooltip',
+							href:'#'
+						}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with all vendors</span></span>Create Vendor linklist').on('click',function(){
 							create_vendors_linklist();
 							return false;
 						}),
@@ -2207,7 +2205,6 @@ return {
 
 
 			 */
-
 			var tpc = $('table.product-collections').eq(0);
 			tpc.find('tr').each(function(){
 				var t = $(this);
