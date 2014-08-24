@@ -59,7 +59,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var appnav = '<li><a id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a id="togglestyle" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
 
-	var bulk_html_box = '<h2 class="warning"><strong>Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
+	var bulk_html_box = '<h2 class="warning"><strong>ShopifyFD Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
 	var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim tooltip tooltip-bottom" href="#"><span class="tooltip-container"><span class="tooltip-label">Enable Autosave</span></span>Autosave</a></li>';
 
@@ -69,7 +69,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var aargh_msg = '<p>Do note that once you run this you are going to have to manually refresh to see the updates. Annoying I know, but I have not found a way around this...</p>';
 
-	var bubble_html = '<div class="bubble ssb hide" style="bottom: 5px;"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="fl pr"><ul class="unstyled"></ul></div></div><footer class="bubble-footer"><div class="bubble-arrow-wrap"><span class="bubble-arrow-border"></span><span class="bubble-arrow"></span></div></footer></div>';
+	var bubble_html = '<div class="bubble ssb hide fadein" style="bottom: 5px;"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="fl pr"><ul class="unstyled"></ul></div></div><footer class="bubble-footer"><div class="bubble-arrow-wrap"><span class="bubble-arrow-border"></span><span class="bubble-arrow"></span></div></footer></div>';
 	
 	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
 
@@ -2534,8 +2534,14 @@ return {
 		setup_shipping:function(go){
 
 			if('undefined' !== typeof go){
+				var toAppendAfter = $('div.section-summary').eq(0);
 
-				$('div.span6.section-summary').eq(0).append('<p style="margin-top:1em" class="fadein box warning">Warning: When you copy and paste over existing rates the old ones still show until the page is refreshed, even though they have been removed. <br><br>Be sure to do a test first. <strong>Use at own risk.</strong></p>');
+				if(toAppendAfter.length){
+					toAppendAfter.append('<p style="margin-top:1em" class="fadein box warning">ShopifyFD Warning: When you copy and paste over existing rates the old ones still show until the page is refreshed, even though they have been removed. <br><br>Be sure to do a test first. <strong>Use at own risk.</strong></p>');					
+				}else{
+					_.notice('The layout on this page is unexpected. Some ShopifyFD features may not work.')
+				}
+
 
 
 				var shippingSettings = $('#settings-shipping'),
@@ -2937,20 +2943,29 @@ return {
 
 			var section = $("<div>", {
 				id: "general_metafields",
-				'class':'row section description'
+				'class':'section description'
+			}),
+			nextGrid = $('<div />',{
+				'class':'next-grid'
+			}),
+			nextGridWrap = $('<div />',{
+				'class':'next-grid__cell next-grid__cell--quarter'
 			}),
 			summary = $('<div>', {
-				'class':'span6 section-summary'
+				'class':'section-summary'
 			}),
 			sectionContent = $('<div>',{
-				'class':'span18 section-content'
+				'class':'next-grid__cell'
 			});
 
-			summary.html('<h1>Store Metafields</h1><p>Edit your shop level metafields here.</p>');
+			summary.html('<h1>Store Metafields</h1><p>Edit your shop level metafields here. Review the <a target="_blank" href="http://docs.shopify.com/themes/liquid-documentation/objects/metafield">Shopify documentation</a> for more info on Metafields.</p>');
 			sectionContent.html(metafieldloader);
-			section.append(summary).append(sectionContent);
 
-			$('div.row.section.description.first-section').eq(0).after(section);
+			nextGridWrap.append(summary);
+			nextGrid.append(nextGridWrap).append(sectionContent);
+			section.append(nextGrid);
+
+			$('#settings-general div.section').eq(0).after(section);
 
 			var loadinto = $('div.sub_section-summary .content');
 			_.loadmeta(loadinto,v);
@@ -3099,7 +3114,7 @@ return {
 							t.find('div.bubble').removeClass('hide');	
 						}
 
-					},200);
+					},100);
 
 				},function(){
 					clearTimeout(order_timer);
@@ -3211,7 +3226,8 @@ return {
 			shopifyCSS.type = "text/css";
 			shopifyCSS.rel = "stylesheet";
 			shopifyCSS.id = "shopifyjs";
-			shopifyCSS.href = "//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css";
+			/*shopifyCSS.href = "//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css";*/
+			shopifyCSS.href = "//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/s/shopifyFD.css";
 			document.getElementsByTagName('head')[0].appendChild(shopifyCSS);
 
 		},

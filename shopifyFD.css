@@ -54,9 +54,6 @@ body{padding-top:32px}
   background-image: linear-gradient( 45deg, rgba(0,0,0, 0.1) 25%, transparent 25%, transparent 50%, rgba(0,0,0, 0.1) 50%, rgba(0,0,0, 0.1) 75%, transparent 75%, transparent );
 }
 
-/* Useful to note what things are not Standard */
-.shopifyJSoverride .altered{color:red!important}
-
 .shopifyJSoverride #sidebar{top: 36px}
 
 /* Open orders count has a new action on it. Make that obvious. */
@@ -69,8 +66,8 @@ body{padding-top:32px}
 /* you know, for hiding stuff... */
 .shopifyJSoverride .hidden{display:none}
 
-/* why did we use the hidden class here? */
-.shopifyJSoverride span[data-hideif="product.isVisible"].hidden{display:inline-block;padding: 1px 5px 0px 5px}
+/* why did we use the hidden class here? 
+.shopifyJSoverride span[data-hideif="product.isVisible"].hidden{display:inline-block;padding: 1px 5px 0px 5px}*/
 
 /* Buttons */
 .shopifyJSoverride .section.buttons{padding:20px}
@@ -89,7 +86,7 @@ body{padding-top:32px}
 .shopifyJSoverride .file_row {background:#E7F3F3;}
 .shopifyJSoverride .file_row td{border-bottom: 1px solid #ABBEBD}
 
-/* Batman modal*/
+/* Modal*/
 .shopifyJSoverride .modal body{overflow: hidden}
 .shopifyJSoverride #metacount {background: #90A5A7;display: inline-block;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff}
 .shopifyJSoverride #metacount.active {background: #21C2A8}
@@ -98,6 +95,7 @@ body{padding-top:32px}
 .shopifyJSoverride .sub_section-summary{margin-bottom:.5em;background: #F3F5F5;padding: 1em;border: 1px solid #ddd;transition:border-color .25s}
 .shopifyJSoverride .sub_section-summary:hover{border: 1px solid #bbb}
 .shopifyJSoverride .sub_section-summary .content{padding-left:0;padding-bottom:0;margin-bottom:0}
+.shopifyJSoverride .next-grid__cell .sub_section-summary {background:#fff;border-radius:5px}
 .sub_section-summary h1, .sub_section-summary h2 {font-size: 18px!important;margin-bottom: 10px!important;font-weight: 300!important}
 
 .shopifyJSoverride .section>.section-summary { padding-left:1.5em; } /* just a little bit smaller */
@@ -120,7 +118,6 @@ body{padding-top:32px}
 .shopifyJSoverride td.vid{cursor:pointer;font-size: .9em;text-decoration: underline}
 .shopifyJSoverride .vbox .mybuttons {display: block;margin-top:.25em}
 .shopifyJSoverride .vbox .mybuttons a.delete {color: #C71919;float:right}
-/*.shopifyJSoverride tr.variant.active {background: #F3F5F5}*/
 
 .shopifyJSoverride .sku.label {float:right;background: #83C96D;line-height: 1em;border: none}
 
@@ -128,6 +125,9 @@ body{padding-top:32px}
 .shopifyJSoverride .header-select:focus {color:#121212;}
 
 html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none; -moz-user-select: none;-ms-user-select: none;}
+
+/* Hide promo */
+#net_promoter_score,#shop-advisor-card[track-view="setup_facebook_store_milestone"] {display:none;}
 
 /* Modal window, because wrestling the built in one is a pain in the bee-hind... */
 .shopifyJSoverride .modal-bg{z-index: 500}
@@ -142,7 +142,7 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 .modalWindow .half {width:50%}
 .modalWindow .em{margin-bottom:1em;}
 .modalWindow .active {display:block}
-.modalWindow > div {width: 500px;position: relative;margin: 10% auto;background: #fff;border-radius: 3px;padding:1em;text-align: left;box-shadow: 0 0 15px rgba(0,0,0,.5)}
+.modalWindow > div.main.content {width: 500px;position: relative;margin: 10% auto!important;background: #fff;border-radius: 3px;padding:1em;text-align: left;box-shadow: 0 0 15px rgba(0,0,0,.5)}
 .modalWindow .content li{margin-bottom: 1em}
 .modalWindow .content > div {max-height:400px;overflow:auto}
 .modalWindow .close-modal{position:absolute;background:#121212;color:#fff;border:1px solid #000;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:1em;right:1em;border-radius:50%;font-weight: bold;font-size: 1em;}
@@ -152,6 +152,13 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 .modalWindow .warning{background:red;padding:.25em;color:#fff;line-height:1.3;margin:0 0 .5em}
 .modalWindow ul{padding-left: 1em}
 .modalWindow .disabled { pointer-events: none; }
+
+/* next-grid */
+
+.shopifyJSoverride .next-grid .section-summary .box.warning{
+  background: #fff;
+  color: rgb(228, 37, 37);
+}
 
 /* animations */
 
