@@ -61,7 +61,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var bulk_html_box = '<h2 class="warning"><strong>ShopifyFD Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
-	var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim tooltip tooltip-bottom" href="#"><span class="tooltip-container"><span class="tooltip-label">Enable Autosave</span></span>Autosave</a></li>';
+	var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim tooltip tooltip-bottom disabled" href="#"><span class="tooltip-container"><span class="tooltip-label">Enable Autosave</span></span>Autosave</a></li>';
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
@@ -106,6 +106,23 @@ return {
 	    .replace(/[\n]/g, '\\n')
 	    .replace(/[\r]/g, '\\r')
 	    .replace(/[\t]/g, '\\t');
+	},
+	redirect:function(url) {
+    	if(typeof url !== 'undefined' && typeof Turbolinks === 'object'){
+			try {
+				Turbolinks.visit(url);
+			} catch (e) {
+				return false;
+			}
+    	}
+	},
+	selectSort:function(a,b){
+		if(!a.getAttribute('value')){
+			return -1;
+		}else if(!b.getAttribute('value')){
+			return 1;
+		}
+		return (a.innerHTML > b.innerHTML) ? 1 : -1;
 	},
 	stripHTML:function(dirtyString) {
     	var container = document.createElement('div');
@@ -1460,6 +1477,18 @@ return {
 								response +='<option value="'+link_lists[i].id+'">'+link_lists[i].title+'</option>';
 							}
 						}
+
+						var llselect = $('<select />',{
+							'class':'header-select fadein'
+						}).append('<option>Choose another linklist to edit</option>',response).change(function(){
+							var v = $(this).val();
+							if(v){
+								 _.redirect('/admin/link_lists/'+v);
+							}
+						});
+
+						$('.header-row .header-right').prepend(llselect);
+
 					}
 					
 				},
@@ -1567,6 +1596,7 @@ return {
 						dataType: "json",
 						success: function(d){
 							_.notice('Link list added');
+							_.redirect('/admin/link_lists/'+d.link_list.id);
 						},
 						error:function(){
 							_.notice('Error creating linklist',true);
@@ -2046,6 +2076,42 @@ return {
 
 			divSummary.html('').append(metafieldloader);
 
+			$.ajax({
+				type: "GET",
+				url: '/admin/products.json?limit=250&fields=id,title',
+				dataType: 'json',
+				success: function(d){
+					if(d){
+						products = d.products;
+						var response = '',
+						len = products.length;
+						if(len<=250){
+							for (var i = 0; i < len; i++) {
+								if(_.data('omega') !== products[i].id.toString()){
+									response +='<option value="'+products[i].id+'">'+products[i].title+'</option>';
+								}
+							}
+
+							var pselect = $('<select />',{
+								'class':'header-select fadein'
+							}).append('<option>Choose another product to edit</option>',response).change(function(){
+								var v = $(this).val();
+								if(v){
+									 _.redirect('/admin/products/'+v);
+								}
+							});
+							pselect.find('option').sort(_.selectSort).appendTo(pselect);
+							$('.header-row .header-right').prepend(pselect);
+						}
+					}
+					
+				},
+				error:function(d){
+					_.notice('Error loading linklist data',true);
+				}
+			});
+
+
 			if ($('#rte_extra').length == 0){
 
 				$('#product-description_iframecontainer').eq(0).after(rte_menu);
@@ -2403,10 +2469,10 @@ return {
 			var loadinto = $('div.sub_section-summary .content');
 			_.loadmeta(loadinto,v);
 
-			/*
+			
 			$.ajax({
 				type: "GET",
-				url: '/admin/pages.json',
+				url: '/admin/pages.json?limit=250&fields=id,title',
 				dataType: 'json',
 				success: function(d){
 					if(d){
@@ -2418,14 +2484,18 @@ return {
 								response +='<option value="'+pages[i].id+'">'+pages[i].title+'</option>';
 							}
 						}
-
-						$('.header-row .header-right').prepend('<select id="shopifyjs_pageselect" class="header-select"><option>Choose another page to edit</option>'+response+'</select>');
-						$('#shopifyjs_pageselect').change(function(){
+						var pageSelect = $('<select />',{
+							id:'shopifyjs_llselect',
+							'class':'header-select fadein'
+						}).append('<option>Choose another page to edit</option>',response).change(function(){
 							var v = $(this).val();
 							if(v){
-								 
+								 _.redirect('/admin/pages/'+v);
 							}
 						});
+						pageSelect.find('option').sort(_.selectSort).appendTo(pageSelect);
+						$('.header-row .header-right').prepend(pageSelect);
+
 					}
 					
 				},
@@ -2433,7 +2503,7 @@ return {
 					_.notice('Error loading page data',true);
 				}
 			});
-			*/
+			
 
 		},
 		shipping_remove_all:function(i,c){
