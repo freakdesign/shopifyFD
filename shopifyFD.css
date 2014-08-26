@@ -79,7 +79,7 @@ body{padding-top:32px}
 
 /* table adjustment */
 .shopifyJSoverride th.inventory.tc{min-width: 50px}
-.shopifyJSoverride td.image.thumb, .shopifyJSoverride th.image, #all-collections td.image { display:none!important; }
+/*.shopifyJSoverride td.image.thumb, */.shopifyJSoverride th.image, #all-collections td.image { display:none!important; }
 
 /* file listing */
 .shopifyJSoverride #settings-general td.image.thumb, .shopifyJSoverride #settings-general th.image {display:table-cell!important}
@@ -88,8 +88,10 @@ body{padding-top:32px}
 
 /* Modal*/
 .shopifyJSoverride .modal body{overflow: hidden}
-.shopifyJSoverride #metacount {background: #90A5A7;display: inline-block;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff}
-.shopifyJSoverride #metacount.active {background: #21C2A8}
+.shopifyJSoverride #metacount {
+  background: #90A5A7;display: none;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff;float: right;
+}
+.shopifyJSoverride #metacount.active {display: inline-block;color:#fff;background: #21C2A8}
 
 /* Sub section - mostly for the metafield box */
 .shopifyJSoverride .sub_section-summary{margin-bottom:.5em;background: #F3F5F5;padding: 1em;border: 1px solid #ddd;transition:border-color .25s}

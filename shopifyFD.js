@@ -3377,7 +3377,11 @@ return {
 		},
 		init:function(){
 
-			_.set_drag_drop();
+			/* 
+			Disable drag and drop (for now) as this clashes with new variant drag feature 
+			// _.set_drag_drop();
+			*/
+			
 			_.get_theme_data();
 
 			$('html').addClass('shopifyJSoverride');
