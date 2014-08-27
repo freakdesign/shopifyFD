@@ -304,3 +304,7 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 @media print {
   #customer_meta_box, .noprint {display:none;}
 }
+.delete-checkbox{vertical-align: top!important;}
+#assets-table tr{transition:background .2s;}
+tr.marked-for-deletion {background:#CA1800;color: #fff;}
+tr.marked-for-deletion a{color:#fff}

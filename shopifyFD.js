@@ -2961,12 +2961,20 @@ return {
 		},
 		setup_files:function(){
 
+			var deleteArray = [];
 			/* not in this version! */
 			var u = $('<ul/>',{
 				'class':'segmented',
 				'id':'get_all_images'
 			}),
 			l = $('<li/>'),
+			deleteFilesBtn = $('<a/>',{
+				'class':'btn delete disabled hidden tooltip tooltip-bottom',
+				href:'#'
+			}).html('<span class="tooltip-container"><span class="tooltip-label">Use at own risk. There is NO undo.</span></span>Delete checked files').on('click',function(e){
+				e.preventDefault();
+				deleteCheckedFiles(deleteArray);
+			}),
 			a = $('<a/>',{
 				'class':'btn',
 				'href':'#',
@@ -3003,10 +3011,67 @@ return {
 
 			});
 
-			l.append(a);
+			var deleteCheckedFiles = function(a){
+
+				if(typeof a === 'object'){
+					if(a.length){
+						$.ajax({
+							type: "DELETE",
+							url: '/admin/files.json?file='+a[0],
+							success: function(e){
+								_.notice('Removed '+a[0]);
+								a.shift();
+								deleteCheckedFiles(a);
+								$('tr.marked-for-deletion').eq(0).slideUp('200',function(){
+									$(this).remove();
+								})
+							},
+							error: function(){
+								_.notice('Error deleting file - '+a[0],true);
+							}
+						});
+					}
+				}
+			};
+
+			var deleteCheckbox = $('<input />',{
+				type:'checkbox',
+				'class':'delete-checkbox'
+			}).change(function(){
+				var t = $(this);
+				var p = t.parent().parent();
+				var filename = p.find('a').eq(1).text();
+				if(typeof filename !== 'undefined'){
+					if(t.is(':checked')){
+						p.addClass('marked-for-deletion');
+						deleteArray.push(filename);
+						deleteArray = _.array_unique(deleteArray);
+						deleteFilesBtn.removeClass('disabled hidden');
+					}else{
+						p.removeClass('marked-for-deletion');
+						var i = deleteArray.indexOf(filename);
+						if(i != -1) {
+							deleteArray.splice(i, 1);
+						}
+						if(deleteArray.length == 0){
+							deleteFilesBtn.addClass('disabled hidden');
+						}
+					}
+				}
+			});
+
+			l.append(deleteFilesBtn,a);
 			u.append(l);
-			$('.header-right .segmented').eq(0).after(u);
-			$('div.info-message').prepend('<p class="box notice"><b>Bulk file deletion is bring considered. Is this a feature you want to see in ShopifyFD?</b></p>');
+
+			setTimeout(function(){
+				/* requires a small delay */
+				$('#assets-table tr td.no-wrap').append(deleteCheckbox);
+				$('.header-right .segmented').eq(0).after(u);
+			},'250');
+			
+
+
+			
 
 		},
 		setup_settings_general:function(){
