@@ -547,8 +547,7 @@ return {
 
 		var url = d.URL+'/metafields/'+metafield_id+'.json';
 
-
-
+		if(_.data('alpha') ==='articles'){url = '/admin/articles/'+_.data('omega')+'/metafields/'+metafield_id+'.json';}
 		if(_.data('omega') ==='general'){url = '/admin/metafields/'+metafield_id+'.json';}
 
 			$.ajax({
@@ -3067,7 +3066,7 @@ return {
 				/* requires a small delay */
 				$('#assets-table tr td.no-wrap').append(deleteCheckbox);
 				$('.header-right .segmented').eq(0).after(u);
-			},'250');
+			},'500');
 			
 
 
