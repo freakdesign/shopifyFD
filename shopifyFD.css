@@ -122,7 +122,7 @@ body{padding-top:32px}
 .shopifyJSoverride .vbox .mybuttons a.delete {color: #C71919;float:right}
 
 .shopifyJSoverride .sku.label {float:right;background: #83C96D;line-height: 1em;border: none}
-
+.shopifyJSoverride .unpublished-theme-title {position: relative;}
 .shopifyJSoverride .header-select {height:32px;border-radius:3px;color:#479ccf;max-width: 250px;}
 .shopifyJSoverride .header-select:focus {color:#121212;}
 

@@ -31,8 +31,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var _savelabel = 'Save',
 	_editlabel = 'Edit',
-	_deletelabel = 'Delete',
-	jsvoid = 'javascript:void(0)';
+	_deletelabel = 'Delete';
 
 	/*
 
@@ -45,7 +44,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	*/
 
-	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn btn-slim savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="'+jsvoid+'">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="'+jsvoid+'">Clear cache</a></p><p><a id="adv_get_collections" class="btn btn-slim" href="">Get collections</a></p><p><a id="adv_get_products" class="btn btn-slim" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
+	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn btn-slim savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="#">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn btn-slim" href="">Get collections</a></p><p><a id="adv_get_products" class="btn btn-slim" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
 
 	var metafieldloader = '<div class="sub_section-summary fadein"><h1><strong>Metafields</strong> <span id="metacount">0</span></h1><div class="content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
 
@@ -57,7 +56,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a id="aboutapp" href="'+jsvoid+'">About ShopifyFD</a></li><li><a id="togglestyle" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="'+jsvoid+'" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a id="aboutapp" href="#">About ShopifyFD</a></li><li><a id="togglestyle" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>ShopifyFD Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
@@ -78,8 +77,7 @@ var _ = (function(){
 
 	var v = { 
 		debug: false,
-		drag_on:true,
-		author: 'freakdesign',
+		drag_on:false,
 		alpha: false,
 		omega: false,
 		countries:false,
@@ -1235,7 +1233,7 @@ return {
 			l.append(c);
 			u.append(l);
 
-			$('.header-right .segmented').eq(0).after(u);
+			$('.header-row .header-right').eq(0).prepend(u);
 
 	},
 	setup_articles:function(){
@@ -1443,9 +1441,9 @@ return {
 
 			for (var i = 0; i < themeBoxes.length; i++) {
 				var themeID = themeBoxes[i].id.split('_').pop(),
-				contentBox = themeBoxes.eq(i).find('.box-content'),
+				contentBox = themeBoxes.eq(i).find('.next-card__section.tc'),
 				div = $('<div />',{
-					style:'color: #ccc;font-family: monospace;'
+					style:'color: #ccc;font-family: monospace;margin-top: 7px;'
 				}).text(themeID);
 				contentBox.append(div);
 			};
@@ -1500,7 +1498,7 @@ return {
 		},
 		setup_link_lists:function(){
 			/* Setup the button and actions for link list duplication and creation */
-			var llf = $('div.linklist-container .box-footer'),
+			var llf = $('.next-card__section .next-grid__cell--no-flex'),
 				create_collection_linklist = function(){
 
 					$.ajax({
@@ -1605,8 +1603,8 @@ return {
 				},
 				a = $('<a/>',{
 					'href':'#',
-					'class':'btn btn-slim fr tooltip-bottom tooltip',
-					'style':'margin-right:.5em'
+					'class':'tooltip-bottom tooltip',
+					'style':'margin-right:1.5em'
 				}).html('<span class="tooltip-container"><span class="tooltip-label">Make a copy of this linklist</span></span>Copy').on('click',function(e){
 					e.preventDefault();
 					var t = $(this),
@@ -1635,11 +1633,12 @@ return {
 						}
 				});
 
-				llf.append(a);
+				llf.prepend(a);
 
-				var d = $('.span6.section-summary').eq(0),
+				var d = $('.section-summary').eq(0),
 						a1 = $('<a/>',{
 							'class':'btn tooltip-bottom tooltip',
+							style:'margin-top:2em',
 							href:'#'
 						}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every collection</span></span>Create Collections linklist').on('click',function(){
 							create_collection_linklist();
@@ -1658,14 +1657,14 @@ return {
 						}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with all vendors</span></span>Create Vendor linklist').on('click',function(){
 							create_vendors_linklist();
 							return false;
-						}),
+						});/*,
 						warning = $('<p/>',{
 							'class':'box warning',
 							style:"margin-top:1em"
-						}).text('If you use the trash can button to remove a linklist some ShopifyFD features will not reload. Navigate away from the page, and back again.');
+						}).text('If you use the trash can button to remove a linklist some ShopifyFD features will not reload. Navigate away from the page, and back again.');*/
 
 				if(d){
-					d.append('<br><br>',a1,'<br><br>',a2,'<br><br>',a3).find('p:eq(0)').append(warning);
+					d.append('<br>',a1,'<br>',a2,'<br>',a3);
 
 				}
 
@@ -1920,7 +1919,7 @@ return {
 			l.append(a,getCountBtn);
 			u.append(l);
 
-			$('.header-right .segmented').eq(0).after(u);
+			$('.header-right').eq(0).prepend(u);
 		},
 		setup_copypaste:function(){
 
@@ -3065,11 +3064,8 @@ return {
 			setTimeout(function(){
 				/* requires a small delay */
 				$('#assets-table tr td.no-wrap').append(deleteCheckbox);
-				$('.header-right .segmented').eq(0).after(u);
+				$('.header-row .header-right').eq(0).prepend(u);
 			},'500');
-			
-
-
 			
 
 		},
@@ -3441,14 +3437,10 @@ return {
 		},
 		init:function(){
 
-			/* 
-			Disable drag and drop (for now) as this clashes with new variant drag feature 
-			// _.set_drag_drop();
-			*/
-			
-			_.get_theme_data();
-
+			if(_.data('drag_on')){ _.set_drag_drop(); }
 			$('html').addClass('shopifyJSoverride');
+
+			_.get_theme_data();
 
 			/* 
 
