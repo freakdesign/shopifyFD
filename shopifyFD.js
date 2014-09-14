@@ -236,7 +236,7 @@ return {
 		if(id){
 			var mycontent = $("iframe").contents().find("#tinymce"),
 			myhtml = mycontent.html(),
-                        metaJSON = {
+			metaJSON = {
 				"metafield": {
 					"namespace": 'backups',
 					"key": id,
@@ -2613,7 +2613,7 @@ return {
 
 
 				var shippingSettings = $('#settings-shipping'),
-				new_buttons = $('<div class="header-right"><div class="header-action"><a class="btn btn-separate tooltip-bottom tooltip" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a><a class="btn btn-separate export-as-json" href="#">Export as JSON</a></div></div>');
+					new_buttons = $('<div class="header-right"><div class="header-action"><a class="btn btn-separate tooltip-bottom tooltip" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a><a class="btn btn-separate export-as-json" href="#">Export as JSON</a></div></div>');
 
 				new_buttons.find('a').eq(0).on('click',function(){
 
