@@ -1665,9 +1665,10 @@ return {
 
 				if(d){
 					d.append('<br>',a1,'<br>',a2,'<br>',a3);
-
 				}
 
+				var endpointError = $('<div />',{'class':'box error animated fadein'}).html('Warning - ShopifyFD features do not currently work on this view. See this <a target="_blank" href="https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/dashboard-endpoints-failing-link-lists-shipping-files-etc-212161">related post</a>.');
+				$('.section.link-lists').eq(0).prepend(endpointError);
 
 			/* end duplication setup */
 		},
@@ -2610,7 +2611,8 @@ return {
 					_.notice('The layout on this page is unexpected. Some ShopifyFD features may not work.')
 				}
 
-
+				var endpointError = $('<div />',{'class':'box error animated fadein'}).html('Warning - ShopifyFD features do not currently work on this view. See this <a target="_blank" href="https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/dashboard-endpoints-failing-link-lists-shipping-files-etc-212161">related post</a>.');
+				$('.section.shipping-rates').eq(0).prepend(endpointError);
 
 				var shippingSettings = $('#settings-shipping'),
 				new_buttons = $('<div class="header-right"><div class="header-action"><a class="btn btn-separate tooltip-bottom tooltip" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a></div></div>');
