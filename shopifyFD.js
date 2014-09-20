@@ -2615,7 +2615,7 @@ return {
 				$('.section.shipping-rates').eq(0).prepend(endpointError);
 
 				var shippingSettings = $('#settings-shipping'),
-				new_buttons = $('<div class="header-right"><div class="header-action"><a class="btn btn-separate tooltip-bottom tooltip" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a></div></div>');
+					new_buttons = $('<div class="header-right"><div class="header-action"><a class="btn btn-separate tooltip-bottom tooltip" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a><a class="btn btn-separate export-as-json" href="#">Export as JSON</a></div></div>');
 
 				new_buttons.find('a').eq(0).on('click',function(){
 
@@ -2646,6 +2646,14 @@ return {
 
 					return false;
 				});
+				new_buttons.find('.export-as-json').on('click', function(evt) {
+					var json = {};
+						$countries = $('.shipping-rate-table');
+
+					_.fd_modal(true, '<textarea readonly rows="23">' + JSON.stringify( _.data('countries').countries ) + '</textarea>','Export all countries', true);
+
+					return false;
+				})
 
 				shippingSettings.find('header').eq(0).append(new_buttons);
 
