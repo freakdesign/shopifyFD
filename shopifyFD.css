@@ -104,6 +104,8 @@ body{padding-top:32px}
 .shopifyJSoverride .row-attached-to-top { position: relative;/*top: -40px;*/}
 .shopifyJSoverride .view-in-store {background-position: 100% -2561px}
 
+.shopifyJSoverride .header-main {max-width: inherit;}
+
 /* Editor extra */
 .shopifyJSoverride #rte_extra{background: #F0F0F0;padding: 5px;}
 
@@ -121,7 +123,8 @@ body{padding-top:32px}
 .shopifyJSoverride .vbox .mybuttons {display: block;margin-top:.25em}
 .shopifyJSoverride .vbox .mybuttons a.delete {color: #C71919;float:right}
 
-.shopifyJSoverride .sku.label {float:right;background: #83C96D;line-height: 1em;border: none}
+.shopifyJSoverride .sku.label {float:right;background: #21C2A8;line-height: 1em;border: none;}
+.shopifyJSoverride .variant.label {float:right;border: none;line-height: 1em;}
 .shopifyJSoverride .unpublished-theme-title {position: relative;}
 .shopifyJSoverride .header-select {height:32px;border-radius:3px;color:#479ccf;max-width: 250px;}
 .shopifyJSoverride .header-select:focus {color:#121212;}
@@ -151,7 +154,7 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 .modalWindow .close-modal:hover{background:red;color:#fff;border-color:red;}
 .modalWindow header{border-bottom:1px solid #ccc;margin:0 0 .5em;padding:0 2em .25em 0;min-height: .25em}
 .modalWindow td{vertical-align: top}
-.modalWindow .warning{background:red;padding:.25em;color:#fff;line-height:1.3;margin:0 0 .5em}
+.modalWindow .warning{background:#d15757;color:#fff;line-height:1.3;margin:0 0 .5em}
 .modalWindow ul{padding-left: 1em}
 .modalWindow .disabled { pointer-events: none; }
 
@@ -162,6 +165,8 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
   color: rgb(228, 37, 37);
 }
 
+.shopifyJSoverride .theme-id{color: #ccc;font-family: monospace;margin-top: 7px;}
+.shopifyJSoverride .theme-id.published{margin-left: 1em;margin-top:0;}
 /* animations */
 
 .fadein{-webkit-animation: fade-in .25s linear;-moz-animation: fade-in .25s linear;-o-animation: fade-in .25s linear;animation: fade-in .25s linear;}

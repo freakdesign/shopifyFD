@@ -46,7 +46,9 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn btn-slim savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="#">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn btn-slim" href="">Get collections</a></p><p><a id="adv_get_products" class="btn btn-slim" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
 
-	var metafieldloader = '<div class="sub_section-summary fadein"><h1><strong>Metafields</strong> <span id="metacount">0</span></h1><div class="content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
+	var metafieldloader = '<div class="sub_section-summary fadein"><h1>Metafields <span id="metacount" class="animated bounce">0</span></h1><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
+
+	var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
 
 	var metafield_default = '<option value="">Select or create a metafield</option>';
 
@@ -66,12 +68,13 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopify.freakdesign.com.au/#donate">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://shopify.freakdesign.com.au" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
 
-	var aargh_msg = '<p>Do note that once you run this you are going to have to manually refresh to see the updates. Annoying I know, but I have not found a way around this...</p>';
+	var aargh_msg = '<p>The page may need to be reloaded to see the changes.</p>';
 
 	var bubble_html = '<div class="bubble ssb hide fadein" style="bottom: 5px;"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="fl pr"><ul class="unstyled"></ul></div></div><footer class="bubble-footer"><div class="bubble-arrow-wrap"><span class="bubble-arrow-border"></span><span class="bubble-arrow"></span></div></footer></div>';
 	
 	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
 
+var endpointError = $('<div />',{'class':'box error animated fadein'}).html('Warning - Some ShopifyFD features do not currently work on this view. See this <a target="_blank" href="https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/dashboard-endpoints-failing-link-lists-shipping-files-etc-212161">related post</a>.');
 
 var _ = (function(){
 
@@ -1135,17 +1138,25 @@ return {
 
 						},
 	btn_removealltags:function(){
-		$('div.row.section.tags div.section-summary').eq(0).append('<a id="addalltags" href="#" class="btn">Add all tags</a> <a id="removealltags" href="#" class="btn">Remove all tags</a>');
 
-		$('#removealltags').on('click',function(){
-			$('ul.tokenized-list').eq(0).find('a').click();
-			return false;
-		});
+		var targetHTML = $('.section.tags .section-summary').eq(0);
+		if(targetHTML.length){
 
-		$('#addalltags').on('click',function(){
-			$('ul.addtags').eq(0).find('span:not(.inactive)').click();
-			return false;
-		});
+			targetHTML.append('<a id="addalltags" href="#" class="btn animated fadein">Add all tags</a> <a id="removealltags" href="#" class="btn animated fadein">Remove all tags</a>');
+
+			$('#removealltags').on('click',function(){
+				$('ul.tokenized-list').eq(0).find('a').click();
+				return false;
+			});
+
+			$('#addalltags').on('click',function(){
+				$('ul.addtags').eq(0).find('span:not(.inactive)').click();
+				return false;
+			});
+
+		}else{
+			_.notice('ShopifyFD error : btn_removealltags : target html not found',true);
+		}
 
 	},
 	flog:function(o){
@@ -1217,7 +1228,10 @@ return {
 	},
 	setup_discounts:function(){
 
-		var u = $('<ul/>',{
+		var targetHTML = $('.header-row .header-right').eq(0);
+
+		if(targetHTML.length){
+			var u = $('<ul/>',{
 			'class':'segmented',
 			'id':'discount_buttons'
 			}),
@@ -1225,37 +1239,62 @@ return {
 			c = $('<a/>',{
 				'class':'btn btn-separate disabled',
 				'href':'#'
-			}).html('Bulk create').on('click',function(){
-				_.fd_modal(true,'<p>This is on the todo list. Will get to it soon(ish)</p></div>','Bulk create discount codes',true);
+			}).html('Bulk create').on('click',function(e){
+				e.preventDefault();
 				return false;
 			});
 
 			l.append(c);
 			u.append(l);
+			targetHTML.prepend(u);	
 
-			$('.header-row .header-right').eq(0).prepend(u);
+		}else{
+			_.notice('ShopifyFD error : setup_discounts : target html not found',true);
+		}
 
 	},
 	setup_articles:function(){
-		_.flog('setup_articles');
-		$('div.span6.section-summary a.view-in-store').remove();
-		$('div.span6.section-summary').eq(0).find('p, h1').remove().end().append(metafieldloader);
 
-		var loadinto = $('div.sub_section-summary .content');
-		_.loadmeta(loadinto,v);
+		var targetHTML = $('.section.description .section-summary').eq(0);
+		if(targetHTML.length){
+			var itemViewLink = targetHTML.find('a').eq(0).attr('href');	
+			targetHTML.after(metafieldloader).remove();
+
+			var loadinto = $('div.metafield-content');
+			_.loadmeta(loadinto,v);
+
+			var page_title = $('h1.header-main');
+
+			if(page_title.length){
+
+				var viewInStore = $('<a />',{
+					href:itemViewLink,
+					target:'_blank',
+					style:'display: inline-block;vertical-align: top;',
+					title:'View in Store'
+				});
+
+				viewInStore.append('<i class="ico ico-20-svg ico-sidebar-bottom-website"></i>');
+				page_title.append(viewInStore);
+			}
+
+		}else{
+			_.notice('ShopifyFD error : setup_articles : Metafield target HTML not found',true);
+		}
 	},
 	setup_blogs:function(){
-		var view_in_store = $('div.span6.section-summary a.view-in-store'),
-		blog_title = $('h1.header-main span[data-bind="blog.title"]');
 
-		blog_title.addClass('view-in-store').html('<a target="shopify_storeview" href="'+view_in_store.prop('href')+'">'+blog_title.text()+'</a>').prop('title', 'View in store');
-		view_in_store.remove();
-		$('div.span6.section-summary').eq(0).find('p, h1').remove().end().append(metafieldloader);
-		var loadinto = $('div.sub_section-summary .content');
+		var targetHTML = $('div.section.description');
 
-		window.setTimeout(function(){
+		if(targetHTML.length){
+
+			targetHTML.after(metafieldloaderSection);
+			var loadinto = $('div.metafield-content');
 			_.loadmeta(loadinto,v);
-		},250);
+
+		}else{
+			_.notice('ShopifyFD error : setup_blogs : target html not found',true);
+		}
 
 	},
 	setup_rte:function(){
@@ -1358,31 +1397,34 @@ return {
 	setup_products_list:function(){
 
 		/*
-				  _                                     _            _         _ _     _
-		 ___  ___| |_ _   _ _ __    _ __  _ __ ___   __| |_   _  ___| |_ ___  | (_)___| |_
-		/ __|/ _ \ __| | | | '_ \  | '_ \| '__/ _ \ / _` | | | |/ __| __/ __| | | / __| __|
-		\__ \  __/ |_| |_| | |_) | | |_) | | | (_) | (_| | |_| | (__| |_\__ \ | | \__ \ |_
-		|___/\___|\__|\__,_| .__/  | .__/|_|  \___/ \__,_|\__,_|\___|\__|___/ |_|_|___/\__|
-		                   |_|     |_|
-
-		
+		                     _            _     _ _     _
+		 _ __  _ __ ___   __| |_   _  ___| |_  | (_)___| |_
+		| '_ \| '__/ _ \ / _` | | | |/ __| __| | | / __| __|
+		| |_) | | | (_) | (_| | |_| | (__| |_  | | \__ \ |_
+		| .__/|_|  \___/ \__,_|\__,_|\___|\__| |_|_|___/\__|
+		|_|
 
 		*/
 
-		if(!$('#showsku').length){
-			var u = $('<ul/>',{
-				'class':'segmented',
-				'id':'showsku'
+		var targetHTML = $('.header-right .segmented').eq(0);
+		if(targetHTML.length){
+
+			if(!$('#showsku').length){
+
+				var u = $('<ul/>',{
+					'class':'segmented',
+					'id':'showsku'
 				}),
 				l = $('<li/>'),
 				a = $('<a/>',{
-					'class':'btn',
-					'href':'#',
-					'title':'Show SKU and Variant IDs'
-				}).html('Show SKUs & ID').on('click',function(){
+						'class':'btn animated fadein',
+						'href':'#',
+						'title':'Show SKU and Variant IDs'
+				}).html('Show SKUs & ID').on('click',function(e){
+					e.preventDefault();
 					var p = [],
-						sku =[],
-						a_list = $('#all-products td.name a');
+					sku =[],
+					a_list = $('#all-products td.name a');
 
 					a_list.each(function(){
 						p.push($(this).attr('href').split(/[/]+/).pop());
@@ -1390,52 +1432,55 @@ return {
 
 					if(p.length){
 						var i=0,
-			getsku = function(p,i){
+						getsku = function(p,i){
 
+							$.ajax({
+								type: "GET",
+								url: '/admin/products/'+p[i]+'.json?fields=variants',
+								dataType: 'json',
+								success: function(d){
+									var s = d.product.variants[0].sku,
+									v = d.product.variants[0].id,
+									skuspan ='';
 
-				$.ajax({
-					type: "GET",
-					url: '/admin/products/'+p[i]+'.json?fields=variants',
-					dataType: 'json',
-					success: function(d){
-						var s = d.product.variants[0].sku,
-							v = d.product.variants[0].id,
-							skuspan ='';
-						if(s || v){
-							if(s){skuspan='<span title="SKU" class="sku label">'+s+'</span>'}
-							a_list.eq(i).before(skuspan+'<span title="VariantID" class="variant label">'+v+'</span>');
-						}
+									if(s || v){
+										if(s){skuspan='<span title="SKU" class="sku label animated fadein">'+s+'</span>'}
+										a_list.eq(i).before(skuspan+'<span title="VariantID" class="variant label animated fadein">'+v+'</span>');
+									}
 
-						if(i+1 < p.length){
-							getsku(p,i+1);
-						}else{
-							_.fd_modal(false);
-						}
+									if(i+1 < p.length){
+										getsku(p,i+1);
+									}else{
+										_.notice('SKUs and Variant IDs Loaded');
+									}
 
-					}	
-					
-				});
+								}	
+								
+							});
 
-				};
+						};
 
-				_.fd_modal(true,'Loading SKUs and Variant IDs, please wait...','Loading',true);
-				getsku(p,i);
+						_.notice('Loading SKUs and Variant IDs, please wait...');
+						getsku(p,i);
+					}
 
-						}
-						return false;
 				});
 
 				l.append(a);
 				u.append(l);
-
-				$('.header-right .segmented').eq(1).after(u);
+				targetHTML.after(u);
 
 			}
-		},
-		setup_themes:function(){
+		}else{
+			_.notice('Error : setup_products_list : html not found',true);
+		}
+	},
+	setup_themes:function(){
+
 			$('.theme-store-cta-section').remove(); /* page is big enough without a giant ad */
+
 			var publishedTitle = $('.published-theme-title'),
-			customiseBtn = $('.btn.btn-primary').eq(1),
+			customiseBtn = $('.btn.btn-primary').eq(0), /* for the published theme */
 			customiseHREF = customiseBtn.attr('href'),
 			themeBoxes = $('div.unpublished-box');
 
@@ -1443,22 +1488,24 @@ return {
 				var themeID = themeBoxes[i].id.split('_').pop(),
 				contentBox = themeBoxes.eq(i).find('.next-card__section.tc'),
 				div = $('<div />',{
-					style:'color: #ccc;font-family: monospace;margin-top: 7px;'
-				}).text(themeID);
+					'class':'theme-id'
+				}).html('<span class="tooltip-bottom tooltip"><span class="tooltip-container"><span class="tooltip-label">Theme ID</span></span>'+themeID+'</span>');
 				contentBox.append(div);
 			};
 
-			if(typeof customiseHREF !== 'undefined'){
-				if(customiseHREF.indexOf('/admin/themes')>-1){
-					var span = $('<span />',{
-						style:'margin:0 1em;color:#479ccf;font-family: monospace;'
-					}).text(customiseHREF.split('/')[3]);
-					publishedTitle.append(span);
+			if(publishedTitle.length){
+				if(typeof customiseHREF !== 'undefined'){
+					if(customiseHREF.indexOf('/admin/themes')>-1){
+						var span = $('<span />',{
+							'class':'theme-id published'
+						}).text(customiseHREF.split('/')[3]);
+						publishedTitle.append(span);
+					}
 				}
 			}
-		},
-		setup_link_lists_edit:function(){
 
+	},
+		setup_link_lists_edit:function(){
 
 			$.ajax({
 				type: "GET",
@@ -1657,102 +1704,149 @@ return {
 						}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with all vendors</span></span>Create Vendor linklist').on('click',function(){
 							create_vendors_linklist();
 							return false;
-						});/*,
-						warning = $('<p/>',{
-							'class':'box warning',
-							style:"margin-top:1em"
-						}).text('If you use the trash can button to remove a linklist some ShopifyFD features will not reload. Navigate away from the page, and back again.');*/
+						});
 
 				if(d){
 					d.append('<br>',a1,'<br>',a2,'<br>',a3);
 				}
 
-				var endpointError = $('<div />',{'class':'box error animated fadein'}).html('Warning - ShopifyFD features do not currently work on this view. See this <a target="_blank" href="https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/dashboard-endpoints-failing-link-lists-shipping-files-etc-212161">related post</a>.');
 				$('.section.link-lists').eq(0).prepend(endpointError);
 
 			/* end duplication setup */
 		},
 		setup_collections:function(){
+
 			_.data('collections',false);
-			var u = $('<ul/>',{
-					'class':'segmented'
-					}),
-					l = $('<li/>'),
-					getCountBtn = $('<a/>',{
-						'class':'btn',
-						style:'margin-left:.5em',
-						href:'#'
-					}).text('Show Product Count').on('click',function(e){
-						e.preventDefault();
-						$.ajax({
-							type: "GET",url: '/admin/collections.json?limit=250',dataType: 'json',
-							success: function(d){
-							if(d.collections.length){
-								_.data('collections',d);
-								for (var i = d.collections.length - 1; i >= 0; i--) {
-									var collectionTable = $('#collections-results'),
-									collectionLink = collectionTable.find('a[href="/admin/collections/'+d.collections[i].id+'"]');
-									if(collectionLink.find('span').length === 0){
-										collectionLink.append('<span class="sku label">'+d.collections[i].products_count+'</span>');
+			var targetHTML = $('.header-right').eq(0);
+
+			if(targetHTML.length){
+				
+				var u = $('<ul/>',{
+						'class':'segmented'
+						}),
+						l = $('<li/>'),
+						getCountBtn = $('<a/>',{
+							'class':'btn',
+							style:'margin-left:.5em',
+							href:'#'
+						}).text('Show Product Count').on('click',function(e){
+							e.preventDefault();
+							$.ajax({
+								type: "GET",url: '/admin/collections.json?limit=250',dataType: 'json',
+								success: function(d){
+								if(d.collections.length){
+									_.data('collections',d);
+									for (var i = d.collections.length - 1; i >= 0; i--) {
+										var collectionTable = $('#collections-results'),
+										collectionLink = collectionTable.find('a[href="/admin/collections/'+d.collections[i].id+'"]');
+										if(collectionLink.find('span').length === 0){
+											collectionLink.append('<span class="sku label">'+d.collections[i].products_count+'</span>');
+										}
+									};
+								}
+								}
+							});
+						}),
+						a = $('<a/>',{
+							'class':'btn',
+							'href':'#',
+							'title':'Add tags to entire collection'
+						}).html('Bulk edit tags').on('click',function(){
+							_.fd_modal(true,bulk_tags,'Edit tags for all products in a collection',true);
+							var fdmodal = $("#fdmodal"),
+							a = fdmodal.find('select[data-action="action"]'),
+							b = fdmodal.find('a').eq(1),
+							c = fdmodal.find('select[data-action="collection"]'),
+							t = fdmodal.find('input').eq(0);
+
+							a.change(function(event) {
+								"purge"==a.val()||"set"==a.val()?("purge"==a.val()&&t.val("").attr("disabled","disabled"),b.addClass("delete")):(t.removeAttr("disabled"),b.removeClass("delete"));
+							});
+
+							var set_tags = function(_d,i,t,callback){
+								/* Overwrite the existing tags */
+								var id = _d.products[i].id,
+								data = {
+									"product": {
+									"id": id,
+									"tags": t
 									}
 								};
-							}
-							}
-						});
-					}),
-					a = $('<a/>',{
-						'class':'btn',
-						'href':'#',
-						'title':'Add tags to entire collection'
-					}).html('Bulk edit tags').on('click',function(){
-						_.fd_modal(true,bulk_tags,'Edit tags for all products in a collection',true);
-						var fdmodal = $("#fdmodal"),
-						a = fdmodal.find('select[data-action="action"]'),
-						b = fdmodal.find('a').eq(1),
-						c = fdmodal.find('select[data-action="collection"]'),
-						t = fdmodal.find('input').eq(0);
 
-						a.change(function(event) {
-							"purge"==a.val()||"set"==a.val()?("purge"==a.val()&&t.val("").attr("disabled","disabled"),b.addClass("delete")):(t.removeAttr("disabled"),b.removeClass("delete"));
-						});
+								b.text(i+1+'/'+_d.products.length);
 
-						var set_tags = function(_d,i,t,callback){
-							/* Overwrite the existing tags */
-							var id = _d.products[i].id,
-							data = {
-								"product": {
-								"id": id,
-								"tags": t
-								}
-							};
-
-							b.text(i+1+'/'+_d.products.length);
-
-							$.ajax({
-							type: "PUT",
-							url: '/admin/products/'+id+'.json',
-							data: data,
-							dataType: 'json',
-							success: function(d){
-								++i;
-								if(i<_d.products.length){
-									set_tags(_d,i,t,callback)
-								}else{
-									if(typeof callback === 'function'){
-										callback();
+								$.ajax({
+								type: "PUT",
+								url: '/admin/products/'+id+'.json',
+								data: data,
+								dataType: 'json',
+								success: function(d){
+									++i;
+									if(i<_d.products.length){
+										set_tags(_d,i,t,callback)
+									}else{
+										if(typeof callback === 'function'){
+											callback();
+										}
 									}
 								}
+								});
 							}
-							});
-						}
 
-						var delete_tags = function(_d,i,t,callback){
+							var delete_tags = function(_d,i,t,callback){
 
-							if(_d.products[i].tags){
+								if(_d.products[i].tags){
+
+									var a1 = t.replace(/, /g, ',').split(','),
+										a2 = _d.products[i].tags.replace(/, /g, ',').split(','),
+										a3 = $(a2).not(a1).get() + '',
+										id = _d.products[i].id,
+										data = {
+											"product": {
+											"id": id,
+											"tags": a3
+											}
+										};
+
+									b.text(i+1+'/'+_d.products.length);
+
+									$.ajax({
+										type: "PUT",
+										url: '/admin/products/'+id+'.json',
+										data: data,
+										dataType: 'json',
+										success: function(d){
+											++i;
+											if(i<_d.products.length){
+												delete_tags(_d,i,t,callback)
+											}else{
+												if(typeof callback === 'function'){
+													callback();
+												}
+											}
+										}
+									});
+
+								}else{
+
+									++i;
+									if(i<_d.products.length){
+										delete_tags(_d,i,t,callback)
+									}else{
+										if(typeof callback === 'function'){
+											callback();
+										}
+									}
+
+								}
+
+							}
+
+							var put_tags = function(_d,i,t,callback){
 
 								var a1 = t.replace(/, /g, ',').split(','),
-									a2 = _d.products[i].tags.replace(/, /g, ',').split(','),
-									a3 = $(a2).not(a1).get() + '',
+									a2 = _d.products[i].tags.split(','),
+									a3 = _.array_unique(a1.concat(a2))+'',
 									id = _d.products[i].id,
 									data = {
 										"product": {
@@ -1761,7 +1855,7 @@ return {
 										}
 									};
 
-								b.text(i+1+'/'+_d.products.length);
+									b.text(i+1+'/'+_d.products.length);
 
 								$.ajax({
 									type: "PUT",
@@ -1771,156 +1865,104 @@ return {
 									success: function(d){
 										++i;
 										if(i<_d.products.length){
-											delete_tags(_d,i,t,callback)
+											put_tags(_d,i,t,callback)
 										}else{
-											if(typeof callback === 'function'){
-												callback();
-											}
+											callback();
 										}
 									}
 								});
 
-							}else{
-
-								++i;
-								if(i<_d.products.length){
-									delete_tags(_d,i,t,callback)
-								}else{
-									if(typeof callback === 'function'){
-										callback();
-									}
-								}
-
 							}
 
-						}
+							b.on('click',function(){
 
-						var put_tags = function(_d,i,t,callback){
-							/*	
-								Add tags (should they be unique) 
-								*not the most efficient method running this every time. add this to the todo list 
-							*/
+							if(c.val().length){
 
-							var a1 = t.replace(/, /g, ',').split(','),
-								a2 = _d.products[i].tags.split(','),
-								a3 = _.array_unique(a1.concat(a2))+'',
-								id = _d.products[i].id,
-								data = {
-									"product": {
-									"id": id,
-									"tags": a3
+								if(a.val()=='add' && t.val().length){
+
+									$.ajax({
+									type: "GET",
+									url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
+									dataType: 'json',
+									success: function(d){
+										b.addClass('disabled');	
+										put_tags(d,0,t.val(),function(){
+											_.notice('Done. Tags have been added');
+											b.text('Update tags').removeClass('disabled');
+										});
 									}
-								};
+									});
+								}
 
-								b.text(i+1+'/'+_d.products.length);
+
+								if(a.val()=='purge' || a.val()=='set'){
+
+									$.ajax({
+									type: "GET",
+									url: '/admin/products.json?collection_id='+c.val()+'&fields=id',
+									dataType: 'json',
+									success: function(d){
+										b.addClass('disabled');	
+										set_tags(d,0,t.val(),function(){
+											_.notice('Done.');
+											b.text('Update tags').removeClass('disabled');
+										});
+									}
+									});
+								}
+
+								if(a.val()=='remove'){
+
+									$.ajax({
+									type: "GET",
+									url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
+									dataType: 'json',
+									success: function(d){
+										b.addClass('disabled');	
+										delete_tags(d,0,t.val(),function(){
+											_.notice('Matched tags have been removed.');
+											b.text('Update tags').removeClass('disabled');
+										});
+									}
+									});
+								}
+
+							}else{
+									_.notice('Choose a collection',true);
+								}
+									return false;
+
+							});
+
+							a.hide();
 
 							$.ajax({
-								type: "PUT",
-								url: '/admin/products/'+id+'.json',
-								data: data,
-								dataType: 'json',
+								type: "GET",url: '/admin/collections.json?limit=250',dataType: 'json',
 								success: function(d){
-									++i;
-									if(i<_d.products.length){
-										put_tags(_d,i,t,callback)
-									}else{
-										callback();
+									if(d.collections.length){
+										_.data('collections',d);
+										var toappend='';
+
+										for (var i = 0, len = d.collections.length; i < len; i++) {
+											toappend+='<option value="'+d.collections[i].id+'">'+d.collections[i].title+'</option>';
+										}
+
+										c.append(toappend).find('option:eq(0)').text('Select a collection');
+										a.show();
 									}
 								}
 							});
 
-						}
-
-						b.on('click',function(){
-
-						if(c.val().length){
-
-							if(a.val()=='add' && t.val().length){
-
-								$.ajax({
-								type: "GET",
-								url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
-								dataType: 'json',
-								success: function(d){
-									b.addClass('disabled');	
-									put_tags(d,0,t.val(),function(){
-										_.notice('Done. Tags have been added');
-										b.text('Update tags').removeClass('disabled');
-									});
-								}
-								});
-							}
-
-
-							if(a.val()=='purge' || a.val()=='set'){
-
-								$.ajax({
-								type: "GET",
-								url: '/admin/products.json?collection_id='+c.val()+'&fields=id',
-								dataType: 'json',
-								success: function(d){
-									b.addClass('disabled');	
-									set_tags(d,0,t.val(),function(){
-										_.notice('Done.');
-										b.text('Update tags').removeClass('disabled');
-									});
-								}
-								});
-							}
-
-							if(a.val()=='remove'){
-
-								$.ajax({
-								type: "GET",
-								url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
-								dataType: 'json',
-								success: function(d){
-									b.addClass('disabled');	
-									delete_tags(d,0,t.val(),function(){
-										_.notice('Matched tags have been removed.');
-										b.text('Update tags').removeClass('disabled');
-									});
-								}
-								});
-							}
-
-
-
-
-						}else{
-								_.notice('Choose a collection',true);
-							}
-								return false;
-
+							return false;
 						});
 
+				l.append(a,getCountBtn);
+				u.append(l);
+				targetHTML.prepend(u);
 
-						a.hide();
-
-						$.ajax({
-							type: "GET",url: '/admin/collections.json?limit=250',dataType: 'json',
-							success: function(d){
-							if(d.collections.length){
-								_.data('collections',d);
-								var toappend='';
-
-								for (var i = 0, len = d.collections.length; i < len; i++) {
-									toappend+='<option value="'+d.collections[i].id+'">'+d.collections[i].title+'</option>';
-								}
-
-								c.append(toappend).find('option:eq(0)').text('Select a collection');
-								a.show();
-							}
-							}
-						});
-
-						return false;
-					});
-
-			l.append(a,getCountBtn);
-			u.append(l);
-
-			$('.header-right').eq(0).prepend(u);
+			}else{
+				_.notice('ShopifyFD error : setup_collections : target html not found');
+			}
 		},
 		setup_copypaste:function(){
 
@@ -2070,48 +2112,61 @@ return {
 
 			clearInterval(_.data('autosave'));
 			
-			var divSummary = $('div.span6.section-summary').eq(0);
-			var productViewLink = divSummary.find('a').eq(0).attr('href');
+			var targetHTML = $('.section.description .section-summary').eq(0);
+			var targetHTMLRightMenu = $('.header-row .header-right');
 
-			divSummary.html('').append(metafieldloader);
+			if(targetHTML.length){
+				var productViewLink = targetHTML.find('a').eq(0).attr('href');	
+				targetHTML.after(metafieldloader).remove();
 
-			$.ajax({
-				type: "GET",
-				url: '/admin/products.json?limit=250&fields=id,title',
-				dataType: 'json',
-				success: function(d){
-					if(d){
-						products = d.products;
-						var response = '',
-						len = products.length;
-						if(len<=250){
-							for (var i = 0; i < len; i++) {
-								if(_.data('omega') !== products[i].id.toString()){
-									response +='<option value="'+products[i].id+'">'+products[i].title+'</option>';
+				var loadinto = $('div.metafield-content');
+				_.loadmeta(loadinto,v);
+			}else{
+				_.notice('ShopifyFD error : setup_products : Metafield target HTML not found',true);
+			}
+			
+			/* PRODUCT SWITCHER */
+			if(targetHTMLRightMenu.length){
+				$.ajax({
+					type: "GET",
+					url: '/admin/products.json?limit=250&fields=id,title',
+					dataType: 'json',
+					success: function(d){
+						if(d){
+							products = d.products;
+							var response = '',
+							len = products.length;
+							if(len<=250){
+								for (var i = 0; i < len; i++) {
+									if(_.data('omega') !== products[i].id.toString()){
+										response +='<option value="'+products[i].id+'">'+products[i].title+'</option>';
+									}
 								}
+
+								var pselect = $('<select />',{
+									'class':'header-select fadein'
+								}).append('<option>Choose another product to edit</option>',response).change(function(){
+									var v = $(this).val();
+									if(v){
+										 _.redirect('/admin/products/'+v);
+									}
+								});
+								pselect.find('option').sort(_.selectSort).appendTo(pselect);
+								targetHTMLRightMenu.prepend(pselect);
 							}
-
-							var pselect = $('<select />',{
-								'class':'header-select fadein'
-							}).append('<option>Choose another product to edit</option>',response).change(function(){
-								var v = $(this).val();
-								if(v){
-									 _.redirect('/admin/products/'+v);
-								}
-							});
-							pselect.find('option').sort(_.selectSort).appendTo(pselect);
-							$('.header-row .header-right').prepend(pselect);
 						}
+						
+					},
+					error:function(d){
+						_.notice('Error loading linklist data',true);
 					}
-					
-				},
-				error:function(d){
-					_.notice('Error loading linklist data',true);
-				}
-			});
+				});
+			}else{
+				_.notice('ShopifyFD error : setup_products : Product switcher target HTML not found',true);
+			}
 
-
-			if ($('#rte_extra').length == 0){
+			/* RTE ADD ON BUTTONS */
+			if ($('#rte_extra').length === 0){
 
 				$('#product-description_iframecontainer').eq(0).after(rte_menu);
 				$('.rtetools-buttons ul.fr').eq(1).append(autosave_html);
@@ -2150,186 +2205,176 @@ return {
 					return false;
 				});
 
-			}else{
-
-				_.notice('Bug! I tried to load the content editor twice.',true);
-
 			}
 
 			_.btn_removealltags();
 
 			var page_title = $('h1.header-main'),
-			loadinto = $('div.sub_section-summary .content'),
 			variants_ids = {};
 
-			var viewInStore = $('<a />',{
-				href:productViewLink,
-				target:'_blank',
-				style:'display: inline-block;vertical-align: top;',
-				title:'View in Store'
-			});
+			if(page_title.length){
+				var viewInStore = $('<a />',{
+					href:productViewLink,
+					target:'_blank',
+					style:'display: inline-block;vertical-align: top;',
+					title:'View in Store'
+				});
 
-			var inventorySummary = $('div.span6.section-summary').eq(1);
-			var addVariantButton = inventorySummary.find('a.btn');
-			var bulkPriceEdit = $('<div />',{
-				'class':'box notice hidden fadein',
-				'style':'margin-top: 1em;'
-			});
+				viewInStore.append('<i class="ico ico-20-svg ico-sidebar-bottom-website"></i>');
+				page_title.append(viewInStore);
+			}
 
-			var toggleBulkPriceEdit = $('<a />',{
-				'class':'btn',
-				'style':'margin-left:1em'
-			}).text('Bulk Edits');
+			/* INVENTORY AND VARIANTS PANEL */
+			var inventorySummary = $('.section.inventory .section-summary').eq(0);
 
-			toggleBulkPriceEdit.on('click',function(e){
-				e.preventDefault();
-				bulkPriceEdit.toggleClass('hidden');
-			});
+			if(inventorySummary.length){
 
-			bulkPriceEdit.html('<h3>Edit all variants</h3><p style="margin: .5em 0 1em;font-size: 12px;border-bottom: 1px solid #ccc;padding-bottom: .5em;">Bulk Editing comes with risks.</p><label style="margin-top:1.5em">Set Compare at Price<br><small>0 will clear the compare at price</small></label><input type="number" style="width:50%" value="0"> <a class="bulk-compare-save tooltip tooltip-bottom btn btn-slim"><span class="tooltip-container"><span class="tooltip-label">Save Compare at Price for all variants</span></span>Save</a>');
+				var addVariantButton = inventorySummary.find('a.btn');
+				var bulkPriceEdit = $('<div />',{
+					'class':'box notice hidden fadein',
+					'style':'margin-top: 1em;'
+				});
+				var toggleBulkPriceEdit = $('<a />',{
+					'class':'btn',
+					'style':'margin-left:1em'
+				}).text('Bulk Edits');
 
-			bulkCompareSaveBtn = bulkPriceEdit.find('a.bulk-compare-save');
-			bulkCompareFields = bulkPriceEdit.find('input');
+				toggleBulkPriceEdit.on('click',function(e){
+					e.preventDefault();
+					bulkPriceEdit.toggleClass('hidden');
+				});
 
-			bulkCompareSaveBtn.on('click',function(e){
-				e.preventDefault();
+				bulkPriceEdit.html('<h3>Edit all variants</h3><p style="margin: .5em 0 1em;font-size: 12px;border-bottom: 1px solid #ccc;padding-bottom: .5em;">Bulk Editing comes with risks.</p><label style="margin-top:1.5em">Set Compare at Price<br><small>0 will clear the compare at price</small></label><input type="number" style="width:50%" value="0"> <a class="bulk-compare-save tooltip tooltip-bottom btn btn-slim"><span class="tooltip-container"><span class="tooltip-label">Save Compare at Price for all variants</span></span>Save</a>');
+				bulkCompareSaveBtn = bulkPriceEdit.find('a.bulk-compare-save');
+				bulkCompareFields = bulkPriceEdit.find('input');
+				bulkCompareSaveBtn.on('click',function(e){
+					e.preventDefault();
 
-				var t = $(this);
-				t.addClass('is-loading').attr('style','margin-left:1em;text-indent: -9999px;');
-				var isDone = function(){
-					t.removeClass('is-loading').attr('style','margin-left:1em');
-				};
+					var t = $(this);
+					t.addClass('is-loading').attr('style','margin-left:1em;text-indent: -9999px;');
+					var isDone = function(){
+						t.removeClass('is-loading').attr('style','margin-left:1em');
+					};
 
-				var comparePrice = bulkCompareFields.val();
-				if(isNaN(comparePrice) || comparePrice === '0' || comparePrice === ''){comparePrice = null;}
+					var comparePrice = bulkCompareFields.val();
+					if(isNaN(comparePrice) || comparePrice === '0' || comparePrice === ''){comparePrice = null;}
 
 
 
-				if(comparePrice || comparePrice === null){
-					if(typeof variants_ids ==='object'){
-						if(Object.keys(variants_ids).length > 1){
-							if(Object.keys(variants_ids).length === $('tr.variant').length){ /* sanity check */
-								var data = [];
-								for (var key in variants_ids) {
-									var obj = variants_ids[key];
-									for (var prop in obj) {
-										if(obj.hasOwnProperty(prop)){
-											var o = {
-												"variant": {
-													id: obj[prop],
-													compare_at_price: comparePrice
+					if(comparePrice || comparePrice === null){
+						if(typeof variants_ids ==='object'){
+							if(Object.keys(variants_ids).length > 1){
+								if(Object.keys(variants_ids).length === $('tr.variant').length){ /* sanity check */
+									var data = [];
+									for (var key in variants_ids) {
+										var obj = variants_ids[key];
+										for (var prop in obj) {
+											if(obj.hasOwnProperty(prop)){
+												var o = {
+													"variant": {
+														id: obj[prop],
+														compare_at_price: comparePrice
+													}
 												}
-											}
-											data.push(o);
+												data.push(o);
 
+											}
 										}
 									}
-								}
-								if(data.length){
-									_.updateVariant(data,0,isDone);
+									if(data.length){
+										_.updateVariant(data,0,isDone);
+									}
+								}else{
+									_.notice('Unexpected variant found.',true);
 								}
 							}else{
-								_.notice('Unexpected variant found.',true);
+								_.notice('You only have 1 variant. No need to bulk edit',true);
 							}
-						}else{
-							_.notice('You only have 1 variant. No need to bulk edit',true);
 						}
 					}
-				}
 
-			});
-
-			inventorySummary.append(bulkPriceEdit);
-
-			viewInStore.append('<i class="ico ico-20-svg ico-sidebar-bottom-website"></i>');
-			page_title.append(viewInStore);
-
-			/* Add the metafield box */
-			_.loadmeta(loadinto,v);
-
-			$('#product-inner-variants th:last-child').before('<th>Variant ID</th>');
-			$('th.inventory.tc').text('#').prop('title', 'Quantity');
-			
-			$('tr.variant').each(function(i){
-
-				var variant_id = $('td.sku input.mock-edit-on-hover').eq(i).prop('id').split(/[- ]+/).pop();
-				variants_ids['variant_'+i] = {'id':variant_id};
-
-				$(this).find('td:last-child').before('<td class="vid tooltip tooltip-bottom"><input class="mock-edit-on-hover" data-action="selectall" data-val="'+variant_id+'" type="text" value="'+variant_id+'" /><span class="tooltip-container"><span class="tooltip-label">Click to edit Metafields</span></span></td>');
-			}).promise().done(function(){
-				_.panel_editvariantmeta();
-			});
-
-			/* 
-
-			 ____            __                        _    ____      _ _           _   _
-			|  _ \ _ __ ___ / _| ___ _ __ _ __ ___  __| |  / ___|___ | | | ___  ___| |_(_) ___  _ __
-			| |_) | '__/ _ \ |_ / _ \ '__| '__/ _ \/ _` | | |   / _ \| | |/ _ \/ __| __| |/ _ \| '_ \
-			|  __/| | |  __/  _|  __/ |  | | |  __/ (_| | | |__| (_) | | |  __/ (__| |_| | (_) | | | |
-			|_|   |_|  \___|_|  \___|_|  |_|  \___|\__,_|  \____\___/|_|_|\___|\___|\__|_|\___/|_| |_|
-
-
-			 */
-			var tpc = $('table.product-collections').eq(0);
-			tpc.find('tr').each(function(){
-				var t = $(this);
-				var collectionID = t.find('a').eq(0).attr('href').split('/').pop();
-				var a=$('<a/>',{
-					'class':'btn tooltip tooltip-bottom',
-					'href':'#'
-				}).html('<span class="tooltip-container"><span class="tooltip-label">Set a metafield with this collection handle</span></span>Set as preferred').on('click',function(e){
-					e.preventDefault();
-					if('undefined' !== collectionID){
-						$.ajax({
-							type: "GET",
-							url: '/admin/collections/'+collectionID+'.json?fields=handle',
-							dataType: 'json',
-							success: function(data){
-								if (typeof data !== 'undefined' && typeof d.URL !== 'undefined'){
-									var collectionHandle = data.collection.handle;
-									$.ajax({
-										type: "POST",
-										url: d.URL+'/metafields.json',
-										dataType: 'json',
-										data: {
-											"metafield": {
-												"namespace": 'collection',
-												"key": 'preferred',
-												"value": collectionHandle,
-												"value_type": "string"
-											}
-										},
-										success: function(d){
-											_.updatedropdown();
-											_.notice('Preferred collection metafield saved');
-										},
-										error: function(d){
-											var err = JSON.parse(d.responseText);
-											_.notice(err.errors.value[0],true);
-										}
-									});	
-								}
-							},
-							error: function(){
-								_.notice('Failed to load collection',true);
-							}
-						});
-					}
-					
 				});
-				$(this).find('td.col-remove').prepend(a);
-			});
 
-			/*
+				inventorySummary.append(bulkPriceEdit);
 
-			 ____        _ _                      _             _                     _       _
-			| __ ) _   _| | | __ __   ____ _ _ __(_) __ _ _ __ | |_   _   _ _ __   __| | __ _| |_ ___  ___
-			|  _ \| | | | | |/ / \ \ / / _` | '__| |/ _` | '_ \| __| | | | | '_ \ / _` |/ _` | __/ _ \/ __|
-			| |_) | |_| | |   <   \ V / (_| | |  | | (_| | | | | |_  | |_| | |_) | (_| | (_| | ||  __/\__ \
-			|____/ \__,_|_|_|\_\   \_/ \__,_|_|  |_|\__,_|_| |_|\__|  \__,_| .__/ \__,_|\__,_|\__\___||___/
-			                                                               |_|
+			}else{
+				_.notice('ShopifyFD error : setup_products : Inventory target HTML not found',true);
+			}
 
-			*/
+			/* PUSH VARIANT ID AND METAFIELD ACTIONS */
+			var variantCellTarget = $('#product-inner-variants th:last-child');
+			if(variantCellTarget.length){
+				$('#product-inner-variants th:last-child').before('<th>Variant ID</th>');
+				$('th.inventory.tc').text('#').prop('title', 'Quantity');
+				
+				$('tr.variant').each(function(i){
+
+					var variant_id = $('td.sku input.mock-edit-on-hover').eq(i).prop('id').split(/[- ]+/).pop();
+					variants_ids['variant_'+i] = {'id':variant_id};
+
+					$(this).find('td:last-child').before('<td class="vid tooltip tooltip-bottom"><input class="mock-edit-on-hover" data-action="selectall" data-val="'+variant_id+'" type="text" value="'+variant_id+'" /><span class="tooltip-container"><span class="tooltip-label">Click to edit Metafields</span></span></td>');
+				}).promise().done(function(){
+					_.panel_editvariantmeta();
+				});
+			}else{
+				_.notice('ShopifyFD error : setup_products : Unexpected variant table HTML',true);
+			}
+
+
+			var tpc = $('table.product-collections').eq(0);
+			if(tpc.length){
+				tpc.find('tr').each(function(){
+					var t = $(this);
+					var collectionID = t.find('a').eq(0).attr('href').split('/').pop();
+					var a=$('<a/>',{
+						'class':'btn tooltip tooltip-bottom',
+						'href':'#'
+					}).html('<span class="tooltip-container"><span class="tooltip-label">Set a metafield with this collection handle</span></span>Set as preferred').on('click',function(e){
+						e.preventDefault();
+						if('undefined' !== collectionID){
+							$.ajax({
+								type: "GET",
+								url: '/admin/collections/'+collectionID+'.json?fields=handle',
+								dataType: 'json',
+								success: function(data){
+									if (typeof data !== 'undefined' && typeof d.URL !== 'undefined'){
+										var collectionHandle = data.collection.handle;
+										$.ajax({
+											type: "POST",
+											url: d.URL+'/metafields.json',
+											dataType: 'json',
+											data: {
+												"metafield": {
+													"namespace": 'collection',
+													"key": 'preferred',
+													"value": collectionHandle,
+													"value_type": "string"
+												}
+											},
+											success: function(d){
+												_.updatedropdown();
+												_.notice('Preferred collection metafield saved');
+											},
+											error: function(d){
+												var err = JSON.parse(d.responseText);
+												_.notice(err.errors.value[0],true);
+											}
+										});	
+									}
+								},
+								error: function(){
+									_.notice('Failed to load collection',true);
+								}
+							});
+						}
+						
+					});
+					$(this).find('td.col-remove').prepend(a);
+				});
+			}else{
+				_.notice('ShopifyFD error : setup_products : Unexpected collection table HTML',true);
+			}
+
 
 			/* add in buttons for additional bulk variant updates */
 			var bulkpanel = $('table.variants .bulk-actions').eq(0);
@@ -2419,11 +2464,15 @@ return {
 
 				});
 
+			}else{
+				_.notice('ShopifyFD error : setup_products : unable to add bulk weight editor');
 			}
 
-			if(typeof variants_ids ==='object'){
-				if(Object.keys(variants_ids).length > 1){
-					addVariantButton.after(toggleBulkPriceEdit);
+			if(inventorySummary.length){
+				if(typeof variants_ids ==='object'){
+					if(Object.keys(variants_ids).length > 1){
+						addVariantButton.after(toggleBulkPriceEdit);
+					}
 				}
 			}
 							
@@ -2442,67 +2491,76 @@ return {
 			Get the page view all setup
 
 			*/
+			var targetHTML = $('.section.description .section-summary').eq(0);
 
-			var divSummary = $('div.span6.section-summary').eq(0),
-			page_title = $('h1.header-main');
+			if(targetHTML.length){
+				var itemViewLink = targetHTML.find('a').eq(0).attr('href');	
+				targetHTML.after(metafieldloader).remove();
 
-			var pageViewLink = divSummary.find('a').eq(0).attr('href');
+				var loadinto = $('div.metafield-content');
+				_.loadmeta(loadinto,v);
+			}else{
+				_.notice('ShopifyFD error : setup_pages : Metafield target HTML not found',true);
+			}
 
-			var viewInStore = $('<a />',{
-				href:pageViewLink,
-				target:'_blank',
-				style:'display: inline-block;vertical-align: top;',
-				title:'View in Store'
-			});
+			var page_title = $('h1.header-main');
+			if(page_title.length){
+				var viewInStore = $('<a />',{
+					href:itemViewLink,
+					target:'_blank',
+					style:'display: inline-block;vertical-align: top;',
+					title:'View in Store'
+				});
 
-			viewInStore.append('<i class="ico ico-20-svg ico-sidebar-bottom-website"></i>');
-			page_title.append(viewInStore);
+				viewInStore.append('<i class="ico ico-20-svg ico-sidebar-bottom-website"></i>');
+				page_title.append(viewInStore);
+			}
+
+			/* RTE ADD ON BUTTONS */
+			if ($('#rte_extra').length === 0){
+				$('#page-content_ifr').eq(0).after(rte_menu);
+				_.setup_rte();
+			}
 			
-			$('#page-content_ifr').eq(0).after(rte_menu);
-			
-			_.setup_rte();
+			/* PAGE SWITCHER */
+			var targetHTMLRightMenu = $('.header-row .header-right');
+			if(targetHTMLRightMenu.length){
+				$.ajax({
+					type: "GET",
+					url: '/admin/pages.json?limit=250&fields=id,title',
+					dataType: 'json',
+					success: function(d){
+						if(d){
+							pages = d.pages;
+							var response = '';
+							for (var i = 0, len = pages.length; i < len; i++) {
 
-			divSummary.html('').append(metafieldloader);
-
-			/* defined what we are loading into */
-			var loadinto = $('div.sub_section-summary .content');
-			_.loadmeta(loadinto,v);
-
-			
-			$.ajax({
-				type: "GET",
-				url: '/admin/pages.json?limit=250&fields=id,title',
-				dataType: 'json',
-				success: function(d){
-					if(d){
-						pages = d.pages;
-						var response = '';
-						for (var i = 0, len = pages.length; i < len; i++) {
-
-							if(_.data('omega') !== pages[i].id.toString()){
-								response +='<option value="'+pages[i].id+'">'+pages[i].title+'</option>';
+								if(_.data('omega') !== pages[i].id.toString()){
+									response +='<option value="'+pages[i].id+'">'+pages[i].title+'</option>';
+								}
 							}
+							var pageSelect = $('<select />',{
+								id:'shopifyjs_llselect',
+								'class':'header-select fadein'
+							}).append('<option>Choose another page to edit</option>',response).change(function(){
+								var v = $(this).val();
+								if(v){
+									 _.redirect('/admin/pages/'+v);
+								}
+							});
+							pageSelect.find('option').sort(_.selectSort).appendTo(pageSelect);
+							$('.header-row .header-right').prepend(pageSelect);
+
 						}
-						var pageSelect = $('<select />',{
-							id:'shopifyjs_llselect',
-							'class':'header-select fadein'
-						}).append('<option>Choose another page to edit</option>',response).change(function(){
-							var v = $(this).val();
-							if(v){
-								 _.redirect('/admin/pages/'+v);
-							}
-						});
-						pageSelect.find('option').sort(_.selectSort).appendTo(pageSelect);
-						$('.header-row .header-right').prepend(pageSelect);
-
+						
+					},
+					error:function(d){
+						_.notice('Error loading page data',true);
 					}
-					
-				},
-				error:function(d){
-					_.notice('Error loading page data',true);
-				}
-			});
-			
+				});
+			}else{
+				_.notice('ShopifyFD error : setup_pages : Page switcher target HTML not found',true);
+			}
 
 		},
 		shipping_remove_all:function(i,c){
@@ -2603,6 +2661,7 @@ return {
 		setup_shipping:function(go){
 
 			if('undefined' !== typeof go){
+/*
 				var toAppendAfter = $('div.section-summary').eq(0);
 
 				if(toAppendAfter.length){
@@ -2610,44 +2669,55 @@ return {
 				}else{
 					_.notice('The layout on this page is unexpected. Some ShopifyFD features may not work.')
 				}
-
-				var endpointError = $('<div />',{'class':'box error animated fadein'}).html('Warning - ShopifyFD features do not currently work on this view. See this <a target="_blank" href="https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/dashboard-endpoints-failing-link-lists-shipping-files-etc-212161">related post</a>.');
+*/
+				/* TEMP ERROR WARNING */
 				$('.section.shipping-rates').eq(0).prepend(endpointError);
+				/* ================== */
 
-				var shippingSettings = $('#settings-shipping'),
-				new_buttons = $('<div class="header-right"><div class="header-action"><a class="btn btn-separate tooltip-bottom tooltip" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a></div></div>');
+				var shippingSettingsHeader = $('#settings-shipping header').eq(0);
+				if(shippingSettingsHeader.length){
 
-				new_buttons.find('a').eq(0).on('click',function(){
+					var new_buttons = $('<div class="header-right animated fadein"><div class="header-action"><a class="btn btn-separate tooltip-bottom tooltip bulk-options" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a> <a class="btn btn-separate tooltip-bottom tooltip export-as-json" href="#"><span class="tooltip-container"><span class="tooltip-label">Export countries</span></span>Export JSON</a></div></div>');
 
-					var myhtml = $('<h2 class="warning"><strong>Warning:</strong> This is a bad idea. It will delete ALL of your countries. There is no undo. Proceed at own risk!</h2><div><div class="span1"><a href="#" class="btn delete_all delete">Delete</a></div><div class="span2">'+aargh_msg+'</div></div>');
+					new_buttons.find('a.export-as-json').on('click',function(e){
+						e.preventDefault();
+						_.fd_modal(true, '<textarea readonly style="min-height:300px">' + JSON.stringify( _.data('countries').countries ) + '</textarea><p><br><a href="/admin/countries.json" target="_blank">View original JSON object in new window</a></p>','Export all countries', true);
+					});
 
-					myhtml.find('a.delete_all').on('click',function(){
+					new_buttons.find('a.bulk-options').on('click',function(){
 
-						$.ajax({
-							type: "GET",
-							url: '/admin/countries.json',
-							dataType: 'json',
-							success: function(d){
-								if(d.countries.length){
-									v.countries = d.countries;
-									_.notice(d.countries.length + " countries returned");
-									_.shipping_remove_all(d.countries.length-1,d.countries);
+						var myhtml = $('<p class="warning">This will delete ALL of your countries. There is no undo. Proceed at own risk!</p><div><div class="span1"><a href="#" class="btn delete_all delete">Delete</a></div><div class="span2">'+aargh_msg+'</div></div>');
+						myhtml.find('a.delete_all').on('click',function(){
+
+							$.ajax({
+								type: "GET",
+								url: '/admin/countries.json',
+								dataType: 'json',
+								success: function(d){
+									if(d.countries.length){
+										v.countries = d.countries;
+										_.notice(d.countries.length + " countries returned");
+										_.shipping_remove_all(d.countries.length-1,d.countries);
+									}
+								},
+								error:function(){
+									_.notice('Error removing country. Process stopped.',true);
 								}
-							},
-							error:function(){
-								_.notice('Error removing country. Process stopped.',true);
-							}
+							});
+
+							return false;
 						});
+
+						_.fd_modal(true,myhtml,'Delete all countries',true);
 
 						return false;
 					});
 
-					_.fd_modal(true,myhtml,'Delete all countries',true);
+					shippingSettingsHeader.append(new_buttons);
 
-					return false;
-				});
-
-				shippingSettings.find('header').eq(0).append(new_buttons);
+				}else{
+					_.notice('ShopifyFD error : setup_shipping');
+				}
 
 				if($('div.shipping-rate-table').length === _.data('countries').countries.length){
 
@@ -2881,14 +2951,23 @@ return {
 		},
 		setup_custom_collections:function(){
 
-			$('div.row.section.visibility').eq(0).after('<div class="row section" id="customer_meta_box"><div class="span12 section-summary">'+metafieldloader+'</div></div>');
-			var loadinto = $('div.sub_section-summary .content');
-			_.loadmeta(loadinto,v);
+			var targetHTML = $('div.section.products').eq(0);
+			if(targetHTML.length){
 
+				targetHTML.after(metafieldloaderSection);
 
-			if ($('#rte_extra').length === 0){
-				$('#collection-description_iframecontainer').eq(0).after(rte_menu);
-				_.setup_rte();
+				var loadinto = $('div.metafield-content');
+				_.loadmeta(loadinto,v);
+
+				if ($('#rte_extra').length === 0){
+					$('#collection-description_iframecontainer').eq(0).after(rte_menu);
+					_.setup_rte();
+				}
+
+			}else{
+
+				_.notice('ShopifyFD error : setup_custom_collections : target html not found',true);
+
 			}
 
 		},
@@ -2961,115 +3040,59 @@ return {
 		},
 		setup_files:function(){
 
-			var deleteArray = [];
-			/* not in this version! */
-			var u = $('<ul/>',{
-				'class':'segmented',
-				'id':'get_all_images'
-			}),
-			l = $('<li/>'),
-			deleteFilesBtn = $('<a/>',{
-				'class':'btn delete disabled hidden tooltip tooltip-bottom',
-				href:'#'
-			}).html('<span class="tooltip-container"><span class="tooltip-label">Use at own risk. There is NO undo.</span></span>Delete checked files').on('click',function(e){
-				e.preventDefault();
-				deleteCheckedFiles(deleteArray);
-			}),
-			a = $('<a/>',{
-				'class':'btn',
-				'href':'#',
-				'style':'margin-left:1em'
-			}).html('Show all files').on('click',function(){
+			/* TEMP ERROR WARNING */
+			$('#pages-index .header-row').eq(0).after(endpointError);
+			/* ================== */
 
-				var t = $(this);
-				t.addClass('is-loading').attr('style','margin-left:1em;text-indent: -9999px;');
+			var targetHTML = $('.header-row .header-right').eq(0);
+			if(targetHTML.length){
 
-				$.ajax({
-					type: "GET",
-					url: '/admin/files.json?limit=2&fields=id',
-					success: function(d,textStatus, request){
-						if(d){
-							var limit = 50,
-							total_pics = request.getResponseHeader('X-Total-Results');
-							if(total_pics > limit){
-								var pic_pages = Math.ceil(total_pics/limit);
-								_.get_files(2,pic_pages);
-							}else{
-								_.notice('There are no more to load',true);
-								t.removeClass('is-loading').attr('style','margin-left:1em');
+				var u = $('<ul/>',{
+					'class':'segmented',
+					'id':'get_all_images'
+				}),
+				l = $('<li/>'),
+				a = $('<a/>',{
+					'class':'btn',
+					'href':'#',
+					'style':'margin-left:1em'
+				}).html('Show all files').on('click',function(){
+
+					var t = $(this);
+					t.addClass('is-loading').attr('style','margin-left:1em;text-indent: -9999px;');
+
+					$.ajax({
+						type: "GET",
+						url: '/admin/files.json?limit=2&fields=id',
+						success: function(d,textStatus, request){
+							if(d){
+								var limit = 50,
+								total_pics = request.getResponseHeader('X-Total-Results');
+								if(total_pics > limit){
+									var pic_pages = Math.ceil(total_pics/limit);
+									_.get_files(2,pic_pages);
+								}else{
+									_.notice('There are no more to load',true);
+									t.removeClass('is-loading').attr('style','margin-left:1em');
+								}
 							}
-						}
 
-					},
-					error:function(){
-						t.removeClass('is-loading').attr('style','margin-left:1em');
-						_.notice('Error loading files',true);
-					}
+						},
+						error:function(){
+							t.removeClass('is-loading').attr('style','margin-left:1em');
+							_.notice('Error loading files',true);
+						}
+					});
+
+					return false;
+
 				});
 
-				return false;
-
-			});
-
-			var deleteCheckedFiles = function(a){
-
-				if(typeof a === 'object'){
-					if(a.length){
-						$.ajax({
-							type: "DELETE",
-							url: '/admin/files.json?file='+a[0],
-							success: function(e){
-								_.notice('Removed '+a[0]);
-								a.shift();
-								deleteCheckedFiles(a);
-								$('tr.marked-for-deletion').eq(0).slideUp('200',function(){
-									$(this).remove();
-								})
-							},
-							error: function(){
-								_.notice('Error deleting file - '+a[0],true);
-							}
-						});
-					}
-				}
-			};
-
-			var deleteCheckbox = $('<input />',{
-				type:'checkbox',
-				'class':'delete-checkbox'
-			}).change(function(){
-				var t = $(this);
-				var p = t.parent().parent();
-				var filename = p.find('a').eq(1).text();
-				if(typeof filename !== 'undefined'){
-					if(t.is(':checked')){
-						p.addClass('marked-for-deletion');
-						deleteArray.push(filename);
-						deleteArray = _.array_unique(deleteArray);
-						deleteFilesBtn.removeClass('disabled hidden');
-					}else{
-						p.removeClass('marked-for-deletion');
-						var i = deleteArray.indexOf(filename);
-						if(i != -1) {
-							deleteArray.splice(i, 1);
-						}
-						if(deleteArray.length == 0){
-							deleteFilesBtn.addClass('disabled hidden');
-						}
-					}
-				}
-			});
-
-			l.append(deleteFilesBtn,a);
-			u.append(l);
-
-			setTimeout(function(){
-				/* requires a small delay */
-				$('#assets-table tr td.no-wrap').append(deleteCheckbox);
-				$('.header-row .header-right').eq(0).prepend(u);
-			},'500');
+				l.append(a);
+				u.append(l);
+				targetHTML.prepend(u);
+			}
 			
-
 		},
 		setup_settings_general:function(){
 
@@ -3099,35 +3122,48 @@ return {
 
 			$('#settings-general div.section').eq(0).after(section);
 
-			var loadinto = $('div.sub_section-summary .content');
+			var loadinto = $('div.metafield-content');
 			_.loadmeta(loadinto,v);
 
 		},
 		setup_customers:function(){
-
-			$('section.customer-details.ssb .box-details').eq(0).after('<div id="customer_meta_box" class="box box-details"><div class="box-header p"><h3>Metafields</h3></div><div class="box-content p">'+metafieldloader+'</div>');
-			var loadinto = $('div.sub_section-summary .content');
-			_.loadmeta(loadinto,v);
-
-
+			var targetHTML = $('section.customer-details.ssb .box-details').eq(0);
+			if(targetHTML.length){
+				targetHTML.after('<div id="customer_meta_box" class="box box-details"><div class="box-header p"><h3>ShopifyFD</h3></div><div class="box-content p">'+metafieldloader+'</div>');
+				var loadinto = $('div.metafield-content');
+				_.loadmeta(loadinto,v);
+			}else{
+				_.notice('ShopifyFD error : setup_customers : target HTML not found');
+			}
 		},
 		setup_single_order:function(){
+			var targetHTML = $('div.order-sidebar .box-details').eq(0);
 
-			$('div.order-sidebar .box-details').eq(0).after('<div id="customer_meta_box" class="box box-details"><div class="box-header p"><h3>Metafields</h3></div><div class="box-content p">'+metafieldloader+'</div>');
-			var loadinto = $('div.sub_section-summary .content');
-			_.loadmeta(loadinto,v);
+			if(targetHTML.length){
 
-			var billing_box = $('div.address[data-showif="order.billing_address"]').eq(0),
-			email = billing_box.find('a[data-modal-view="ContactCustomerModalView"]'),
-			input = $('<input />',{
-				'value':email.text(),
-				'class':'noprint',
-				'style':'margin-top:1em'
-			}).on('click',function(){
-				$(this).select();
-			});
+				$('div.order-sidebar .box-details').eq(0).after('<div id="customer_meta_box" class="box box-details"><div class="box-header p"><h3>ShopifyFD</h3></div><div class="box-content p">'+metafieldloader+'</div>');
+				var loadinto = $('div.metafield-content');
+				_.loadmeta(loadinto,v);
 
-			billing_box.append(input);
+			}else{
+				_.notice('ShopifyFD error : setup_single_order : target html not found');
+			}
+
+			var billing_box = $('.box.box-details').eq(5),
+			email = billing_box.find('a[bind-event-click="contactCustomer.show()"]');
+
+			if(email.length){
+				var input = $('<input />',{
+					'value':email.text(),
+					'readonly':'readonly',
+					'class':'noprint',
+					'style':'margin:1em 0'
+				}).on('click',function(){
+					$(this).select();
+				});
+
+				email.parent().after(input);
+			}
 
 		},
 		setup_orders:function(){
