@@ -56,7 +56,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var rte_menu = '<div id="rte_extra"><a class="btn btn-slim tooltip tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Careful, this method is brutal...</span></span>Purge html</a> <a class="btn btn-slim tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn btn-slim tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
 
-	var vbox = '<div class="vbox"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
+	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
 	var appnav = '<li><a id="aboutapp" href="#">About ShopifyFD</a></li><li><a id="togglestyle" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
 
@@ -74,7 +74,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 	
 	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
 
-var endpointError = $('<div />',{'class':'box error animated fadein'}).html('Warning - Some ShopifyFD features do not currently work on this view. See this <a target="_blank" href="https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/dashboard-endpoints-failing-link-lists-shipping-files-etc-212161">related post</a>.');
+	var endpointError = $('<div />',{'class':'box error animated fadein'}).html('Warning - Some ShopifyFD features do not currently work on this view. Fixes are being looked at, but for now expect errors. See this <a target="_blank" href="https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/dashboard-endpoints-failing-link-lists-shipping-files-etc-212161">related post</a>.');
 
 var _ = (function(){
 
@@ -1241,7 +1241,7 @@ return {
 				'href':'#'
 			}).html('Bulk create').on('click',function(e){
 				e.preventDefault();
-				return false;
+
 			});
 
 			l.append(c);
@@ -1613,20 +1613,64 @@ return {
 						dataType: "json",
 						success: function(d){
 
-							var l = {"link_list":{"handle":"all-vendors","title":"All Vendors","links":[]}};
+							var l = {
+								utf8:'✓',
+								_method:'create',
+								link_list:{
+									handle:"all-vendors",
+									title:"All Vendors",
+									links:[]
+								}
+							};
 
 							for (var i = 0, len = d.vendors.length; i < len; ++i) {
+
 								l.link_list.links.push({
-									'position':i+1,
-									'title': d.vendors[i],
-									'link_type':'http',
-									'subject':'/collections/vendors?q='+(encodeURIComponent(d.vendors[i].toLowerCase()).replace(/%20/g, '+'))
-								})
+									position:i+1,
+									title: d.vendors[i],
+									link_type:'http',
+									subject:'/collections/vendors?q='+(encodeURIComponent(d.vendors[i].toLowerCase()).replace(/%20/g, '+'))
+								});
+
+
 							}
 
 							create_a_linklist(l);
 
 						}	
+					});
+
+				},
+				create_a_linklist_FIX = function(linklist,isSerialized){
+
+					if(typeof linklist === 'undefined'){return}
+
+					$.ajax({
+						type: "POST",
+						url: '/admin/link_lists',
+						data:linklist,
+						success: function(d,o,h){
+
+							var loc = h.getResponseHeader('X-XHR-Redirected-To');
+							if(loc){
+
+								linklistID = href = loc.split('/').pop();
+
+								if(!isNaN(linklistID)){
+									_.notice('Link list added');
+									_.redirect('/admin/link_lists/'+linklistID);
+								}else{
+									_.notice('Error creating linklist - ID not returned',true);
+								}
+							}else{
+								/* if the redirected header is not present we will need to parse the html */
+								_.notice('link list copied');
+							}
+
+						},
+						error:function(){
+							_.notice('Error creating linklist',true);
+						}
 					});
 
 				},
@@ -1636,14 +1680,19 @@ return {
 						type: "POST",
 						url: '/admin/link_lists.json',
 						data:JSON.stringify(linklist),
-						contentType: "application/json;charset=utf-8", /* required */
-						dataType: "json",
+						contentType: "application/json;charset=utf-8", 
 						success: function(d){
 							_.notice('Link list added');
 							_.redirect('/admin/link_lists/'+d.link_list.id);
 						},
-						error:function(){
-							_.notice('Error creating linklist',true);
+						error:function(a){
+							if(a.status === 406){
+								_.notice('Linklist creation attempted. Reload page.');
+								_.redirect('/admin/links');
+							}else{
+								_.notice('Error creating linklist',true);	
+							}
+							
 						}
 					});
 
@@ -1658,6 +1707,83 @@ return {
 						a = t.parent().find('a[href^="/admin/link_lists"]').eq(0);
 						if(a.length){
 							href = a.attr('href').split('/').pop();
+
+							/* prepare for html loading and parse */
+							if(!isNaN(href)){
+							$.ajax({
+								type: "GET",
+								url: '/admin/link_lists/'+href,
+								success: function(d){
+
+									var html = $(d);
+									var targetString = '#edit_link_list_'+href;
+									var target = html.find(targetString);
+
+									if(target.length){
+
+										/* remove the extra inputs we don't want */
+										target.find('input[name="_method"]').remove();
+										target.find('input[name="authenticity_token"]').remove();
+
+										/* mark as a copy */
+										var title = target.find('input[name="link_list[title]"]');
+										title.val(title.val()+' [COPY]');
+										
+										/* find the type select dropdown */
+										var types = target.find('select[name="link_list[links][][link_type]"]');
+
+										/* 
+										this is a real dirty way of injecting data
+										*/
+										types.each(function(index){
+											var t = $(this);
+											var v = t.val();
+											if(v==='collection'){
+
+												var selectTarget = target.find('div[context="collectionPicker'+index+'"]').eq(0);
+												var collectionDef =  selectTarget.attr('define').split(',');
+												if(typeof collectionDef[2] !== 'undefined'){
+													var subjectID = parseInt(collectionDef[2].replace(/\D/g,''));
+													selectTarget.after('<input name="link_list[links][][subject_id]" value="'+subjectID+'" />');
+												}
+
+											}else if(v==='page'){
+
+												var selectTarget = target.find('div[context="pagePicker'+index+'"]').eq(0);
+												var pageDef =  selectTarget.attr('define').split(',');
+												if(typeof pageDef[2] !== 'undefined'){
+													var subjectID = parseInt(pageDef[2].replace(/\D/g,''));
+													selectTarget.after('<input name="link_list[links][][subject_id]" value="'+subjectID+'" />');
+												}
+
+											}else if(v==='product'){
+
+												var selectTarget = target.find('div[context="productPicker'+index+'"]').eq(0);
+												var productDef =  selectTarget.attr('define').split(',');
+												if(typeof productDef[2] !== 'undefined'){
+													var subjectID = parseInt(productDef[2].replace(/\D/g,''));
+													selectTarget.after('<input name="link_list[links][][subject_id]" value="'+subjectID+'" />');
+												}
+												
+											}
+											
+										});
+										
+										create_a_linklist_FIX(target.serialize());
+
+									}
+
+
+								},
+								error:function(s,b,e){
+									_.notice(e,true);
+								}
+							});
+							}
+							/*
+							
+							// old method below:
+
 							if(!isNaN(href)){
 								$.ajax({
 									type: "GET",
@@ -1675,6 +1801,8 @@ return {
 									}
 								});
 							}
+							*/
+
 						}else{
 							_.notice('Can not copy this linklist. ID was not found',true);
 						}
@@ -1711,6 +1839,55 @@ return {
 				}
 
 				$('.section.link-lists').eq(0).prepend(endpointError);
+
+				var addLinkListBtn = $('.section-summary a[href="/admin/link_lists/new"]');
+				if(addLinkListBtn.length){
+
+					var linklistEditButtons = $('#link_lists .next-grid__cell header a:last-child');
+					if(linklistEditButtons.length){
+
+						var optionAppend = '';
+
+						if(linklistEditButtons.length > 2){
+
+							linklistEditButtons.each(function(){
+
+								var t = $(this);
+								var linklistTitle = t.parent().parent().find('h3').text();
+								var linklistHREF = t.attr('href');
+
+								if(linklistTitle.length && linklistHREF.length){
+									optionAppend+='<option value="'+ linklistHREF +'">'+linklistTitle+'</option>'
+								}
+								
+							});
+
+							if(optionAppend.length){
+								var selectLinkList = $('<select />',{
+									'style':'margin-top:1em;border-radius:3px;border-color: #D3D3D3;color: #479ccf;'
+								}).on('change',function(){
+
+									var t = $(this);
+									var v = t.val();
+
+									if(v.length){
+										_.redirect(v);
+									}
+
+								}).html('<option value="">Jump to linklist</option>'+optionAppend);
+
+								var div = $('<div />');
+								div.append(selectLinkList,'<small style="display: block">Select a linklist to quickly jump to edit view. Useful for when you have many linklists...</small>');
+								addLinkListBtn.after(div);
+							}
+
+						}
+
+					}
+
+
+
+				}
 
 			/* end duplication setup */
 		},
@@ -2165,6 +2342,24 @@ return {
 				_.notice('ShopifyFD error : setup_products : Product switcher target HTML not found',true);
 			}
 
+			/* FAST REMOVE FROM COLLECTIONS */
+			var collectionPanel = $('.section.collections .section-summary');
+			if(collectionPanel.length){
+				var collectionRemoveButtons = $('#product-custom-collections .remove a');
+				if(collectionRemoveButtons.length){
+
+					var removeFromAll = $('<a />',{
+						'class':'btn'
+					}).text('Remove from all').on('click',function(e){
+						e.preventDefault();
+						collectionRemoveButtons.trigger('click');
+					})
+					collectionPanel.append(removeFromAll);
+				}
+
+			}
+
+
 			/* RTE ADD ON BUTTONS */
 			if ($('#rte_extra').length === 0){
 
@@ -2599,8 +2794,67 @@ return {
 			}
 
 		},
-		save_new_rates:function(to_add,i,t){
+		save_new_rates_FIX:function(to_add,i,t){
+			/*
+			if this is not longer needed remember to change
+			the save_new_rates function call back to the 
+			original one...
+			*/
+			
+			if('undefined' === typeof i){ return; }			
+			if('undefined' === typeof to_add[i]){ return; }
 
+			var cid = t.data('cid');
+
+			var rate = to_add[i];
+			var type = rate.type;
+
+			if(type == 'weight'){
+				rate.type = 'weight_based'
+			}else if(type == 'price'){
+				rate.type = 'price_based'
+			}else if(type = 'carrier'){
+				rate.type = 'carrier_based'
+			}
+
+			rate.country_id = cid; /* update to match the target country */
+			rate.new_type = rate.type; /* NEW setting. Not sure what this does yet... */
+
+			/* be sure to include the utf8 var */
+			var data = {
+				utf8:'✓',
+				shipping_rate:rate
+			}
+
+			_.notice('Pasting "'+rate.name +'"...');
+
+			$.ajax({
+				type: "POST",
+				url: '/admin/shipping_rates',
+				data: data,
+				success: function(d, statusText, xhr){
+
+					t.parent().parent().find('table').append('<tbody><tr style="background:#efefef"><td>'+to_add[i].name+'</td><td>New rate pasted.</td><td>'+to_add[i].price+'</td></tr></tbody>');
+
+					if(i === (to_add.length-1)){
+						_.notice('Paste complete');
+					}else{
+						i++;
+						_.save_new_rates_FIX(to_add,i,t);
+					}
+				},
+				error:function(d, statusText, xhr){
+					_.notice('Error pasting. '+xhr, true);
+				}
+			});
+
+
+		},
+		save_new_rates:function(to_add,i,t){
+			/*
+			The endpoints in the dashboard have been removed.
+			Use the save_new_rate_FIX function for now.
+			*/
 			if('undefined' !== typeof to_add[i]){
 
 				var d = to_add[i],
@@ -2661,17 +2915,10 @@ return {
 		setup_shipping:function(go){
 
 			if('undefined' !== typeof go){
-/*
-				var toAppendAfter = $('div.section-summary').eq(0);
 
-				if(toAppendAfter.length){
-					toAppendAfter.append('<p style="margin-top:1em" class="fadein box warning">ShopifyFD Warning: When you copy and paste over existing rates the old ones still show until the page is refreshed, even though they have been removed. <br><br>Be sure to do a test first. <strong>Use at own risk.</strong></p>');					
-				}else{
-					_.notice('The layout on this page is unexpected. Some ShopifyFD features may not work.')
-				}
-*/
 				/* TEMP ERROR WARNING */
-				$('.section.shipping-rates').eq(0).prepend(endpointError);
+				var sectionWarning = $('<div />',{'class':'box error animated fadein'}).html('Warning - The way that shipping rates are copied and pasted has recently changed. It has NOT been thoroughly tested. Be sure to test this feature BEFORE making bulk edits. See this <a target="_blank" href="https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/dashboard-endpoints-failing-link-lists-shipping-files-etc-212161">related post</a>.');
+				$('.section.shipping-rates').eq(0).prepend(sectionWarning);
 				/* ================== */
 
 				var shippingSettingsHeader = $('#settings-shipping header').eq(0);
@@ -2686,7 +2933,7 @@ return {
 
 					new_buttons.find('a.bulk-options').on('click',function(){
 
-						var myhtml = $('<p class="warning">This will delete ALL of your countries. There is no undo. Proceed at own risk!</p><div><div class="span1"><a href="#" class="btn delete_all delete">Delete</a></div><div class="span2">'+aargh_msg+'</div></div>');
+						var myhtml = $('<p class="box warning">This will delete ALL of your countries. There is no undo. Proceed at own risk!</p><div><div class="span1"><a href="#" class="btn delete_all delete">Delete</a></div><div class="span2">'+aargh_msg+'</div></div>');
 						myhtml.find('a.delete_all').on('click',function(){
 
 							$.ajax({
@@ -2740,29 +2987,32 @@ return {
 								dataType: 'json',
 								success: function(d){
 
+									/* 
+										now that we have the delete list - let's delete
+										we should queue them up, but let's try a mini burst 
+										This could cause issues. Watch carefully.
+
+									*/
+
 									var w = d.country.weight_based_shipping_rates,
 									p = d.country.price_based_shipping_rates,
 									c = d.country.carrier_shipping_rate_providers;
 
-									/* build up the delete list */
+									// build up the delete list
+
 									for (var i = 0, len = w.length; i < len; i++) {
-											to_delete.push([w[i].id,'weight']);
+											to_delete.push([w[i].id,'weight_based']);
 									}
 
 									for (var i = 0, len = p.length; i < len; i++) {
-											to_delete.push([p[i].id,'price']);
+											to_delete.push([p[i].id,'price_based']);
 									}
 
 									for (var i = 0, len = c.length; i < len; i++) {
-											to_delete.push([c[i].id,'carrier']);
+											to_delete.push([c[i].id,'carrier_based']);
 									}
 
-									/* 
-										now that we have the delete list - let's delete
-										we should queue them up, but let's try a mini burst 
-										This could cause issues with api limit. watch carefully.
-
-									*/
+									/*
 
 									for (var i = 0, len = to_delete.length; i < len; i++) {
 
@@ -2786,9 +3036,31 @@ return {
 											}
 										});
 
-									} /* end delete loop */
+									} 
+									*/
 
-									_.save_new_rates(to_add,0,t);
+									for (var i = 0, len = to_delete.length; i < len; i++) {
+
+										var type = to_delete[i][1];
+
+										$.ajax({
+											type: "POST",
+											url: '/admin/shipping_rates/'+to_delete[i][0],
+											data:{
+												utf8:'✓',
+												_method:'delete',
+												shipping_rate:{
+													type:type
+												}
+											},
+											success: function(d){},
+											error: function(d){
+												_.notice('Failed to replace rate',true);
+											}
+										});
+									}
+
+									_.save_new_rates_FIX(to_add,0,t);
 
 								},
 								fail:function(){
@@ -2853,9 +3125,9 @@ return {
 							'data-country':_.data('countries').countries[index].name,
 							'data-cid':_.data('countries').countries[index].id,
 							'data-index':index,
-							'class':'hidden fadein bulkpaste btn btn-slim',
+							'class':'hidden fadein bulkpaste btn btn-slim tooltip tooltip-bottom',
 							'style':'float:right;margin-right:.5em'
-						}).text('Paste rates').on('click',function(){			
+						}).html('<span class="tooltip-container"><span class="tooltip-label">Will replace ALL existing rates.</span></span>Paste rates (replace)').on('click',function(){			
 
 							var t=$(this),
 							cid = t.attr('data-cid'),
@@ -3039,11 +3311,9 @@ return {
 
 		},
 		setup_files:function(){
-
-			/* TEMP ERROR WARNING */
-			$('#pages-index .header-row').eq(0).after(endpointError);
-			/* ================== */
-
+			/*
+			This function currently obselete due to recent dashboard edits.
+			*/
 			var targetHTML = $('.header-row .header-right').eq(0);
 			if(targetHTML.length){
 
@@ -3168,82 +3438,17 @@ return {
 		},
 		setup_orders:function(){
 
-			var u = $('<ul/>',{
-				'class':'segmented',
-				'id':'get_email_list'
-			}),
-			l = $('<li/>'),
-			a = $('<a/>',{
-				'class':'btn',
-				'href':'#'
-			}).html('Get emails').on('click',function(){
-
-				var myhtml = $(recent_emails_box);
-
-				myhtml.find('a.getdata').on('click',function(){
-
-					var t = $('#recent_emails_output'),
-					time = new Date(),
-					o = 30,
-					o_val = $('#from_recent_order_id').val(),
-					f_status = $('#recent_fulfillment_status').val(); 
-
-					/* reset the textarea */
-					t.val('');
-
-					if(o_val.length>0){o=parseInt(o_val)}
-
-					time.setDate(time.getDate()- o);
-
-					var d = time.getDate(),
-					m = time.getMonth() + 1,
-					y = time.getFullYear();
-
-					var strdate = y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d) +' 00:00';
-
-					_.flog(time);
-					_.flog(strdate);
-
-					$.ajax({
-						type: "GET",
-						url: '/admin/orders.json?fields=email&fulfillment_status='+f_status+'&created_at_min='+strdate,
-						success: function(d){
-
-							if(d.orders.length){
-								var orders = d.orders,
-								output = '';
-
-								for (var i = 0, len = orders.length; i < len; i++) {
-									_.flog(orders[i].email);
-									output+=orders[i].email+',\n';
-								}
-
-								t.val(output);
-
-							}else{
-
-								_.notice("Error. No results returned",true);
-
-							}
-						}
-					});
-
-				});
-
-				_.fd_modal(true,myhtml,'Get recent order emails',true);
-				return false;
-
-			});
-
-			l.append(a);
-			u.append(l);
-
-			$('.header-right .segmented').eq(1).after(u);
-
-			var visible_orders = $('.order.no-wrap a'),
+			var targetHTML = $('.header-row .header-right').eq(0),
+			visible_orders = $('.order.no-wrap a'),
 			order_timer = false; 
 
-			visible_orders.append(bubble_html).css({'position':'relative'}).hover(function(){
+			/* ORDER CREATION IMPORT */
+				/* nothing here? ask for the beta version */
+			/* END ORDER CREATION IMPORT */
+
+			if(visible_orders.length){
+
+				visible_orders.append(bubble_html).css({'position':'relative'}).hover(function(){
 
 					var t = $(this);
 					order_timer = setTimeout(function(){
@@ -3289,6 +3494,7 @@ return {
 					var t = $(this);
 					t.find('div.bubble').addClass('hide');
 				});
+			}
 
 		},
 		updatedropdown:function(){
@@ -3543,7 +3749,7 @@ return {
 						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'general' ){
 							_.setup_settings_general();
 						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'files' ){
-							_.setup_files();
+							/*_.setup_files();*/
 						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'shipping' ){
 							_.setup_shipping();
 						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'taxes' ){
