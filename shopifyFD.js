@@ -74,8 +74,6 @@ if(url.indexOf("myshopify.com/admin")>1){
 	
 	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
 
-	var endpointError = $('<div />',{'class':'box error animated fadein'}).html('Warning - Some ShopifyFD features do not currently work on this view. Fixes are being looked at, but for now expect errors. See this <a target="_blank" href="https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/dashboard-endpoints-failing-link-lists-shipping-files-etc-212161">related post</a>.');
-
 var _ = (function(){
 
 	var v = { 
@@ -1505,41 +1503,44 @@ return {
 			}
 
 	},
-		setup_link_lists_edit:function(){
+		setup_link_lists_single:function(){
 
-			$.ajax({
-				type: "GET",
-				url: '/admin/link_lists.json',
-				dataType: 'json',
-				success: function(d){
-					if(d){
-						link_lists = d.link_lists;
-						var response = '';
-						for (var i = 0, len = link_lists.length; i < len; i++) {
+			var targetHTML = $('.header-row .header-right');
+			if(targetHTML.length){
+				$.ajax({
+					type: "GET",
+					url: '/admin/link_lists.json',
+					dataType: 'json',
+					success: function(d){
+						if(d){
+							link_lists = d.link_lists;
+							var response = '';
+							for (var i = 0, len = link_lists.length; i < len; i++) {
 
-							if(_.data('omega') !== link_lists[i].id.toString()){
-								response +='<option value="'+link_lists[i].id+'">'+link_lists[i].title+'</option>';
+								if(_.data('omega') !== link_lists[i].id.toString()){
+									response +='<option value="'+link_lists[i].id+'">'+link_lists[i].title+'</option>';
+								}
 							}
+
+							var llselect = $('<select />',{
+								'class':'header-select fadein'
+							}).append('<option>Choose another linklist to edit</option>',response).change(function(){
+								var v = $(this).val();
+								if(v){
+									 _.redirect('/admin/link_lists/'+v);
+								}
+							});
+
+							targetHTML.prepend(llselect);
+
 						}
-
-						var llselect = $('<select />',{
-							'class':'header-select fadein'
-						}).append('<option>Choose another linklist to edit</option>',response).change(function(){
-							var v = $(this).val();
-							if(v){
-								 _.redirect('/admin/link_lists/'+v);
-							}
-						});
-
-						$('.header-row .header-right').prepend(llselect);
-
+						
+					},
+					error:function(d){
+						_.notice('Error loading linklist data',true);
 					}
-					
-				},
-				error:function(d){
-					_.notice('Error loading linklist data',true);
-				}
-			});
+				});
+			}
 
 
 		},
@@ -1554,6 +1555,12 @@ return {
 						dataType: "json",
 						success: function(d){
 
+							var compiled = {};
+							compiled['utf8'] = '✓';
+							compiled['link_list[handle]'] = 'all-collections';
+							compiled['link_list[title]'] = 'All Collections';
+							var compiledParam = $.param(compiled);
+
 							var l = {"link_list":{"handle":"all-collections","title":"All Collections","links":[]}};
 
 							for (var i = 0, len = d.collections.length; i < len; ++i) {
@@ -1562,10 +1569,19 @@ return {
 									'title': d.collections[i].title,
 									'link_type':'collection',
 									'subject_id':d.collections[i].id
-								})
+								});
+
+								var compiledLink = {};
+								compiledLink['link_list[links][][position]'] = i+1;
+								compiledLink['link_list[links][][title]'] = d.collections[i].title;
+								compiledLink['link_list[links][][link_type]'] = 'collection';
+								compiledLink['link_list[links][][subject_id]'] = d.collections[i].id;
+								compiledParam +='&' + $.param(compiledLink);
+
 							}
 
-							create_a_linklist(l);
+							/* create_a_linklist(l); */
+							create_a_linklist_FIX(compiledParam);
 
 						},
 						error:function(){
@@ -1584,18 +1600,34 @@ return {
 						dataType: "json",
 						success: function(d){
 
+							var compiled = {};
+							compiled['utf8'] = '✓';
+							compiled['link_list[handle]'] = 'all-pages';
+							compiled['link_list[title]'] = 'All Pages';
+							var compiledParam = $.param(compiled);
+
 							var l = {"link_list":{"handle":"all-pages","title":"All Pages","links":[]}};
 
 							for (var i = 0, len = d.pages.length; i < len; ++i) {
+
 								l.link_list.links.push({
 									'position':i+1,
 									'title': d.pages[i].title,
 									'link_type':'page',
 									'subject_id':d.pages[i].id
 								})
+
+								var compiledLink = {};
+								compiledLink['link_list[links][][position]'] = i+1;
+								compiledLink['link_list[links][][title]'] = d.pages[i].title;
+								compiledLink['link_list[links][][link_type]'] = 'page';
+								compiledLink['link_list[links][][subject_id]'] = d.pages[i].id;
+								compiledParam +='&' + $.param(compiledLink);
+
 							}
 
-							create_a_linklist(l);
+							/* create_a_linklist(l); */
+							create_a_linklist_FIX(compiledParam);
 
 						},
 						error:function(){
@@ -1614,11 +1646,9 @@ return {
 						success: function(d){
 
 							var compiled = {};
-
 							compiled['utf8'] = '✓';
 							compiled['link_list[handle]'] = 'all-vendors';
 							compiled['link_list[title]'] = 'All Vendors';
-
 							var compiledParam = $.param(compiled);
 
 							var l = {
@@ -1645,14 +1675,15 @@ return {
 								compiledLink['link_list[links][][title]'] = d.vendors[i];
 								compiledLink['link_list[links][][link_type]'] = 'http';
 								compiledLink['link_list[links][][subject]'] = '/collections/vendors?q='+(encodeURIComponent(d.vendors[i].toLowerCase()).replace(/%20/g, '+'));
+								compiledParam +='&' + $.param(compiledLink);
 
 								l.link_list.links.push(link);
-								compiledParam +='&' + $.param(compiledLink);
+
 
 							}
 
-							//create_a_linklist(l);
-							create_a_linklist_FIX(compiledParam)
+							/* create_a_linklist(l); */
+							create_a_linklist_FIX(compiledParam);
 
 						}	
 					});
@@ -1755,9 +1786,7 @@ return {
 										/* find the type select dropdown */
 										var types = target.find('select[name="link_list[links][][link_type]"]');
 
-										/* 
-										this is a real dirty way of injecting data
-										*/
+										/* this is a real dirty way of injecting data */
 										types.each(function(index){
 											var t = $(this);
 											var v = t.val();
@@ -1765,6 +1794,7 @@ return {
 
 												var selectTarget = target.find('div[context="collectionPicker'+index+'"]').eq(0);
 												var collectionDef =  selectTarget.attr('define').split(',');
+
 												if(typeof collectionDef[2] !== 'undefined'){
 													var subjectID = parseInt(collectionDef[2].replace(/\D/g,''));
 													selectTarget.after('<input name="link_list[links][][subject_id]" value="'+subjectID+'" />');
@@ -1774,6 +1804,7 @@ return {
 
 												var selectTarget = target.find('div[context="pagePicker'+index+'"]').eq(0);
 												var pageDef =  selectTarget.attr('define').split(',');
+
 												if(typeof pageDef[2] !== 'undefined'){
 													var subjectID = parseInt(pageDef[2].replace(/\D/g,''));
 													selectTarget.after('<input name="link_list[links][][subject_id]" value="'+subjectID+'" />');
@@ -1783,6 +1814,7 @@ return {
 
 												var selectTarget = target.find('div[context="productPicker'+index+'"]').eq(0);
 												var productDef =  selectTarget.attr('define').split(',');
+
 												if(typeof productDef[2] !== 'undefined'){
 													var subjectID = parseInt(productDef[2].replace(/\D/g,''));
 													selectTarget.after('<input name="link_list[links][][subject_id]" value="'+subjectID+'" />');
@@ -1808,38 +1840,73 @@ return {
 							_.notice('Can not copy this linklist. ID was not found',true);
 						}
 				});
+	
+				var deleteBtn = $('<a />',{
+					'href':'#',
+					'class':'tooltip-bottom tooltip delete',
+					'style':'margin-right:1.5em'
+					}).html('<span class="tooltip-container"><span class="tooltip-label">Delete Linklist on click</span></span><i class="ico ico-14-svg ico-delete"></i>').on('click',function(e){
 
-				llf.prepend(a);
+							e.preventDefault();
+							var t = $(this);
+							var a = t.parent().find('a[href^="/admin/link_lists"]').eq(0);
 
-				var d = $('.section-summary').eq(0),
-						a1 = $('<a/>',{
-							'class':'btn tooltip-bottom tooltip',
-							style:'margin-top:2em',
-							href:'#'
-						}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every collection</span></span>Create Collections linklist').on('click',function(){
-							create_collection_linklist();
-							return false;
-						}),
-						a2 = $('<a/>',{
-							'class':'btn tooltip-bottom tooltip',
-							href:'#'
-						}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every page</span></span>Create Pages linklist').on('click',function(){
-							create_pages_linklist();
-							return false;
-						}),
-						a3 = $('<a/>',{
-							'class':'btn tooltip-bottom tooltip',
-							href:'#'
-						}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with all vendors</span></span>Create Vendor linklist').on('click',function(){
-							create_vendors_linklist();
-							return false;
-						});
+							if(a.length){
+								href = a.attr('href').split('/').pop();
 
-				if(d){
-					d.append('<br>',a1,'<br>',a2,'<br>',a3);
+								if(!isNaN(href)){
+
+									var data = {
+										'utf8':'✓',
+										'_method':'delete'
+									};
+
+									$.ajax({
+										type: "POST",
+										url: '/admin/link_lists/'+href,
+										data:data,
+										success: function(d){
+											t.closest('.next-grid__cell.next-grid__cell--half').addClass('disable').css({'opacity':'.2','pointer-events' : 'none'});
+										}
+									});
+								}
+							}
+
+				});
+
+				if(llf.length > 1){
+					llf.prepend(deleteBtn, a);
+				}else{
+					llf.prepend(a);
 				}
+				
+				var d = $('.section-summary').eq(0),
+				a1 = $('<a/>',{
+					'class':'btn tooltip-bottom tooltip',
+					style:'margin-bottom:.5em',
+					href:'#'
+				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every collection</span></span>Create Collections linklist').on('click',function(){
+					create_collection_linklist();
+					return false;
+				}),
+				a2 = $('<a/>',{
+					'class':'btn tooltip-bottom tooltip',
+					style:'margin-bottom:.5em',
+					href:'#'
+				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every page</span></span>Create Pages linklist').on('click',function(){
+					create_pages_linklist();
+					return false;
+				}),
+				a3 = $('<a/>',{
+					'class':'btn tooltip-bottom tooltip',
+					style:'margin-bottom:.5em',
+					href:'#'
+				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with all vendors</span></span>Create Vendor linklist').on('click',function(){
+					create_vendors_linklist();
+					return false;
+				});
 
-				$('.section.link-lists').eq(0).prepend(endpointError);
+				if(d.length){d.append('<br>',a1,'<br>',a2,'<br>',a3);}
 
 				var addLinkListBtn = $('.section-summary a[href="/admin/link_lists/new"]');
 				if(addLinkListBtn.length){
@@ -1865,7 +1932,7 @@ return {
 
 							if(optionAppend.length){
 								var selectLinkList = $('<select />',{
-									'style':'margin-top:1em;border-radius:3px;border-color: #D3D3D3;color: #479ccf;'
+									'style':'margin-top:1em;border-radius:3px;border-color: #D3D3D3;color: #479ccf;width: 100%'
 								}).on('change',function(){
 
 									var t = $(this);
@@ -1878,20 +1945,16 @@ return {
 								}).html('<option value="">Jump to linklist</option>'+optionAppend);
 
 								var div = $('<div />');
-								div.append(selectLinkList,'<small style="display: block">Select a linklist to quickly jump to edit view. Useful for when you have many linklists...</small>');
+								div.append(selectLinkList,'<small style="display: block;background: #fff;padding: .5em;">Select a linklist to quickly jump to edit view. Useful for when you have many linklists...</small>');
 								addLinkListBtn.after(div);
 							}
-
 
 						}
 
 					}
 
-
-
 				}
 
-			/* end duplication setup */
 		},
 		setup_collections:function(){
 
@@ -2057,7 +2120,7 @@ return {
 
 							if(c.val().length){
 
-								if(a.val()=='add' && t.val().length){
+								if(a.val()==='add' && t.val().length){
 
 									$.ajax({
 									type: "GET",
@@ -2074,7 +2137,7 @@ return {
 								}
 
 
-								if(a.val()=='purge' || a.val()=='set'){
+								if(a.val()==='purge' || a.val()==='set'){
 
 									$.ajax({
 									type: "GET",
@@ -2090,7 +2153,7 @@ return {
 									});
 								}
 
-								if(a.val()=='remove'){
+								if(a.val()==='remove'){
 
 									$.ajax({
 									type: "GET",
@@ -2106,10 +2169,9 @@ return {
 									});
 								}
 
-							}else{
-									_.notice('Choose a collection',true);
-								}
-									return false;
+							}else{ _.notice('Choose a collection',true); }
+
+								return false;
 
 							});
 
@@ -2805,9 +2867,9 @@ return {
 			
 			if('undefined' === typeof i){ return; }			
 			if('undefined' === typeof to_add[i]){ return; }
+			if('undefined' === typeof t){ return; }
 
 			var cid = t.data('cid');
-
 			var rate = to_add[i];
 			var type = rate.type;
 
@@ -2820,7 +2882,7 @@ return {
 			}
 
 			rate.country_id = cid; /* update to match the target country */
-			rate.new_type = rate.type; /* NEW setting. Not sure what this does yet... */
+			rate.new_type = rate.type; /* NEW setting. Not sure what the use is... */
 
 			/* be sure to include the utf8 var */
 			var data = {
@@ -2850,12 +2912,11 @@ return {
 				}
 			});
 
-
 		},
 		save_new_rates:function(to_add,i,t){
 			/*
 			The endpoints in the dashboard have been removed.
-			Use the save_new_rate_FIX function for now.
+			Use the slower but functional save_new_rate_FIX function for now.
 			*/
 			if('undefined' !== typeof to_add[i]){
 
@@ -2926,7 +2987,7 @@ return {
 				var shippingSettingsHeader = $('#settings-shipping header').eq(0);
 				if(shippingSettingsHeader.length){
 
-					var new_buttons = $('<div class="header-right animated fadein"><div class="header-action"><a class="btn btn-separate tooltip-bottom tooltip bulk-options" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a> <a class="btn btn-separate tooltip-bottom tooltip export-as-json" href="#"><span class="tooltip-container"><span class="tooltip-label">Export countries</span></span>Export JSON</a></div></div>');
+					var new_buttons = $('<div class="header-right animated fadein"><div class="header-action"><a class="btn tooltip-bottom tooltip bulk-paste-btn disabled" href="#"><span class="tooltip-container"><span class="tooltip-label">Paste to selected countries</span></span>Bulk Paste</a> <a class="btn btn-separate tooltip-bottom tooltip bulk-options" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a> <a class="btn btn-separate tooltip-bottom tooltip export-as-json" href="#"><span class="tooltip-container"><span class="tooltip-label">Export countries</span></span>Export JSON</a></div></div>');
 
 					new_buttons.find('a.export-as-json').on('click',function(e){
 						e.preventDefault();
@@ -2974,8 +3035,7 @@ return {
 						weight_based_shipping_rates:[],
 						price_based_shipping_rates:[],
 						carrier_shipping_rate_providers:[]
-					},
-					shipping_types = ['weight','price','carrier'];
+					};
 
 					var create_shipping_rate = function(c,to_add,t){
 
@@ -3003,15 +3063,15 @@ return {
 									// build up the delete list
 
 									for (var i = 0, len = w.length; i < len; i++) {
-											to_delete.push([w[i].id,'weight_based']);
+										to_delete.push([w[i].id,'weight_based']);
 									}
 
 									for (var i = 0, len = p.length; i < len; i++) {
-											to_delete.push([p[i].id,'price_based']);
+										to_delete.push([p[i].id,'price_based']);
 									}
 
 									for (var i = 0, len = c.length; i < len; i++) {
-											to_delete.push([c[i].id,'carrier_based']);
+										to_delete.push([c[i].id,'carrier_based']);
 									}
 
 									/*
@@ -3078,9 +3138,7 @@ return {
 
 					$('div.shipping-rate-table').each(function(index){
 
-
 						var t=$(this);
-
 						var copy = $('<a/>',{
 							'href':'#',
 							'data-country':_.data('countries').countries[index].name,
@@ -3098,9 +3156,7 @@ return {
 							$('a.copyrates').removeClass('btn-primary');
 							t.addClass('btn-primary');
 
-							/* lazy hide all */
-							$('a.bulkpaste').removeClass('hidden').addClass('disabled');
-
+							
 							$.ajax({
 								type: "GET",
 								url: '/admin/countries/'+cid+'.json',
@@ -3112,7 +3168,8 @@ return {
 									_.notice('Ready to paste '+cname+'.');
 
 									/* lazy show all */
-									$('a.bulkpaste').removeClass('disabled');
+									$('a.bulkpaste, input.paste-checkbox').removeClass('hidden');
+
 								},
 								error:function(){
 									_.notice('Error copying rates',true);
@@ -3120,6 +3177,12 @@ return {
 							});
 
 							return false;
+						});
+						
+						var pasteCheckbox = $('<input />',{
+							'type':'checkbox',
+							'style':'float:right',
+							'class':'hidden paste-checkbox'
 						});
 
 						var paste = $('<a/>',{
@@ -3130,7 +3193,6 @@ return {
 							'class':'hidden fadein bulkpaste btn btn-slim tooltip tooltip-bottom',
 							'style':'float:right;margin-right:.5em'
 						}).html('<span class="tooltip-container"><span class="tooltip-label">Will replace ALL existing rates.</span></span>Paste rates (replace)').on('click',function(){			
-
 							var t=$(this),
 							cid = t.attr('data-cid'),
 							shipping_rates_copy = shipping_rates,
@@ -3188,12 +3250,11 @@ return {
 						/* add the buttons */
 						var appendAfter = t.find('a[bind-event-click="addShippingRateModal.show()"]');
 						if(appendAfter.length){
-							appendAfter.after(copy,paste);
+							appendAfter.after(copy,paste,pasteCheckbox);
 						}else{
 							_.notice('Error. Unable to add copy button.',true);
 							return false;
 						}
-
 
 					});
 
@@ -3248,6 +3309,8 @@ return {
 		get_files:function(i,pic_pages){
 
 			var table = $('#settings-general table');
+
+			if(table.length){
 			_.notice('Loading files...');
 
 			$.ajax({
@@ -3309,7 +3372,8 @@ return {
 
 					}
 				}
-			});	
+			});
+			}
 
 		},
 		setup_files:function(){
@@ -3410,7 +3474,6 @@ return {
 		},
 		setup_single_order:function(){
 			var targetHTML = $('div.order-sidebar .box-details').eq(0);
-
 			if(targetHTML.length){
 
 				$('div.order-sidebar .box-details').eq(0).after('<div id="customer_meta_box" class="box box-details"><div class="box-header p"><h3>ShopifyFD</h3></div><div class="box-content p">'+metafieldloader+'</div>');
@@ -3745,7 +3808,7 @@ return {
 						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'themes' ){
 							_.setup_themes();
 						} else if( _.data('alpha') == 'link_lists' && !isNaN(_.data('omega'))){
-							_.setup_link_lists_edit();
+							_.setup_link_lists_single();
 						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'discounts' ){
 							_.setup_discounts();
 						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'general' ){
