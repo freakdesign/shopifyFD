@@ -109,7 +109,7 @@ return {
 	    .replace(/[\t]/g, '\\t');
 	},
 	redirect:function(url) {
-    	if(typeof url !== 'undefined' && typeof Turbolinks === 'object'){
+    	if(typeof url !== 'undefined' && typeof Turbolinks === 'function'){
 			try {
 				Turbolinks.visit(url);
 			} catch (e) {
@@ -1880,6 +1880,7 @@ return {
 								div.append(selectLinkList,'<small style="display: block">Select a linklist to quickly jump to edit view. Useful for when you have many linklists...</small>');
 								addLinkListBtn.after(div);
 							}
+
 
 						}
 
