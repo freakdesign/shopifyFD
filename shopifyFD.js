@@ -1613,6 +1613,14 @@ return {
 						dataType: "json",
 						success: function(d){
 
+							var compiled = {};
+
+							compiled['utf8'] = '✓';
+							compiled['link_list[handle]'] = 'all-vendors';
+							compiled['link_list[title]'] = 'All Vendors';
+
+							var compiledParam = $.param(compiled);
+
 							var l = {
 								utf8:'✓',
 								_method:'create',
@@ -1625,23 +1633,32 @@ return {
 
 							for (var i = 0, len = d.vendors.length; i < len; ++i) {
 
-								l.link_list.links.push({
+								var link = {
 									position:i+1,
 									title: d.vendors[i],
 									link_type:'http',
 									subject:'/collections/vendors?q='+(encodeURIComponent(d.vendors[i].toLowerCase()).replace(/%20/g, '+'))
-								});
+								};
 
+								var compiledLink = {};
+								compiledLink['link_list[links][][position]'] = i+1;
+								compiledLink['link_list[links][][title]'] = d.vendors[i];
+								compiledLink['link_list[links][][link_type]'] = 'http';
+								compiledLink['link_list[links][][subject]'] = '/collections/vendors?q='+(encodeURIComponent(d.vendors[i].toLowerCase()).replace(/%20/g, '+'));
+
+								l.link_list.links.push(link);
+								compiledParam +='&' + $.param(compiledLink);
 
 							}
 
-							create_a_linklist(l);
+							//create_a_linklist(l);
+							create_a_linklist_FIX(compiledParam)
 
 						}	
 					});
 
 				},
-				create_a_linklist_FIX = function(linklist,isSerialized){
+				create_a_linklist_FIX = function(linklist){
 
 					if(typeof linklist === 'undefined'){return}
 
@@ -1651,10 +1668,10 @@ return {
 						data:linklist,
 						success: function(d,o,h){
 
-							var loc = h.getResponseHeader('X-XHR-Redirected-To');
+							var loc = h.getResponseHeader('X-XHR-Redirected-To'); /* this is not always sent */
 							if(loc){
 
-								linklistID = href = loc.split('/').pop();
+								linklistID = loc.split('/').pop();
 
 								if(!isNaN(linklistID)){
 									_.notice('Link list added');
@@ -1663,8 +1680,14 @@ return {
 									_.notice('Error creating linklist - ID not returned',true);
 								}
 							}else{
-								/* if the redirected header is not present we will need to parse the html */
-								_.notice('link list copied');
+								/* if the redirected header is not present we will need to parse the returned html for clues */
+								var form = $(d).find('form').eq(0);
+								linklistID = form.attr('action').split('/').pop();
+								if(!isNaN(linklistID)){
+									_.notice('Link list added');
+									_.redirect('/admin/link_lists/'+linklistID);
+								}
+								
 							}
 
 						},
@@ -1780,28 +1803,6 @@ return {
 								}
 							});
 							}
-							/*
-							
-							// old method below:
-
-							if(!isNaN(href)){
-								$.ajax({
-									type: "GET",
-									url: '/admin/link_lists/'+href+'.json',
-									dataType: 'json',
-									success: function(d){
-										delete d.link_list.id;
-										delete d.link_list['default'];
-										d.link_list.title += ' COPY';
-										d.link_list.handle += '-copy';
-										create_a_linklist(d);
-									},
-									error:function(){
-										_.notice('Error creating linklist',true);
-									}
-								});
-							}
-							*/
 
 						}else{
 							_.notice('Can not copy this linklist. ID was not found',true);
