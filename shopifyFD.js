@@ -74,6 +74,8 @@ if(url.indexOf("myshopify.com/admin")>1){
 	
 	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
 
+	var emergencyPanel = '<div class="emergency-panel">{contents}</div>';
+
 var _ = (function(){
 
 	var v = { 
@@ -1580,7 +1582,7 @@ return {
 
 							}
 
-							/* create_a_linklist(l); */
+							/* create_a_linklist(l); // old method */
 							create_a_linklist_FIX(compiledParam);
 
 						},
@@ -1759,7 +1761,9 @@ return {
 					e.preventDefault();
 					var t = $(this),
 						a = t.parent().find('a[href^="/admin/link_lists"]').eq(0);
+
 						if(a.length){
+							t.addClass('btn is-loading no-btn');
 							href = a.attr('href').split('/').pop();
 
 							/* prepare for html loading and parse */
@@ -1831,6 +1835,7 @@ return {
 
 								},
 								error:function(s,b,e){
+									t.removeClass('btn is-loading no-btn');
 									_.notice(e,true);
 								}
 							});
@@ -1843,7 +1848,7 @@ return {
 	
 				var deleteBtn = $('<a />',{
 					'href':'#',
-					'class':'tooltip-bottom tooltip delete',
+					'class':'tooltip-bottom tooltip',
 					'style':'margin-right:1.5em'
 					}).html('<span class="tooltip-container"><span class="tooltip-label">Delete Linklist on click</span></span><i class="ico ico-14-svg ico-delete"></i>').on('click',function(e){
 
@@ -1852,6 +1857,7 @@ return {
 							var a = t.parent().find('a[href^="/admin/link_lists"]').eq(0);
 
 							if(a.length){
+								t.addClass('btn is-loading no-btn');
 								href = a.attr('href').split('/').pop();
 
 								if(!isNaN(href)){
@@ -1866,7 +1872,7 @@ return {
 										url: '/admin/link_lists/'+href,
 										data:data,
 										success: function(d){
-											t.closest('.next-grid__cell.next-grid__cell--half').addClass('disable').css({'opacity':'.2','pointer-events' : 'none'});
+											t.removeClass('btn is-loading no-btn').closest('.next-grid__cell.next-grid__cell--half').addClass('disable').css({'opacity':'.2','pointer-events' : 'none'});
 										}
 									});
 								}
@@ -1875,7 +1881,25 @@ return {
 				});
 
 				if(llf.length > 1){
+
 					llf.prepend(deleteBtn, a);
+
+					$.ajax({
+					type: "GET",
+					url: '/admin/link_lists.json',
+					dataType: 'json',
+					success: function(d){
+						if(d){
+							_.data('link_lists',d);
+							link_lists = d.link_lists;
+							llf.each(function(index){
+								var t = $(this);
+								t.parent().find('h3').append('<span class="fadein" style="color:#ccc;display: block;font-size: 11px;font-family: monospace;">'+d.link_lists[index].handle+'</span>');
+							});
+						}
+					}
+					});
+
 				}else{
 					llf.prepend(a);
 				}
@@ -1886,6 +1910,7 @@ return {
 					style:'margin-bottom:.5em',
 					href:'#'
 				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every collection</span></span>Create Collections linklist').on('click',function(){
+					$(this).addClass('is-loading disabled');
 					create_collection_linklist();
 					return false;
 				}),
@@ -1894,6 +1919,7 @@ return {
 					style:'margin-bottom:.5em',
 					href:'#'
 				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every page</span></span>Create Pages linklist').on('click',function(){
+					$(this).addClass('is-loading disabled');
 					create_pages_linklist();
 					return false;
 				}),
@@ -1902,6 +1928,7 @@ return {
 					style:'margin-bottom:.5em',
 					href:'#'
 				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with all vendors</span></span>Create Vendor linklist').on('click',function(){
+					$(this).addClass('is-loading disabled');
 					create_vendors_linklist();
 					return false;
 				});
@@ -3463,9 +3490,9 @@ return {
 
 		},
 		setup_customers:function(){
-			var targetHTML = $('section.customer-details.ssb .box-details').eq(0);
+			var targetHTML = $('.next-card.next-card--aside').eq(1);
 			if(targetHTML.length){
-				targetHTML.after('<div id="customer_meta_box" class="box box-details"><div class="box-header p"><h3>ShopifyFD</h3></div><div class="box-content p">'+metafieldloader+'</div>');
+				targetHTML.after('<div id="customer_meta_box" class="next-card next-card--aside"><div class="box-content p">'+metafieldloader+'</div>');
 				var loadinto = $('div.metafield-content');
 				_.loadmeta(loadinto,v);
 			}else{
@@ -3473,15 +3500,16 @@ return {
 			}
 		},
 		setup_single_order:function(){
-			var targetHTML = $('div.order-sidebar .box-details').eq(0);
+
+			var targetHTML = $('#order-sidebar');
 			if(targetHTML.length){
 
-				$('div.order-sidebar .box-details').eq(0).after('<div id="customer_meta_box" class="box box-details"><div class="box-header p"><h3>ShopifyFD</h3></div><div class="box-content p">'+metafieldloader+'</div>');
+				targetHTML.append('<div id="customer_meta_box" class="next-card next-card--aside"><div class="box-content p">'+metafieldloader+'</div>');
 				var loadinto = $('div.metafield-content');
 				_.loadmeta(loadinto,v);
 
 			}else{
-				_.notice('ShopifyFD error : setup_single_order : target html not found');
+				_.notice('ShopifyFD error : setup_single_order : target html not found',true);
 			}
 
 			var billing_box = $('.box.box-details').eq(5),
