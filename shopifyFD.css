@@ -59,6 +59,7 @@ body{padding-top:32px}
 
 /* you know, for hiding stuff... */
 .shopifyJSoverride .hidden{display:none}
+.shopifyJSoverride .label.hidden { display: inline; }
 
 /* Buttons */
 .shopifyJSoverride .section.buttons{padding:20px}
@@ -95,6 +96,8 @@ body{padding-top:32px}
 .shopifyJSoverride .view-in-store {background-position: 100% -2561px}
 
 .shopifyJSoverride .header-main {max-width: inherit;}
+.shopifyJSoverride .header-main .next-icon--website-slate-lightest {margin-left:.5em;}
+
 
 /* Editor extra */
 .shopifyJSoverride #rte_extra{background: #F0F0F0;padding: 5px;}

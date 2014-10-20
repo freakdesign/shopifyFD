@@ -1274,7 +1274,7 @@ return {
 					title:'View in Store'
 				});
 
-				viewInStore.append('<i class="ico ico-20-svg ico-sidebar-bottom-website"></i>');
+				viewInStore.append('<i class="next-icon next-icon--20 next-icon--header next-icon--website-slate-lightest"></i>');
 				page_title.append(viewInStore);
 			}
 
@@ -2384,7 +2384,8 @@ return {
 			var targetHTMLRightMenu = $('.header-row .header-right');
 
 			if(targetHTML.length){
-				var productViewLink = targetHTML.find('a').eq(0).attr('href');	
+				var previewButton = targetHTML.find('a').eq(0).clone(true);
+				var productViewLink = previewButton.attr('href');
 				targetHTML.after(metafieldloader).remove();
 
 				var loadinto = $('div.metafield-content');
@@ -2499,15 +2500,20 @@ return {
 			variants_ids = {};
 
 			if(page_title.length){
-				var viewInStore = $('<a />',{
-					href:productViewLink,
-					target:'_blank',
-					style:'display: inline-block;vertical-align: top;',
-					title:'View in Store'
-				});
+				if(typeof productViewLink !== 'undefined'){
+					var viewInStore = $('<a />',{
+						href:productViewLink,
+						target:'_blank',
+						style:'display: inline-block;vertical-align: top;',
+						title:'View in Store'
+					});
 
-				viewInStore.append('<i class="ico ico-20-svg ico-sidebar-bottom-website"></i>');
-				page_title.append(viewInStore);
+					viewInStore.append('<i class="next-icon next-icon--20 next-icon--header next-icon--website-slate-lightest"></i>');
+					page_title.append(viewInStore);
+				}else{
+					page_title.append(previewButton); 
+				}
+
 			}
 
 			/* INVENTORY AND VARIANTS PANEL */
@@ -2780,7 +2786,8 @@ return {
 			var targetHTML = $('.section.description .section-summary').eq(0);
 
 			if(targetHTML.length){
-				var itemViewLink = targetHTML.find('a').eq(0).attr('href');	
+				var previewButton = targetHTML.find('a').eq(0).clone(true);
+				var itemViewLink = previewButton.attr('href');	
 				targetHTML.after(metafieldloader).remove();
 
 				var loadinto = $('div.metafield-content');
@@ -2791,15 +2798,19 @@ return {
 
 			var page_title = $('h1.header-main');
 			if(page_title.length){
-				var viewInStore = $('<a />',{
-					href:itemViewLink,
-					target:'_blank',
-					style:'display: inline-block;vertical-align: top;',
-					title:'View in Store'
-				});
+				if(typeof itemViewLink !== 'undefined'){
+					var viewInStore = $('<a />',{
+						href:itemViewLink,
+						target:'_blank',
+						style:'display: inline-block;vertical-align: top;',
+						title:'View in Store'
+					});
 
-				viewInStore.append('<i class="ico ico-20-svg ico-sidebar-bottom-website"></i>');
-				page_title.append(viewInStore);
+					viewInStore.append('<i class="next-icon next-icon--20 next-icon--header next-icon--website-slate-lightest"></i>');
+					page_title.append(viewInStore);
+				}else{
+					page_title.append(previewButton); 
+				}
 			}
 
 			/* RTE ADD ON BUTTONS */
