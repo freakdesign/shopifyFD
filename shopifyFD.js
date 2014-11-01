@@ -236,13 +236,16 @@ return {
 
 		*/
 
+		if(typeof id === 'undefined'){return}
 		if(id){
 			var mycontent = $("iframe").contents().find("#tinymce"),
-			myhtml = mycontent.html(),
-			metaJSON = {
+			myhtml = mycontent.html();
+			if(typeof myhtml === 'undefined'){ return }
+
+			var metaJSON = {
 				"metafield": {
 					"namespace": 'backups',
-					"key": id,
+					"key": id, /* consider using datestamp in the future for multiple backups */
 					"value": myhtml,
 					"value_type": "string"
 				}
@@ -279,21 +282,22 @@ return {
 
 		*/
 
-		var url = '/admin/'+_.data('alpha')+'/'+_.data('omega')+'/metafields.json';
+		var url = '/admin/'+_.data('alpha')+'/'+_.data('omega')+'/metafields.json?limit=250';
 
 		if(_.data('omega') ==='general'){url = '/admin/metafields.json';}
 		if(_.data('alpha') ==='articles'){url = '/admin/articles/'+_.data('omega')+'/metafields.json';}
 
 		$.getJSON(url, function(data) {
 
-			var h = '',
+			var h = '';
+			var namespaceArray = _.data('datalistNamespace') || ['global'];
+			var keyArray = _.data('datalistKey') || [];
+
 			m = data.metafields;
 
 			if(m){
 
 				_.data('m',m);
-				var namespaceArray = _.data('datalistNamespace') || ['global'];
-				var keyArray = _.data('datalistKey') || [];
 
 				if(_.data('alpha')==='products' || _.data('alpha')==='collections' || _.data('alpha')==='pages'){
 					_.setup_copypaste();	
@@ -336,7 +340,6 @@ return {
 
 			loadinto.html(h).append(metafieldform);
 
-
 			for (var i = 0; i < namespaceArray.length; i++) {
 				var dlOption = $('<option />',{
 					value:namespaceArray[i]
@@ -351,18 +354,19 @@ return {
 				$('#fd-dl-key').append(dlOption)
 			};
 
-		$('#advanced_meta_features').off('click').on('click',function(){
-			var adv_meta = $('#advanced_meta').eq(0);
-			adv_meta.toggleClass('hidden');
-			return false;
-		});
 
-		$('#adv_clear_cache').off('click').on('click',function(){
-			$('#advanced_meta').find('select').remove().end().find('a').show();
-			_.data('products',false);
-			_.data('collections',false);
-			return false;
-		});
+			$('#advanced_meta_features').off('click').on('click',function(){
+				var adv_meta = $('#advanced_meta').eq(0);
+				adv_meta.toggleClass('hidden');
+				return false;
+			});
+
+			$('#adv_clear_cache').off('click').on('click',function(){
+				$('#advanced_meta').find('select').remove().end().find('a').show();
+				_.data('products',false);
+				_.data('collections',false);
+				return false;
+			});
 
 		/* 
 		note the double up functions 
@@ -1219,8 +1223,10 @@ return {
 		if(m){
 			for (var i = 0, len = m.length; i < len; i++) {
 				if(m[i].namespace == 'backups'){
+					console.log(m[i].value);
 				mycontent.html(m[i].value);
 				_.notice('Backup restored');
+				return;
 			}}
 		}else{
 			_.notice('Error, nothing to restore',true);
