@@ -66,7 +66,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopify.freakdesign.com.au/#donate">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://shopify.freakdesign.com.au" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
+	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopifyfd.com/">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://shopify.freakdesign.com.au" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
 
 	var aargh_msg = '<p>The page may need to be reloaded to see the changes.</p>';
 
@@ -284,8 +284,8 @@ return {
 
 		var url = '/admin/'+_.data('alpha')+'/'+_.data('omega')+'/metafields.json?limit=250';
 
-		if(_.data('omega') ==='general'){url = '/admin/metafields.json';}
-		if(_.data('alpha') ==='articles'){url = '/admin/articles/'+_.data('omega')+'/metafields.json';}
+		if(_.data('omega') ==='general'){url = '/admin/metafields.json?limit=250';}
+		if(_.data('alpha') ==='articles'){url = '/admin/articles/'+_.data('omega')+'/metafields.json?limit=250';}
 
 		$.getJSON(url, function(data) {
 
@@ -1223,7 +1223,6 @@ return {
 		if(m){
 			for (var i = 0, len = m.length; i < len; i++) {
 				if(m[i].namespace == 'backups'){
-					console.log(m[i].value);
 				mycontent.html(m[i].value);
 				_.notice('Backup restored');
 				return;
@@ -1262,6 +1261,8 @@ return {
 	setup_articles:function(){
 
 		var targetHTML = $('.section.description .section-summary').eq(0);
+		var headerButtons = $('.header-row .header-right').eq(0);
+
 		if(targetHTML.length){
 			var itemViewLink = targetHTML.find('a').eq(0).attr('href');	
 			targetHTML.after(metafieldloader).remove();
@@ -1287,6 +1288,57 @@ return {
 		}else{
 			_.notice('ShopifyFD error : setup_articles : Metafield target HTML not found',true);
 		}
+
+		if(headerButtons.length){
+			var u = $('<ul/>',{
+			'class':'segmented',
+			'id':'copy-object'
+			}),
+			l = $('<li/>'),
+			c = $('<a/>',{
+				'class':'btn btn-separate',
+				'href':'#'
+			}).html('Duplicate').on('click',function(e){
+				e.preventDefault();
+				var t = $(this);
+				$.getJSON(d.URL+'.json', function(data) {
+					var articleJSON = {
+						article:{
+							author:data.article.author,
+							blog_id:data.article.blog_id,
+							body_html:data.article.body_html,
+							summary_html:data.article.summary_html,
+							tags:data.article.tags,
+							template_suffix:data.article.template_suffix,
+							title:data.article.title + ' [copy]',
+							published:false
+						}
+					};
+					$.ajax({
+						type: "POST",
+						url: '/admin/blogs/'+data.article.blog_id+'/articles.json',
+						dataType: 'json',
+						data: articleJSON,
+						success: function(d){
+							_.redirect('/admin/blogs/'+d.article.blog_id+'/articles/'+d.article.id);
+						},
+						error:function(d){
+							_.notice('Error saving',true);
+						}
+					});
+
+				});
+
+			});
+
+			l.append(c);
+			u.append(l);
+			headerButtons.prepend(u);
+
+		}else{
+			_.notice('ShopifyFD error : setup_articles : Header button missing',true);
+		}
+
 	},
 	setup_blogs:function(){
 
@@ -3331,6 +3383,8 @@ return {
 		setup_custom_collections:function(){
 
 			var targetHTML = $('div.section.products').eq(0);
+			var headerButtons = $('.header-row .header-right').eq(0);
+
 			if(targetHTML.length){
 
 				targetHTML.after(metafieldloaderSection);
@@ -3344,10 +3398,151 @@ return {
 				}
 
 			}else{
-
 				_.notice('ShopifyFD error : setup_custom_collections : target html not found',true);
-
 			}
+
+			if(headerButtons.length){
+				var u = $('<ul/>',{
+				'class':'segmented',
+				'id':'copy-object'
+				}),
+				l = $('<li/>'),
+				c = $('<a/>',{
+					'class':'btn btn-separate',
+					'href':'#'
+				}).html('Duplicate').on('click',function(e){
+					e.preventDefault();
+					var t = $(this);
+					t.addClass('disabled is-loading');
+
+					$.getJSON(d.URL+'.json', function(data) {
+
+						delete data.collection.disjunctive;
+						delete data.collection.handle;
+						delete data.collection.id;
+						delete data.collection.products_count;
+						delete data.collection.published_at;
+						delete data.collection.published_scope;
+						delete data.collection.updated_at;
+
+						data.collection.published = false; /* set to unpublished by default */
+						data.collection.title += ' [copy]';
+
+						var collectionData = {};
+						var collectionURL = '/admin/custom_collections.json'; /* default */
+						var collectionType = data.collection.collection_type;
+
+						delete data.collection.collection_type; /* no longer need type */
+
+						if (collectionType === 'smart'){
+							collectionData.smart_collection = data.collection;
+							collectionURL = '/admin/smart_collections.json'; /* swap url */
+						}else{
+							collectionData.custom_collection = data.collection;
+						}
+						
+						if(collectionType === 'smart'){
+
+							$.ajax({
+								type: "POST",
+								url: collectionURL,
+								contentType: "application/json;charset=utf-8",
+								data: JSON.stringify(collectionData),
+								success: function(d){
+									try {
+										var id = d[Object.keys(d)[0]].id;
+										if(id !== 'undefined'){
+											_.redirect('/admin/collections/'+id);
+										}
+									}
+									catch (e) {/* error trap */}
+								},
+								error:function(){
+									_.notice('Error duplicating.', true);
+								}
+							});
+
+						}else{
+
+
+							var count = 0;
+							var id = document.URL.split('/').pop()
+							var countCollects = function(){
+								$.ajax({
+									type:'GET',
+									url:'/admin/collects/count.json?collection_id=' + id,
+									success: function(d){
+										count = d.count;
+										if(count>0){
+											getCollects(id,count,1)	
+										}
+
+									}
+								});
+							};
+
+							var getCollects = function(id,count,page,collects){
+
+								if(typeof id === 'undefined'){ return }
+								if(typeof count === 'undefined'){ return }
+								if(typeof page === 'undefined'){ var page = 1 }
+								if(typeof collects === 'undefined'){ var collects = [] }
+
+								_.notice('Duplicating collection, please wait...');
+								var limit = 250;
+								$.ajax({
+									type:'GET',
+									url:'/admin/collects.json?limit='+limit+'&fields=product_id&page='+page+'&collection_id=' + id,
+									success: function(d){
+
+										collects = collects.concat(d.collects);
+
+										if(page*limit > count){
+
+											collectionData.custom_collection.collects = collects;
+
+											$.ajax({
+												type: "POST",
+												url: collectionURL,
+												contentType: "application/json;charset=utf-8",
+												data: JSON.stringify(collectionData),
+												success: function(d){
+													try {
+														var id = d[Object.keys(d)[0]].id;
+														if(id !== 'undefined'){
+															_.redirect('/admin/collections/'+id);
+														}
+													}
+													catch (e) {/* error trap */}
+												},
+												error:function(){
+													_.notice('Error duplicating.', true);
+												}
+											});
+										}else{
+											getCollects(id,count,++page,collects);
+										}
+
+									}
+								});
+							}
+
+							countCollects();
+							
+
+						}
+
+
+					})
+				});
+
+				l.append(c);
+				u.append(l);
+				headerButtons.prepend(u);
+			}else{
+				_.notice('ShopifyFD error : setup_articles : Header button missing',true);
+			}
+
 
 		},
 		get_files:function(i,pic_pages){
@@ -3359,7 +3554,7 @@ return {
 
 			$.ajax({
 				type: "GET",
-				url: '/admin/files.json?limit=50&direction=next&page='+i,
+				url: '/admin/files.json?limit=250&direction=next&page='+i,
 				success: function(d,textStatus, request){
 					if(d){
 
