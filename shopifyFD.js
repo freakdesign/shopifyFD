@@ -298,6 +298,8 @@ return {
 			if(m){
 
 				_.data('m',m);
+				_.data('hasbackup',false); /* reset to default */
+				$('#restorebackup').hide();
 
 				if(_.data('alpha')==='products' || _.data('alpha')==='collections' || _.data('alpha')==='pages'){
 					_.setup_copypaste();	
@@ -316,17 +318,18 @@ return {
 					h+= '<option data-type="' +m[i].value_type + '" data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
 					v.metafields[m[i].id] = { namespace: m[i].namespace, value: m[i].value, key: m[i].key };
 					if (m[i].namespace == "backups"){
-
-						_.flog('hasbackup!');
-						$('#restorebackup').show();
-						_.data('hasbackup',true);
-
+						if(_.data('hasbackup') === false){
+							$('#restorebackup').show();
+							_.data('hasbackup',true);
+							_.setupRteBackupBtn();
+						}
 					}
 
 					namespaceArray.push(m[i].namespace);
 					keyArray.push(m[i].key);
 
 				}
+
 				namespaceArray = _.array_unique(namespaceArray);
 				keyArray = _.array_unique(keyArray);
 
@@ -1355,6 +1358,13 @@ return {
 		}
 
 	},
+	setupRteBackupBtn:function(){
+		var restoreBackupBtn = $('#restorebackup');
+		restoreBackupBtn.show().on('click',function(e){
+			e.preventDefault();
+			_.restorebackup(_.data('omega'));
+		});
+	},
 	setup_rte:function(){
 
 		/*
@@ -1369,14 +1379,13 @@ return {
 
 		*/
 
-		if(_.data('hasbackup')){
-
-			var restoreBackupBtn = $('#restorebackup');
-			restoreBackupBtn.show().on('click',function(){
-				_.restorebackup(_.data('omega'));
-				return false;
-			});
-
+		var restoreBackupBtn = $('#restorebackup');
+		if(restoreBackupBtn.length){
+			if(_.data('hasbackup')){
+				_.setupRteBackupBtn();
+			}else{
+				restoreBackupBtn.hide();
+			}
 		}
 
 		$('#clearformatting').on('click',function(){
