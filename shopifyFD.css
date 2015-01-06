@@ -252,6 +252,17 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 .no-btn {height: inherit;line-height: inherit;border: none;padding: inherit;min-width: 1.25em;}
 .no-btn .ico{opacity:0;}
 
+.shopifyJSoverride .bubble{
+  top:-1em;
+  background: #F7FCFB;
+  position: absolute;
+  left: 3.5em;
+  border: 1px solid #EAEAEA;
+  border-radius: 3px;
+  min-width: 200px;
+  box-shadow: 0 0 10px rgba(111, 146, 152, 0.3);
+}
+
 /* animations */
 
 .fadein{-webkit-animation: fade-in .25s linear;-moz-animation: fade-in .25s linear;-o-animation: fade-in .25s linear;animation: fade-in .25s linear;}

@@ -58,7 +58,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a id="aboutapp" href="#">About ShopifyFD</a></li><li><a id="togglestyle" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a id="aboutapp" href="#">About ShopifyFD</a></li><li><a id="togglestyle" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>ShopifyFD Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
@@ -70,11 +70,13 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var aargh_msg = '<p>The page may need to be reloaded to see the changes.</p>';
 
-	var bubble_html = '<div class="bubble ssb hide fadein" style="bottom: 5px;"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="fl pr"><ul class="unstyled"></ul></div></div><footer class="bubble-footer"><div class="bubble-arrow-wrap"><span class="bubble-arrow-border"></span><span class="bubble-arrow"></span></div></footer></div>';
+	var bubble_html = '<div class="bubble hide fadein"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="pr"><ul class="unstyled"></ul></div></div></div>';
 	
 	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
 
 	var emergencyPanel = '<div class="emergency-panel">{contents}</div>';
+
+	var supportingSite = ['citizen-reign','morfars'];
 
 var _ = (function(){
 
@@ -3784,7 +3786,7 @@ return {
 										order_list = '';
 
 									for (var i = 0, len = line_items.length; i < len; i++) {
-										order_list +='<li style="white-space:normal">'+line_items[i].quantity + ' x '+line_items[i].name+'</li>';
+										order_list +='<li style="white-space:normal">'+line_items[i].quantity + ' &times; '+line_items[i].name+'</li>';
 									}
 
 									if(d.order.fulfillment_status && tracking_number.length){
@@ -4026,11 +4028,11 @@ return {
 						_.data('omega',omega);
 						_.flog(_.data('alpha')+','+_.data('omega'));
 
-						if( _.data('alpha') == 'customers' && !isNaN(_.data('omega'))){
+						if( _.data('alpha') === 'customers' && !isNaN(_.data('omega'))){
 							_.setup_customers();
-						} else if( _.data('alpha') == 'articles' && !isNaN(_.data('omega'))){
+						} else if( _.data('alpha') === 'articles' && !isNaN(_.data('omega'))){
 							_.setup_articles();
-						} else if( _.data('alpha') == 'pages' && !isNaN(_.data('omega'))){
+						} else if( _.data('alpha') === 'pages' && !isNaN(_.data('omega'))){
 							_.setup_pages();
 						} else 	if( _.data('alpha') === 'smart_collections' && !isNaN(_.data('omega'))){
 							_.setup_custom_collections(); 
@@ -4038,37 +4040,37 @@ return {
 							 _.setup_custom_collections();
 						} else if( _.data('alpha') === 'collections' && !isNaN(_.data('omega'))){
 							 _.setup_custom_collections();
-						} else if( _.data('alpha') == 'blogs' && !isNaN(_.data('omega'))){
+						} else if( _.data('alpha') === 'blogs' && !isNaN(_.data('omega'))){
 							_.setup_blogs();
-						} else if( _.data('alpha') == 'products'){
-							_.setup_products();
-						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'products' ){
+						} else if( _.data('alpha') === 'products' && !isNaN(_.data('omega'))){
+								_.setup_products();
+						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'products' ){
 							_.setup_products_list();
-						} else if( _.data('alpha') == 'orders' && !isNaN(_.data('omega'))){
+						} else if( _.data('alpha') === 'orders' && !isNaN(_.data('omega'))){
 							_.setup_single_order();
-						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'orders' ){
+						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'orders' ){
 							_.setup_orders();
-						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'collections' ){
+						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'collections' ){
 							_.setup_collections();
-						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'link_lists' ){
+						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'link_lists' ){
 							_.setup_link_lists();
-						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'links' ){
+						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'links' ){
 							_.setup_link_lists();
-						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'themes' ){
+						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'themes' ){
 							_.setup_themes();
-						} else if( _.data('alpha') == 'link_lists' && !isNaN(_.data('omega'))){
+						} else if( _.data('alpha') === 'link_lists' && !isNaN(_.data('omega'))){
 							_.setup_link_lists_single();
-						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'discounts' ){
+						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'discounts' ){
 							_.setup_discounts();
-						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'general' ){
+						} else if( _.data('alpha') === 'settings' && _.data('omega') === 'general' ){
 							_.setup_settings_general();
-						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'files' ){
+						} else if( _.data('alpha') === 'settings' && _.data('omega') === 'files' ){
 							/*_.setup_files();*/
-						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'shipping' ){
+						} else if( _.data('alpha') === 'settings' && _.data('omega') === 'shipping' ){
 							_.setup_shipping();
-						} else if( _.data('alpha') == 'settings' && _.data('omega') == 'taxes' ){
+						} else if( _.data('alpha') === 'settings' && _.data('omega') === 'taxes' ){
 							/*_.setup_taxes();*/
-						} else if( _.data('alpha') == 'admin' && _.data('omega') == 'announcements' ){
+						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'announcements' ){
 							_.setup_announcements();
 						}
 
