@@ -44,21 +44,21 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	*/
 
-	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn btn-slim savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin-top:1em;line-height:1"><small><a id="advanced_meta_features" href="#">Toggle advanced features</a><br>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.</small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn btn-slim" href="">Get collections</a></p><p><a id="adv_get_products" class="btn btn-slim" href="">Get products</a> <small>not suitable for large stores</small></p></div>';
+	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle advanced features</a></small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
 
-	var metafieldloader = '<div class="sub_section-summary fadein"><h1>Metafields <span id="metacount" class="animated bounce">0</span></h1><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
+	var metafieldloader = '<div class="sub_section-summary fadein sidebar-cell"><h1>Metafields <span id="metacount" class="animated bounce">0</span></h1><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
 
 	var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
 
 	var metafield_default = '<option value="">Select or create a metafield</option>';
 
-	var metafield_copybox = '<div><a class="btn btn-slim" id="fd_copymetafields">Copy All Metafields</a> <a class="btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
+	var metafield_copybox = '<div class="metafield-copy-paste"><a class="fd-btn btn" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
 
-	var rte_menu = '<div id="rte_extra"><a class="btn btn-slim tooltip tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Careful, this method is brutal...</span></span>Purge html</a> <a class="btn btn-slim tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn btn-slim tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
+	var rte_menu_html = '<div id="rte_extra"><a class="btn fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
 
 	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a id="aboutapp" href="#">About ShopifyFD</a></li><li><a id="togglestyle" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a id="aboutapp" href="#">About ShopifyFD</a></li><li class="hidden"><a id="togglestyle" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="#" class="disabled tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Create an order</span></span>Order Create</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>ShopifyFD Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
@@ -240,7 +240,7 @@ return {
 
 		if(typeof id === 'undefined'){return}
 		if(id){
-			var mycontent = $("iframe").contents().find("#tinymce"),
+			var mycontent = $("iframe").contents().find("#tinymce").eq(0),
 			myhtml = mycontent.html();
 			if(typeof myhtml === 'undefined'){ return }
 
@@ -253,9 +253,14 @@ return {
 				}
 			};
 
+			var url = d.URL+'/metafields.json';
+			if(_.data('alpha') === 'articles'){
+				url = '/admin/articles/' + id + '/metafields.json';
+			}
+
 			$.ajax({
 				type: "POST",
-				url: d.URL+'/metafields.json',
+				url: url,
 				dataType: 'json',
 				data: metaJSON,
 				success: function(d){
@@ -728,7 +733,7 @@ return {
 
 	},
 	clearformatting:function(){
-		var mycontent = $("iframe").contents().find("#tinymce"),
+		var mycontent = $("iframe").contents().find("#tinymce").eq(0),
 			div = document.createElement("div");
 
 		div.innerHTML = mycontent.html();
@@ -1118,49 +1123,54 @@ return {
 	},
 	panel_editvariantmeta:function(){
 
-							$('.row.section.inventory .section-summary p').eq(0).after('<p class="box notice">To edit metafields for the variant click in the variant ID number field.</p>');
+							/*$('.row.section.inventory .section-summary p').eq(0).after('<p class="box notice">To edit metafields for the variant click in the variant ID number field.</p>');*/
 
 							var tdVidInput = $('td.vid input');
 							/* simple function to return val to default */
 							tdVidInput.on('change', function() {
 								var t = $(this);
 								t.val(t.attr('data-val'));
+							}).on('click',function(){
+								var t = $(this);
+								t.select();
 							});
 
-							/* fire setup when field is clicked */
-							tdVidInput.on('click', function() {
+							var editVariantMetafieldBtn = $('.edit-variant-metafield');
+							editVariantMetafieldBtn.on('click', function(e) {
+								e.preventDefault();
+
 								$('#vrow').remove();
 								var t = $(this),
 								v = t.attr('data-val');
-								t.select();
-
-								_.flog(v);
+								
 								_.data('currentvrow',v);
 
 								$('tr.variant.active').removeClass('active');
-								var tp = t.parent().parent();
+								
+								var tp = t.parent().parent().parent();
 								tp_td = tp.find('td').length+1;
-
 								tp.addClass('active').after('<tr id="vrow"><td colspan="'+tp_td+'">'+vbox+'</td></tr>');
-									_.setup_vrow(v);
+
+								_.setup_vrow(v);
 							});
 
 						},
-	btn_removealltags:function(){
+	btn_removealltags:function(view){
+		if(view !== 'product'){ return }
 
-		var targetHTML = $('.section.tags .section-summary').eq(0);
+		var targetHTML = $('ul.js-tag-list').eq(0).parent();
 		if(targetHTML.length){
 
-			targetHTML.append('<a id="addalltags" href="#" class="btn animated fadein">Add all tags</a> <a id="removealltags" href="#" class="btn animated fadein">Remove all tags</a>');
+			targetHTML.append('<a id="addalltags" href="#" class="fd-btn btn">Add all tags</a> <a id="removealltags" href="#" class="fd-btn btn delete">Remove all tags</a>');
 
-			$('#removealltags').on('click',function(){
-				$('ul.tokenized-list').eq(0).find('a').click();
-				return false;
+			$('#removealltags').on('click',function(e){
+				e.preventDefault();
+				$('ul.next-token-list').eq(0).find('a').click();
 			});
 
-			$('#addalltags').on('click',function(){
-				$('ul.addtags').eq(0).find('span:not(.inactive)').click();
-				return false;
+			$('#addalltags').on('click',function(e){
+				e.preventDefault();
+				$('.previous-tags li.next-token--clickable').click();
 			});
 
 		}else{
@@ -1222,12 +1232,12 @@ return {
 
 	},
 	restorebackup:function(id){
-		var mycontent = $("iframe").contents().find("#tinymce"),
-		m = _.data('m');
+		var mycontent = $("iframe").contents().find("#tinymce").eq(0);
+		var m = _.data('m');
 
 		if(m){
 			for (var i = 0, len = m.length; i < len; i++) {
-				if(m[i].namespace == 'backups'){
+				if(m[i].namespace === 'backups'){
 				mycontent.html(m[i].value);
 				_.notice('Backup restored');
 				return;
@@ -1344,6 +1354,12 @@ return {
 			_.notice('ShopifyFD error : setup_articles : Header button missing',true);
 		}
 
+		if ($('#rte_extra').length === 0){
+			$('#article-content_iframecontainer').eq(0).after(rte_menu_html);
+			_.setup_rte();
+		}
+
+
 	},
 	setup_blogs:function(){
 
@@ -1420,7 +1436,7 @@ return {
 
 		*/
 
-		var images = $("iframe").contents().find("#tinymce").find('img');
+		var images = $("iframe").contents().find("#tinymce").eq(0).find('img');
 
 		if(images && images.length){
 			var meta = '';
@@ -1435,9 +1451,13 @@ return {
 			"metafield": {"namespace": 'helpers',"key": 'images',"value": meta,"value_type": "string"}
 			};
 
+			var url = d.URL+'/metafields.json';
+			if(_.data('alpha') === 'articles'){
+				url = '/admin/articles/' + _.data('omega') + '/metafields.json';
+			}
 			$.ajax({
 				  type: "POST",
-				  url: d.URL+'/metafields.json',
+				  url: url,
 				  dataType: 'json',
 				  data: metaJSON,
 				  success: function(d){
@@ -1474,7 +1494,34 @@ return {
 		|_|
 
 		*/
+		var firstGridCell = $('div.header-row:first');
+		if(firstGridCell.length){
+			var skuGridCell = $('<div />',{
+				'class':'row s-none'
+			});
 
+			$.ajax({
+				type: "GET",
+				url: '/admin/settings/general.json',
+				dataType: 'json',
+				success: function(d){
+					var totalSkus = false;
+					try {
+						_.data('shop_settings', d.shop_settings);
+						totalSkus = d.shop_settings.total_skus;
+						skuGridCell.html(skuNoticeHtml);
+					}catch (e) {}
+
+					if(totalSkus){
+						var skuNoticeHtml = '<div class="box notice header-notice has-ico"><i class="ico next-icon--16 next-icon--notice-blue in-gutter"></i>You are using %1 skus</div>';
+						skuNoticeHtml = skuNoticeHtml.replace('%1',totalSkus);
+						skuGridCell.html(skuNoticeHtml);
+						firstGridCell.after(skuGridCell);
+					}
+				}
+			});
+
+		}
 		var targetHTML = $('.header-right .segmented').eq(0);
 		if(targetHTML.length){
 
@@ -1486,9 +1533,9 @@ return {
 				}),
 				l = $('<li/>'),
 				a = $('<a/>',{
-						'class':'btn animated fadein',
-						'href':'#',
-						'title':'Show SKU and Variant IDs'
+					'class':'btn fd-btn animated fadein',
+					'href':'#',
+					'title':'Show SKU and Variant IDs'
 				}).html('Show SKUs & ID').on('click',function(e){
 					e.preventDefault();
 					var p = [],
@@ -1546,16 +1593,16 @@ return {
 	},
 	setup_themes:function(){
 
-			$('.theme-store-cta-section').remove(); /* page is big enough without a giant ad */
-
 			var publishedTitle = $('.published-theme-title'),
 			customiseBtn = $('.btn.btn-primary').eq(0), /* for the published theme */
 			customiseHREF = customiseBtn.attr('href'),
 			themeBoxes = $('div.unpublished-box');
 
+			var themeIDs = [];
 			for (var i = 0; i < themeBoxes.length; i++) {
-				var themeID = themeBoxes[i].id.split('_').pop(),
-				contentBox = themeBoxes.eq(i).find('.next-card__section.tc'),
+				var themeID = themeBoxes[i].id.split('_').pop();
+				themeIDs.push(themeID);
+				var contentBox = themeBoxes.eq(i).find('.next-card__section.tc'),
 				div = $('<div />',{
 					'class':'theme-id'
 				}).html('<span class="tooltip-bottom tooltip"><span class="tooltip-container"><span class="tooltip-label">Theme ID</span></span>'+themeID+'</span>');
@@ -1565,11 +1612,30 @@ return {
 			if(publishedTitle.length){
 				if(typeof customiseHREF !== 'undefined'){
 					if(customiseHREF.indexOf('/admin/themes')>-1){
+						var themeID = customiseHREF.split('/')[3];
+						themeIDs.push(themeID);
 						var span = $('<span />',{
 							'class':'theme-id published'
-						}).text(customiseHREF.split('/')[3]);
+						}).text(themeID);
 						publishedTitle.append(span);
 					}
+				}
+			}
+
+			if(themeIDs.length > 1){
+				var targetHeaderButton = $('.header-right a:last');
+				if(targetHeaderButton.length){
+					var downloadAllThemesBtn= $('<a />',{
+						'class':'btn fd-btn'
+					}).text('Export all themes').on('click',function(e){
+						e.preventDefault();
+						for (var i = 0; i < themeIDs.length; i++) {
+							var url = 'https://freakdesign.myshopify.com/admin/themes/'+ themeIDs[i] +'/export';
+							$.ajax({ type: "POST", url: url });
+						};
+						_.notice(themeIDs.length + ' export requests sent. Check your inbox');
+					});
+					targetHeaderButton.after(downloadAllThemesBtn);
 				}
 			}
 
@@ -1975,7 +2041,7 @@ return {
 				
 				var d = $('.section-summary').eq(0),
 				a1 = $('<a/>',{
-					'class':'btn tooltip-bottom tooltip',
+					'class':'btn tooltip-bottom tooltip fd-btn',
 					style:'margin-bottom:.5em',
 					href:'#'
 				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every collection</span></span>Create Collections linklist').on('click',function(){
@@ -1984,7 +2050,7 @@ return {
 					return false;
 				}),
 				a2 = $('<a/>',{
-					'class':'btn tooltip-bottom tooltip',
+					'class':'btn tooltip-bottom tooltip fd-btn',
 					style:'margin-bottom:.5em',
 					href:'#'
 				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every page</span></span>Create Pages linklist').on('click',function(){
@@ -1993,7 +2059,7 @@ return {
 					return false;
 				}),
 				a3 = $('<a/>',{
-					'class':'btn tooltip-bottom tooltip',
+					'class':'btn tooltip-bottom tooltip fd-btn',
 					style:'margin-bottom:.5em',
 					href:'#'
 				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with all vendors</span></span>Create Vendor linklist').on('click',function(){
@@ -2064,7 +2130,7 @@ return {
 						}),
 						l = $('<li/>'),
 						getCountBtn = $('<a/>',{
-							'class':'btn',
+							'class':'btn fd-btn',
 							style:'margin-left:.5em',
 							href:'#'
 						}).text('Show Product Count').on('click',function(e){
@@ -2086,7 +2152,7 @@ return {
 							});
 						}),
 						a = $('<a/>',{
-							'class':'btn',
+							'class':'btn fd-btn',
 							'href':'#',
 							'title':'Add tags to entire collection'
 						}).html('Bulk edit tags').on('click',function(){
@@ -2388,7 +2454,7 @@ return {
 					q.hide();
 				}
 
-				$('div.sub_section-summary').after(a);
+				$('div.sub_section-summary').append(a);
 			}
 
 		},
@@ -2435,6 +2501,21 @@ return {
 			}
 
 		},
+		deleteProductImages:function(id,callback){
+			if(typeof id === 'undefined'){ return }
+			if(isNaN(id)){ return }
+			$.ajax({
+				type: "PUT",
+				url: '/admin/products/'+ id +'.json',
+				dataType: 'json',
+				data: {'product': {'id': id,'images': ['']}},
+				success: function(d){
+					$('#product-images').parent().remove();
+					_.notice('Images deleted. Reload product to check...');
+				}
+			});	
+
+		},
 		setup_products:function(){
 
 			/*
@@ -2449,14 +2530,9 @@ return {
 
 			clearInterval(_.data('autosave'));
 			
-			var targetHTML = $('.section.description .section-summary').eq(0);
-			var targetHTMLRightMenu = $('.header-row .header-right');
-
+			var targetHTML = $('.next-layout__sidebar').eq(0); /*.section.description .section-summary*/
 			if(targetHTML.length){
-				var previewButton = targetHTML.find('a').eq(0).clone(true);
-				var productViewLink = previewButton.attr('href');
-				targetHTML.after(metafieldloader).remove();
-
+				targetHTML.prepend(metafieldloader);
 				var loadinto = $('div.metafield-content');
 				_.loadmeta(loadinto,v);
 			}else{
@@ -2464,6 +2540,7 @@ return {
 			}
 			
 			/* PRODUCT SWITCHER */
+			var targetHTMLRightMenu = $('.header-row .header-right');
 			if(targetHTMLRightMenu.length){
 				$.ajax({
 					type: "GET",
@@ -2480,14 +2557,11 @@ return {
 										response +='<option value="'+products[i].id+'">'+products[i].title+'</option>';
 									}
 								}
-
 								var pselect = $('<select />',{
 									'class':'header-select fadein'
 								}).append('<option>Choose another product to edit</option>',response).change(function(){
 									var v = $(this).val();
-									if(v){
-										 _.redirect('/admin/products/'+v);
-									}
+									if(v){ _.redirect('/admin/products/'+v); }
 								});
 								pselect.find('option').sort(_.selectSort).appendTo(pselect);
 								targetHTMLRightMenu.prepend(pselect);
@@ -2504,28 +2578,62 @@ return {
 			}
 
 			/* FAST REMOVE FROM COLLECTIONS */
-			var collectionPanel = $('.section.collections .section-summary');
+			var collectionPanel = $('#js-collections');
 			if(collectionPanel.length){
-				var collectionRemoveButtons = $('#product-custom-collections .remove a');
+				var collectionRemoveButtons = collectionPanel.find('.list-of-added-collections a');
 				if(collectionRemoveButtons.length){
-
 					var removeFromAll = $('<a />',{
-						'class':'btn'
+						'class':'btn fd-btn delete'
 					}).text('Remove from all').on('click',function(e){
 						e.preventDefault();
 						collectionRemoveButtons.trigger('click');
 					})
 					collectionPanel.append(removeFromAll);
 				}
+			}
 
+			/* ADD SITEMAP BUTTON */
+			var sectionVisibility = $('.next-card.visibility .next-card__section:first');
+			if(sectionVisibility.length){
+				var seoHiddenBtn = $('<a />',{
+					'class':'btn fd-btn'
+				}).text('Hide from Sitemap').on('click',function(e){
+					e.preventDefault();
+					var metaJSON = {
+						"metafield": {
+							'namespace': 'seo',
+							'key': 'hidden',
+							'value': 1,
+							'value_type': 'integer'
+						}
+					};
+
+					/* POST the metafield */
+					$.ajax({
+						type: "POST",
+						url: d.URL+'/metafields.json',
+						dataType: 'json',
+						data: metaJSON,
+						success: function(d){
+							 _.updatedropdown();
+							_.notice("SEO hidden metafield added!");
+						},
+						error:function(){
+							_.notice("Failed to save metafield",true);
+
+						}
+					});	
+
+				});
+				sectionVisibility.append('<p style="margin:1em 0">Add metafield to remove this product from the sitemap. It is <b>very</b> important that you <a href="http://docs.shopify.com/api/unlinked/hide-from-search-engines-and-sitemaps" target="_blank">understand</a> what doing this means. If you don\'t, leave it alone.</p>',seoHiddenBtn);
 			}
 
 
 			/* RTE ADD ON BUTTONS */
 			if ($('#rte_extra').length === 0){
 
-				$('#product-description_iframecontainer').eq(0).after(rte_menu);
-				$('.rtetools-buttons ul.fr').eq(1).append(autosave_html);
+				$('#product-description_iframecontainer').eq(0).after(rte_menu_html);
+				$('.rtetools-buttons ul.segmented:last').append(autosave_html);
 
 				_.setup_rte();
 
@@ -2563,11 +2671,33 @@ return {
 
 			}
 
-			_.btn_removealltags();
+			_.btn_removealltags('product');
 
-			var page_title = $('h1.header-main'),
-			variants_ids = {};
+			/* images */
 
+			var imageSection = $('div.next-card.images');
+			if(imageSection.length){
+				var removeImagesBtn = $('<a />',{
+					'class':'btn fd-btn delete tooltip tooltip-bottom'
+				}).html('Remove all images<span class="tooltip-container"><span class="tooltip-label">Instant, and no undo</span></span>').on('click',function(e){
+					e.preventDefault();
+					var t = $(this);
+					var id = d.URL.split('/').pop();
+					_.deleteProductImages(id);
+				});
+				
+				var removeImagesCell = $('<div class="next-grid__cell next-grid__cell--no-flex"></div>');
+				removeImagesCell.append(removeImagesBtn);
+				$('.next-card.images header .next-grid__cell:last').after(removeImagesCell);
+
+			}else{
+				_.notice('Unable to find image section',true);
+			}
+
+
+			/*var page_title = $('h1.header-main'),*/
+			
+			/*
 			if(page_title.length){
 				if(typeof productViewLink !== 'undefined'){
 					var viewInStore = $('<a />',{
@@ -2579,25 +2709,26 @@ return {
 
 					viewInStore.append('<i class="next-icon next-icon--20 next-icon--header next-icon--website-slate-lightest"></i>');
 					page_title.append(viewInStore);
-				}else{
-					page_title.append(previewButton); 
 				}
 
 			}
+			*/
+
+			var variants_ids = {};
 
 			/* INVENTORY AND VARIANTS PANEL */
-			var inventorySummary = $('.section.inventory .section-summary').eq(0);
-
+			/*var inventorySummary = $('.section.inventory .section-summary').eq(0);*/
+			var inventorySummary = $('#product-outer-variants');
 			if(inventorySummary.length){
 
 				var addVariantButton = inventorySummary.find('a.btn');
 				var bulkPriceEdit = $('<div />',{
-					'class':'box notice hidden fadein',
-					'style':'margin-top: 1em;'
+					'class':'next-card__section fadein hidden',
+					'style':'background: #F5F6F7;'
 				});
 				var toggleBulkPriceEdit = $('<a />',{
-					'class':'btn',
-					'style':'margin-left:1em'
+					'class':'btn fd-btn btn-slim',
+					'style':'margin-left:1em;margin-top: -3px;'
 				}).text('Bulk Edits');
 
 				toggleBulkPriceEdit.on('click',function(e){
@@ -2605,7 +2736,7 @@ return {
 					bulkPriceEdit.toggleClass('hidden');
 				});
 
-				bulkPriceEdit.html('<h3>Edit all variants</h3><p style="margin: .5em 0 1em;font-size: 12px;border-bottom: 1px solid #ccc;padding-bottom: .5em;">Bulk Editing comes with risks.</p><label style="margin-top:1.5em">Set Compare at Price<br><small>0 will clear the compare at price</small></label><input type="number" style="width:50%" value="0"> <a class="bulk-compare-save tooltip tooltip-bottom btn btn-slim"><span class="tooltip-container"><span class="tooltip-label">Save Compare at Price for all variants</span></span>Save</a>');
+				bulkPriceEdit.html('<h2>Edit all variants</h2><p style="margin: .5em 0 1em;font-size: 12px;border-bottom: 1px solid #ccc;padding-bottom: .5em;">Bulk Editing comes with risks. Proceed with caution.</p><label style="margin-top:1.5em">Set Compare at Price<br><small>0 will clear the compare at price</small></label><input type="number" style="width:50%" value="0"> <a class="bulk-compare-save tooltip tooltip-bottom btn fd-btn"><span class="tooltip-container"><span class="tooltip-label">Save Compare at Price for all variants</span></span>Save</a>');
 				bulkCompareSaveBtn = bulkPriceEdit.find('a.bulk-compare-save');
 				bulkCompareFields = bulkPriceEdit.find('input');
 				bulkCompareSaveBtn.on('click',function(e){
@@ -2656,7 +2787,7 @@ return {
 
 				});
 
-				inventorySummary.append(bulkPriceEdit);
+				inventorySummary.prepend(bulkPriceEdit);
 
 			}else{
 				_.notice('ShopifyFD error : setup_products : Inventory target HTML not found',true);
@@ -2665,15 +2796,31 @@ return {
 			/* PUSH VARIANT ID AND METAFIELD ACTIONS */
 			var variantCellTarget = $('#product-inner-variants th:last-child');
 			if(variantCellTarget.length){
-				$('#product-inner-variants th:last-child').before('<th>Variant ID</th>');
-				$('th.inventory.tc').text('#').prop('title', 'Quantity');
+				$('#product-inner-variants th:last-child').before('<th class="variants-table__heading--indent-right tr">Variant ID</th>');
+
+				var inventoryTH = $('th.tc:first');
+				if(inventoryTH.length){
+					if (inventoryTH.text() === 'Inventory'){
+						inventoryTH.text('#').prop('title', 'Quantity');
+					}
+				}
 				
-				$('tr.variant').each(function(i){
+				var variantRows = $('tr.variant');
+				variantRows.each(function(i){
 
-					var variant_id = $('td.sku input.mock-edit-on-hover').eq(i).prop('id').split(/[- ]+/).pop();
+					var variantEditBtn = variantRows.eq(i).find('td:last a:first');
+					var variant_id = variantEditBtn.prop('href').split('/').pop();
+					var variantEditMetafieldBtn = $('<a />',{
+						'class':'edit-variant-metafield btn btn-slim next-field--connected next-field--connected--no-flex tooltip tooltip-bottom',
+						'data-val':variant_id
+					}).html('<span><svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" width="12" height="12" viewBox="0 0 12 12" enable-background="new 0 0 12 12" xml:space="preserve" style="margin-top: 7px;"><path fill="#21C2A8" d="M0 0v12h12V0H0zM11 11H1V1h10V11zM5 9h2V7h2V5H7V3H5v2H3v2h2V9z"></path></svg></span><span class="tooltip-container"><span class="tooltip-label">Click to edit Metafields</span></span>');
+
 					variants_ids['variant_'+i] = {'id':variant_id};
+					variantEditBtn.after(variantEditMetafieldBtn);
 
-					$(this).find('td:last-child').before('<td class="vid tooltip tooltip-bottom"><input class="mock-edit-on-hover" data-action="selectall" data-val="'+variant_id+'" type="text" value="'+variant_id+'" /><span class="tooltip-container"><span class="tooltip-label">Click to edit Metafields</span></span></td>');
+					var beforeHTML = '<td class="vid new-variants-table__cell"><input class="mock-edit-on-hover tr" data-action="selectall" data-val="'+variant_id+'" type="text" value="'+variant_id+'" /></td>';
+					$(this).find('td:last-child').before(beforeHTML);
+
 				}).promise().done(function(){
 					_.panel_editvariantmeta();
 				});
@@ -2682,17 +2829,19 @@ return {
 			}
 
 
-			var tpc = $('table.product-collections').eq(0);
+			/*var tpc = $('table.product-collections').eq(0);*/
+			/* var tpc = $('ul.list-of-added-collections'); */
+			var tpc = $('ul.product-collections-list');
 			if(tpc.length){
-				tpc.find('tr').each(function(){
+				tpc.find('li').each(function(){
 					var t = $(this);
 					var collectionID = t.find('a').eq(0).attr('href').split('/').pop();
 					var a=$('<a/>',{
-						'class':'btn tooltip tooltip-bottom',
+						'class':'tooltip tooltip-bottom',
 						'href':'#'
-					}).html('<span class="tooltip-container"><span class="tooltip-label">Set a metafield with this collection handle</span></span>Set as preferred').on('click',function(e){
+					}).html('<span class="next-icon next-icon--16 next-icon--sidebar next-icon--sidebar-collections"></span><span class="tooltip-container"><span class="tooltip-label">Set a metafield with this collection handle</span></span>').on('click',function(e){
 						e.preventDefault();
-						if('undefined' !== collectionID){
+						if(collectionID !== 'undefined'){
 							$.ajax({
 								type: "GET",
 								url: '/admin/collections/'+collectionID+'.json?fields=handle',
@@ -2728,9 +2877,12 @@ return {
 								}
 							});
 						}
-						
 					});
-					$(this).find('td.col-remove').prepend(a);
+
+					/*t.find('span.list-collections__name-wrapper').prepend(a);*/
+					t.find('div.next-grid:first').prepend(a);
+
+
 				});
 			}else{
 				_.notice('ShopifyFD error : setup_products : Unexpected collection table HTML',true);
@@ -2738,17 +2890,17 @@ return {
 
 
 			/* add in buttons for additional bulk variant updates */
-			var bulkpanel = $('table.variants .bulk-actions').eq(0);
+			var bulkpanel = $('div.bulk-actions').eq(0);
 
 			if(bulkpanel.length){
 
 				var a=$('<a/>',{
 					'href':'#',
-					'class':'btn btn-slim hidden',
+					'class':'btn fd-btn hidden',
 					'style':'padding-left:.5em'
 				}).text('Edit selected weights').on('click',function(){
 
-					_.fd_modal(true,'<label>New weight (grams)</label><input class="half" min="0" type="number" data-action="update-variant-weight" /><a data-action="update-variant-weight" href="#" class="btn btn-slim">Save</a><br><br><small>Note: You will need to reload this page before Shopify will show the new weight in the dashboard.</small>','Edit weight',true);
+					_.fd_modal(true,'<label>New weight (grams)</label><input class="half" min="0" type="number" data-action="update-variant-weight" /><a data-action="update-variant-weight" href="#" class="btn btn-slim">Save</a><br><br><small>Note: You may need to reload this page before Shopify will show the new weight in the dashboard.</small>','Edit weight',true);
 
 					var a = $('a[data-action="update-variant-weight"]'),
 					w = $('input[data-action="update-variant-weight"]');
@@ -2764,7 +2916,8 @@ return {
 								var v = [];
 
 								checked.each(function(){
-									var id = $(this).parent().parent().find('td.vid').text();
+									var t = $(this);
+									var id = t.val();
 									if(!isNaN(id)){v.push(parseInt(id))}
 								});
 
@@ -2825,14 +2978,12 @@ return {
 
 				});
 
-			}else{
-				_.notice('ShopifyFD error : setup_products : unable to add bulk weight editor');
 			}
 
 			if(inventorySummary.length){
 				if(typeof variants_ids ==='object'){
 					if(Object.keys(variants_ids).length > 1){
-						addVariantButton.after(toggleBulkPriceEdit);
+						inventorySummary.find('header a.btn--plain:last').after(toggleBulkPriceEdit)
 					}
 				}
 			}
@@ -2884,7 +3035,7 @@ return {
 
 			/* RTE ADD ON BUTTONS */
 			if ($('#rte_extra').length === 0){
-				$('#page-content_ifr').eq(0).after(rte_menu);
+				$('#page-content_iframecontainer').eq(0).after(rte_menu_html);
 				_.setup_rte();
 			}
 			
@@ -3005,7 +3156,7 @@ return {
 				data: data,
 				success: function(d, statusText, xhr){
 
-					t.parent().parent().find('table').append('<tbody><tr style="background:#efefef"><td>'+to_add[i].name+'</td><td>New rate pasted.</td><td>'+to_add[i].price+'</td></tr></tbody>');
+					t.parent().parent().find('input.paste-checkbox').remove().end().removeClass('active-row').find('table').append('<tbody><tr style="background:#efefef"><td>'+to_add[i].name+'</td><td>New rate pasted.</td><td>'+to_add[i].price+'</td></tr></tbody>');
 
 					if(i === (to_add.length-1)){
 						_.notice('Paste complete');
@@ -3082,19 +3233,31 @@ return {
 				_.notice('save_new_rates error - length',true);
 			}
 		},
+		bulkPasteShippingQueue:function(checkedInputs,i){
+			if(typeof checkedInputs === 'undefined'){ return }
+			if(typeof i === 'undefined'){ var i = 0 }
+
+			if(checkedInputs.length && i < checkedInputs.length){
+				var t = checkedInputs.eq(i);
+				t.parent().find('a.bulkpaste:first').click();
+				setTimeout(function(){
+					_.bulkPasteShippingQueue(checkedInputs,++i)
+				},5000);
+			}
+		},
 		setup_shipping:function(go){
 
 			if('undefined' !== typeof go){
 
 				/* TEMP ERROR WARNING */
-				var sectionWarning = $('<div />',{'class':'box error animated fadein'}).html('Warning - The way that shipping rates are copied and pasted has recently changed. It has NOT been thoroughly tested. Be sure to test this feature BEFORE making bulk edits. See this <a target="_blank" href="https://ecommerce.shopify.com/c/shopify-apis-and-technology/t/dashboard-endpoints-failing-link-lists-shipping-files-etc-212161">related post</a>.');
-				$('.section.shipping-rates').eq(0).prepend(sectionWarning);
+				var sectionWarning = $('<div />',{'class':'box error animated fadein'}).html('Warning - The "Rates Copy and Paste" feature is experimental. Use with caution, and at your own risk.');
+				$('div.header-row:first').after(sectionWarning);
 				/* ================== */
 
 				var shippingSettingsHeader = $('#settings-shipping header').eq(0);
 				if(shippingSettingsHeader.length){
 
-					var new_buttons = $('<div class="header-right animated fadein"><div class="header-action"><a class="btn tooltip-bottom tooltip bulk-paste-btn disabled" href="#"><span class="tooltip-container"><span class="tooltip-label">Paste to selected countries</span></span>Bulk Paste</a> <a class="btn btn-separate tooltip-bottom tooltip bulk-options" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a> <a class="btn btn-separate tooltip-bottom tooltip export-as-json" href="#"><span class="tooltip-container"><span class="tooltip-label">Export countries</span></span>Export JSON</a></div></div>');
+					var new_buttons = $('<div class="header-right animated fadein"><div class="header-action"><a class="btn fd-btn tooltip-bottom tooltip bulk-paste-btn hidden" href="#"><span class="tooltip-container"><span class="tooltip-label">Paste to selected countries</span></span>Bulk Paste</a> <a class="btn tooltip-bottom tooltip bulk-check-btn fd-btn hidden" href="#"><span class="tooltip-container"><span class="tooltip-label">Check all regions</span></span>Check All</a> <a class="btn fd-btn tooltip-bottom tooltip bulk-options" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a> <a class="btn fd-btn tooltip-bottom tooltip export-as-json" href="#"><span class="tooltip-container"><span class="tooltip-label">Export countries</span></span>Export JSON</a></div></div>');
 
 					new_buttons.find('a.export-as-json').on('click',function(e){
 						e.preventDefault();
@@ -3128,6 +3291,17 @@ return {
 						_.fd_modal(true,myhtml,'Delete all countries',true);
 
 						return false;
+					});
+
+					new_buttons.find('a.bulk-check-btn').on('click',function(e){
+						e.preventDefault();
+						$('input.paste-checkbox:not(.hidden)').prop('checked',true).change();
+					});
+
+					new_buttons.find('a.bulk-paste-btn').on('click',function(e){
+						e.preventDefault();
+						var checkedInputs = $('input.paste-checkbox:checked:not(.hidden)');
+						_.bulkPasteShippingQueue(checkedInputs,0);
 					});
 
 					shippingSettingsHeader.append(new_buttons);
@@ -3251,9 +3425,9 @@ return {
 							'data-country':_.data('countries').countries[index].name,
 							'data-cid':_.data('countries').countries[index].id,
 							'data-index':index,
-							'class':'fadein btn btn-slim copyrates tooltip tooltip-bottom',
+							'class':'fadein btn fd-btn btn-slim copyrates tooltip tooltip-bottom',
 							'style':'float:right;margin-right:.5em'
-						}).html('<span class="tooltip-container"><span class="tooltip-label">Copy Rates to Memory</span></span>Copy rates').on('click',function(){
+						}).html('<span class="tooltip-container"><span class="tooltip-label">Copy Rates to Memory</span></span>Copy').on('click',function(){
 
 							var t=$(this),
 								i = t.attr('data-index'),
@@ -3261,9 +3435,8 @@ return {
 								cid = t.attr('data-cid');
 
 							$('a.copyrates').removeClass('btn-primary');
-							t.addClass('btn-primary');
-
 							
+
 							$.ajax({
 								type: "GET",
 								url: '/admin/countries/'+cid+'.json',
@@ -3276,6 +3449,12 @@ return {
 
 									/* lazy show all */
 									$('a.bulkpaste, input.paste-checkbox').removeClass('hidden');
+									t.addClass('btn-primary').parent().find('input.paste-checkbox').prop('checked', false).addClass('hidden');
+									t.parent().find('a.bulkpaste').addClass('hidden');
+
+									if($('input.paste-checkbox:checked').length === 0){
+										$('a.bulk-check-btn').removeClass('hidden');
+									}
 
 								},
 								error:function(){
@@ -3290,6 +3469,24 @@ return {
 							'type':'checkbox',
 							'style':'float:right',
 							'class':'hidden paste-checkbox'
+						}).change(function() {
+
+							var t=$(this);
+							if(this.checked) {
+								t.parent().parent().addClass('active-row');
+							}else{
+								t.parent().parent().removeClass('active-row');
+							}
+
+							var inputCheckedLength = $('input.paste-checkbox:checked').length;
+
+							if(inputCheckedLength === 0){
+								$('a.bulk-check-btn').removeClass('hidden');
+								$('a.bulk-paste-btn').addClass('hidden');
+							}else{
+								$('a.bulk-check-btn').addClass('hidden');
+								$('a.bulk-paste-btn').removeClass('hidden');
+							}
 						});
 
 						var paste = $('<a/>',{
@@ -3297,9 +3494,9 @@ return {
 							'data-country':_.data('countries').countries[index].name,
 							'data-cid':_.data('countries').countries[index].id,
 							'data-index':index,
-							'class':'hidden fadein bulkpaste btn btn-slim tooltip tooltip-bottom',
+							'class':'hidden fadein bulkpaste btn btn-slim fd-btn tooltip tooltip-bottom',
 							'style':'float:right;margin-right:.5em'
-						}).html('<span class="tooltip-container"><span class="tooltip-label">Will replace ALL existing rates.</span></span>Paste rates (replace)').on('click',function(){			
+						}).html('<span class="tooltip-container"><span class="tooltip-label">Will replace ALL existing rates.</span></span>Paste').on('click',function(){			
 							var t=$(this),
 							cid = t.attr('data-cid'),
 							shipping_rates_copy = shipping_rates,
@@ -3404,7 +3601,7 @@ return {
 				_.loadmeta(loadinto,v);
 
 				if ($('#rte_extra').length === 0){
-					$('#collection-description_iframecontainer').eq(0).after(rte_menu);
+					$('#collection-description_iframecontainer').eq(0).after(rte_menu_html);
 					_.setup_rte();
 				}
 
@@ -3916,8 +4113,11 @@ return {
 			shopifyCSS.type = "text/css";
 			shopifyCSS.rel = "stylesheet";
 			shopifyCSS.id = "shopifyjs";
-			/*shopifyCSS.href = "//rawgithub.com/freakdesign/shopifyFD/master/shopifyFD.css";*/
-			shopifyCSS.href = "//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/s/shopifyFD.css";
+			/*
+			https://dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css
+			"//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/s/shopifyFD.css";
+			*/
+			shopifyCSS.href = "//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css";
 			document.getElementsByTagName('head')[0].appendChild(shopifyCSS);
 
 		},
@@ -3944,13 +4144,13 @@ return {
 		},
 		setup_announcements:function(){
 
-			var insertionPoint = $('.section.first-section').eq(0);
+			var insertionPoint = $('.section').eq(0);
 			if(insertionPoint.length){
 				var announcementPanel = insertionPoint.clone();
 				var summary= announcementPanel.find('.section-summary');
 				var title = summary.find('h1').eq(0);
 				var summaryp = summary.find('p');
-				var content = announcementPanel.find('.span18');
+				var content = announcementPanel.find('.next-card');
 
 				var box = $('<div />',{
 					'class':'box box-details'
@@ -3972,7 +4172,6 @@ return {
 					success:function(d){
 
 						for (var i = 0; i < d.announcements.length; i++) {
-
 							var li = $('<li />',{
 								'class':'content-index__item'
 							}).html('<small>'+ d.announcements[i].date +'</small><br><strong>'+d.announcements[i].title+'</strong><p>'+d.announcements[i].description+'</p>');
@@ -3992,6 +4191,8 @@ return {
 					}
 				});
 
+			}else{
+				_.notice('Unable to add ShopifyFD updates to page',true)
 			}
 
 		},

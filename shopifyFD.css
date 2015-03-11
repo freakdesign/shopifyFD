@@ -58,12 +58,12 @@ body{padding-top:32px}
 .shopifyJSoverride tr.variant td:last-child {min-width:70px;}
 
 /* you know, for hiding stuff... */
-.shopifyJSoverride .hidden{display:none}
+.shopifyJSoverride .hidden{display:none!important}
 .shopifyJSoverride .label.hidden { display: inline; }
 
 /* Buttons */
 .shopifyJSoverride .section.buttons{padding:20px}
-.shopifyJSoverride .btn.delete{border-color: #C41818;background: #E72323;text-shadow:none;color:#fff;transition:background .25s}
+.shopifyJSoverride .btn.delete{border-color: #AD2424;background: #CA2929;text-shadow:none;color:#fff;transition:background .25s}
 
 /* Make those delete buttons far more obvious */
 .shopifyJSoverride .btn.delete:hover{background:#121212;color:#fff}
@@ -74,8 +74,12 @@ body{padding-top:32px}
 
 /* file listing */
 .shopifyJSoverride #settings-general td.image.thumb, .shopifyJSoverride #settings-general th.image {display:table-cell!important}
-.shopifyJSoverride .file_row {background:#E7F3F3;}
-.shopifyJSoverride .file_row td{border-bottom: 1px solid #ABBEBD}
+.shopifyJSoverride .active-row {
+  background: #E7F3F3;
+  padding: 1em 20px 0;
+  margin: 0 -20px 0;
+}
+.active-row a.bulkpaste{display: none;}
 
 /* Modal*/
 .shopifyJSoverride .modal body{overflow: hidden}
@@ -85,11 +89,11 @@ body{padding-top:32px}
 .shopifyJSoverride #metacount.active {display: inline-block;color:#fff;background: #21C2A8}
 
 /* Sub section - mostly for the metafield box */
-.shopifyJSoverride .sub_section-summary{margin-bottom:.5em;background: #F3F5F5;padding: 1em;border: 1px solid #ddd;transition:border-color .25s}
+.shopifyJSoverride .sub_section-summary{margin-bottom:1.5em;background:#F5F6F7;padding: 1em;border: 1px solid #ddd;box-shadow: 0 2px 4px rgba(0,0,0,0.1);transition:border-color .25s}
 .shopifyJSoverride .sub_section-summary:hover{border: 1px solid #bbb}
 .shopifyJSoverride .sub_section-summary .content{padding-left:0;padding-bottom:0;margin-bottom:0}
-.shopifyJSoverride .next-grid__cell .sub_section-summary {background:#fff;border-radius:5px}
-.sub_section-summary h1, .sub_section-summary h2 {font-size: 18px!important;margin-bottom: 10px!important;font-weight: 300!important}
+/*.shopifyJSoverride .next-grid__cell .sub_section-summary {background:#fff;border-radius:5px}*/
+.sub_section-summary h1, .sub_section-summary h2 {font-size: 18px;margin-bottom: 10px;font-weight: 300}
 
 .shopifyJSoverride .section>.section-summary { padding-left:1.5em; }
 .shopifyJSoverride .row-attached-to-top { position: relative;}
@@ -97,7 +101,7 @@ body{padding-top:32px}
 
 .shopifyJSoverride .header-main {max-width: inherit;}
 .shopifyJSoverride .header-main .next-icon--website-slate-lightest {margin-left:.5em;}
-
+.metafield-copy-paste {margin-top: 1em}
 
 /* Editor extra */
 .shopifyJSoverride #rte_extra{background: #F0F0F0;padding: 5px;}
@@ -205,7 +209,7 @@ body{padding-top:32px}
 .shopifyJSoverride .vbox .mybuttons a.delete {color: #C71919;float:right}
 
 .shopifyJSoverride .sku.label {float:right;background: #21C2A8;line-height: 1em;border: none;}
-.shopifyJSoverride .variant.label {float:right;border: none;line-height: 1em;}
+.shopifyJSoverride .variant.label {float:right;border: none;line-height: 1em;background: #21C2A8;}
 .shopifyJSoverride .unpublished-theme-title {position: relative;}
 .shopifyJSoverride .header-select {height:32px;border-radius:3px;color:#479ccf;max-width: 250px;}
 .shopifyJSoverride .header-select:focus {color:#121212;}
@@ -409,3 +413,30 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 #assets-table tr{transition:background .2s;}
 tr.marked-for-deletion {background:#CA1800;color: #fff;}
 tr.marked-for-deletion a{color:#fff}
+
+.fd-btn{
+  background: #898B8A;
+  color: #fff;
+  /*padding: .25em .5em;
+  height: 2em;
+  line-height: 1.5em;*/
+  transition: all .25s;
+  border: 1px solid #727781;
+}
+.fd-btn:hover{
+  background: #21C2A8;
+  color:#fff;
+}
+.next-card__section ~ .next-card__section {
+border-top: 1px solid #D8D8D8;
+}
+
+.new-variants-table__row.active{
+  background: #eff9fd;
+}
+.table-hover tr#vrow:hover td {background: #fff}
+.loading-bar__container {top:88px}
+
+#all-products .name {max-width: 200px}
+
+.linklist-title {overflow: hidden;max-width: 80%;}
