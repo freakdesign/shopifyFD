@@ -2824,8 +2824,6 @@ return {
 				}).promise().done(function(){
 					_.panel_editvariantmeta();
 				});
-			}else{
-				_.notice('ShopifyFD error : setup_products : Unexpected variant table HTML',true);
 			}
 
 
