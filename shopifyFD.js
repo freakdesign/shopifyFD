@@ -44,7 +44,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	*/
 
-	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle advanced features</a></small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
+	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
 
 	var metafieldloader = '<div class="sub_section-summary fadein sidebar-cell"><h1>Metafields <span id="metacount" class="animated bounce">0</span></h1><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
 
@@ -54,7 +54,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var metafield_copybox = '<div class="metafield-copy-paste"><a class="fd-btn btn" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
 
-	var rte_menu_html = '<div id="rte_extra"><a class="btn fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
+	var rte_menu_html = '<div id="rte_extra"><a class="btn fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except<br>target,class,href & src</span></span>Clean HTML</a> <a class="btn fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
 
 	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
@@ -733,12 +733,26 @@ return {
 
 	},
 	clearformatting:function(){
-		var mycontent = $("iframe").contents().find("#tinymce").eq(0),
-			div = document.createElement("div");
+		var mycontent = $("iframe").contents().find("#tinymce").eq(0);
+		var div = document.createElement("div");
 
 		div.innerHTML = mycontent.html();
 		var text = div.textContent || div.innerText || "";
 		mycontent.text(text);
+	},
+	removeAttributes:function(){
+
+		var mycontent = $("iframe").contents().find("#tinymce").eq(0);
+		var selector = mycontent.find('*');
+		var whitelist = ['href','target','class','src'];
+		selector.each(function(i,elem) {
+			for (var i = elem.attributes.length -1; i >= 0 ; i--) {
+				if(whitelist.indexOf(elem.attributes[i].name)<0){
+					elem.removeAttribute(elem.attributes[i].name);
+				}
+			}
+		});
+
 	},
 	clearmetaform: function(){
 		$('#metafield_namespace').val('').prop("disabled", false);
@@ -1406,10 +1420,16 @@ return {
 			}
 		}
 
-		$('#clearformatting').on('click',function(){
+		$('#clearformatting').on('click',function(e){
+			e.preventDefault();
 			_.clearformatting();
-			return false;
 		});
+
+		$('#clear-html-attributes').on('click',function(e){
+			e.preventDefault();
+			_.removeAttributes();
+		});
+		
 
 		$('#createbackup').on('click',function(){
 			_.createbackup(_.data('omega'));

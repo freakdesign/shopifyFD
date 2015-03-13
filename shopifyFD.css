@@ -440,3 +440,5 @@ border-top: 1px solid #D8D8D8;
 #all-products .name {max-width: 200px}
 
 .linklist-title {overflow: hidden;max-width: 80%;}
+
+#advanced_meta p {margin-bottom:.25em;}
