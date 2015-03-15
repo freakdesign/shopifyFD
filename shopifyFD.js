@@ -1650,8 +1650,12 @@ return {
 					}).text('Export all themes').on('click',function(e){
 						e.preventDefault();
 						for (var i = 0; i < themeIDs.length; i++) {
-							var url = 'https://freakdesign.myshopify.com/admin/themes/'+ themeIDs[i] +'/export';
-							$.ajax({ type: "POST", url: url });
+							var url = '/admin/themes/'+ themeIDs[i] +'/export';
+							$.ajax({ 
+								type: "POST", 
+								data:{'_method':'post'},
+								url: url 
+							});
 						};
 						_.notice(themeIDs.length + ' export requests sent. Check your inbox');
 					});
