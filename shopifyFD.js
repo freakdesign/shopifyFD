@@ -2908,6 +2908,9 @@ return {
 				});
 			}else{
 				_.notice('ShopifyFD error : setup_products : Unexpected collection table HTML',true);
+				if($('.section-summary').length){
+					_.fd_modal(true,'This version of ShopifyFD is not compatabile with the older product page layout. There is a legacy version available that can help. <a href="http://freakdesign.com.au/blogs/news/17721025" target="_blank">More info</a>.','Legacy page detected',true);
+				}
 			}
 
 
