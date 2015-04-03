@@ -1262,7 +1262,10 @@ return {
 	},
 	setup_discounts:function(){
 
-		var targetHTML = $('.header-row .header-right').eq(0);
+		/*var targetHTML = $('.header-row .header-right').eq(0);*/
+
+		var targetHTML = $('.header .header__secondary-actions:first');
+		
 
 		if(targetHTML.length){
 			var u = $('<ul/>',{
@@ -1503,17 +1506,7 @@ return {
 
 		return a;
 	},
-	setup_products_list:function(){
-
-		/*
-		                     _            _     _ _     _
-		 _ __  _ __ ___   __| |_   _  ___| |_  | (_)___| |_
-		| '_ \| '__/ _ \ / _` | | | |/ __| __| | | / __| __|
-		| |_) | | | (_) | (_| | |_| | (__| |_  | | \__ \ |_
-		| .__/|_|  \___/ \__,_|\__,_|\___|\__| |_|_|___/\__|
-		|_|
-
-		*/
+	showSkuHeaderCount:function(){
 		var firstGridCell = $('div.header-row:first');
 		if(firstGridCell.length){
 			var skuGridCell = $('<div />',{
@@ -1542,7 +1535,24 @@ return {
 			});
 
 		}
-		var targetHTML = $('.header-right .segmented').eq(0);
+	},
+	setup_products_list:function(){
+
+		/*
+		                     _            _     _ _     _
+		 _ __  _ __ ___   __| |_   _  ___| |_  | (_)___| |_
+		| '_ \| '__/ _ \ / _` | | | |/ __| __| | | / __| __|
+		| |_) | | | (_) | (_| | |_| | (__| |_  | | \__ \ |_
+		| .__/|_|  \___/ \__,_|\__,_|\___|\__| |_|_|___/\__|
+		|_|
+
+		*/
+		_.showSkuHeaderCount();
+
+		/*var targetHTML = $('.header-right .segmented').eq(0);*/
+		var targetHTML = $('.header .header__secondary-actions:first');
+		if(!targetHTML.length){targetHTML = $('.header .header__primary-actions:first')}
+
 		if(targetHTML.length){
 
 			if(!$('#showsku').length){
@@ -1604,7 +1614,7 @@ return {
 
 				l.append(a);
 				u.append(l);
-				targetHTML.after(u);
+				targetHTML.append(u);
 
 			}
 		}else{
@@ -1643,7 +1653,7 @@ return {
 			}
 
 			if(themeIDs.length > 1){
-				var targetHeaderButton = $('.header-right a:last');
+				var targetHeaderButton = $('.header .header__secondary-actions:first'); /*$('.header-right a:last')*/
 				if(targetHeaderButton.length){
 					var downloadAllThemesBtn= $('<a />',{
 						'class':'btn fd-btn'
@@ -1659,14 +1669,14 @@ return {
 						};
 						_.notice(themeIDs.length + ' export requests sent. Check your inbox');
 					});
-					targetHeaderButton.after(downloadAllThemesBtn);
+					targetHeaderButton.append(downloadAllThemesBtn);
 				}
 			}
 
 	},
 		setup_link_lists_single:function(){
 
-			var targetHTML = $('.header-row .header-right');
+			var targetHTML = $('.header .header__primary-actions:first'); /* $('.header-row .header-right') */
 			if(targetHTML.length){
 				$.ajax({
 					type: "GET",
@@ -2144,8 +2154,13 @@ return {
 		},
 		setup_collections:function(){
 
+			_.showSkuHeaderCount();
 			_.data('collections',false);
-			var targetHTML = $('.header-right').eq(0);
+			
+			/* var targetHTML = $('.header-right').eq(0); */
+			var targetHTML = $('.header .header__secondary-actions:first');
+			if(!targetHTML.length){targetHTML = $('.header .header__secondary-actions:first');}
+			if(!targetHTML.length){targetHTML = $('.header .header__primary-actions:first')}
 
 			if(targetHTML.length){
 				
@@ -2166,7 +2181,7 @@ return {
 									_.data('collections',d);
 									for (var i = d.collections.length - 1; i >= 0; i--) {
 										var collectionTable = $('#collections-results'),
-										collectionLink = collectionTable.find('a[href="/admin/collections/'+d.collections[i].id+'"]');
+										collectionLink = collectionTable.find('a[href="/admin/collections/'+d.collections[i].id+'"]:last');
 										if(collectionLink.find('span').length === 0){
 											collectionLink.append('<span class="sku label">'+d.collections[i].products_count+'</span>');
 										}
@@ -2565,6 +2580,9 @@ return {
 			
 			/* PRODUCT SWITCHER */
 			var targetHTMLRightMenu = $('.header-row .header-right');
+			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $('.header .header__secondary-actions:first');}
+			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $('.header .header__primary-actions:first')}
+
 			if(targetHTMLRightMenu.length){
 				$.ajax({
 					type: "GET",
@@ -2909,7 +2927,7 @@ return {
 			}else{
 				_.notice('ShopifyFD error : setup_products : Unexpected collection table HTML',true);
 				if($('.section-summary').length){
-					_.fd_modal(true,'This version of ShopifyFD is not compatabile with the older product page layout. There is a legacy version available that can help. <a href="http://freakdesign.com.au/blogs/news/17721025" target="_blank">More info</a>.','Legacy page detected',true);
+					_.fd_modal(true,'This version of ShopifyFD is not compatible with the older product page layout. There is a legacy version available that can help. <a href="http://freakdesign.com.au/blogs/news/17721025" target="_blank">More info</a>.','Legacy page detected',true);
 				}
 			}
 
@@ -3066,6 +3084,9 @@ return {
 			
 			/* PAGE SWITCHER */
 			var targetHTMLRightMenu = $('.header-row .header-right');
+			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $('.header .header__secondary-actions:first');}
+			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $('.header .header__primary-actions:first')}
+
 			if(targetHTMLRightMenu.length){
 				$.ajax({
 					type: "GET",
@@ -3091,7 +3112,7 @@ return {
 								}
 							});
 							pageSelect.find('option').sort(_.selectSort).appendTo(pageSelect);
-							$('.header-row .header-right').prepend(pageSelect);
+							targetHTMLRightMenu.prepend(pageSelect);
 
 						}
 						
@@ -3283,7 +3304,9 @@ return {
 				if(shippingSettingsHeader.length){
 
 					var new_buttons = $('<div class="header-right animated fadein"><div class="header-action"><a class="btn fd-btn tooltip-bottom tooltip bulk-paste-btn hidden" href="#"><span class="tooltip-container"><span class="tooltip-label">Paste to selected countries</span></span>Bulk Paste</a> <a class="btn tooltip-bottom tooltip bulk-check-btn fd-btn hidden" href="#"><span class="tooltip-container"><span class="tooltip-label">Check all regions</span></span>Check All</a> <a class="btn fd-btn tooltip-bottom tooltip bulk-options" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a> <a class="btn fd-btn tooltip-bottom tooltip export-as-json" href="#"><span class="tooltip-container"><span class="tooltip-label">Export countries</span></span>Export JSON</a></div></div>');
-
+					if(!$('.header__secondary-actions').length){
+						new_buttons.addClass('header__secondary-actions');
+					}
 					new_buttons.find('a.export-as-json').on('click',function(e){
 						e.preventDefault();
 						_.fd_modal(true, '<textarea readonly style="min-height:300px">' + JSON.stringify( _.data('countries').countries ) + '</textarea><p><br><a href="/admin/countries.json" target="_blank">View original JSON object in new window</a></p>','Export all countries', true);
@@ -3616,7 +3639,10 @@ return {
 		setup_custom_collections:function(){
 
 			var targetHTML = $('div.section.products').eq(0);
+
 			var headerButtons = $('.header-row .header-right').eq(0);
+			if(!headerButtons.length){headerButtons = $('.header .header__secondary-actions:first');}
+			if(!headerButtons.length){headerButtons = $('.header .header__primary-actions:first')}
 
 			if(targetHTML.length){
 

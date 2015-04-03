@@ -21,8 +21,9 @@
 
 
 */
+
 #shopifyJSbar.loading{top:-40px}
-#shopifyJSbar{background:#57666f;position:fixed;top:0;left:0;width:100%;z-index:9999;min-width: 996px;transition:top .5s}
+#shopifyJSbar{background:#57666f;position:fixed;top:0;left:0;width:100%;z-index:9999;transition:top .5s}
 #shopifyJSbar ul{list-style: none;margin:0;color:#fff}
 #shopifyJSbar li, #shopifyJSbar li a{display: inline-block}
 #shopifyJSbar li {float:left}
@@ -37,23 +38,37 @@
 #shopifyJSbar li:last-child a, #shopifyJSbar li:nth-child(2) a{border-left:none}
 #shopifyJSbar .ico-16{margin:2px 0 0 2px;}
 #shopifyJSbar *, #shopifyJSbar *:before, #shopifyJSbar *:after {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
-
 #shopifyJSnav .btn.is-loading, #shopifyJSnav .btn.is-loading:hover{background-color: #FAFAFA!important;border-radius: 0;color: rgba(0,0,0,0);}
 
-body{padding-top:32px}
 
+
+
+body{padding-top:32px}
 #wrapper{padding-bottom: 5em}
 #gheader.black-header {z-index:99999}
 #global-notification {z-index:999999}
-.header-row {top:32px}
 
+.header-row {top:32px}
+.shopifyJSoverride .next-nav {top:32px;}
+.shopifyJSoverride #sidebar{top: 36px}
+
+@media screen and (max-width: 768px){
+  #shopifyJSbar{
+    display: none;
+  }
+  body{padding-top:0px}
+  .header-row {top:0px}
+}
+
+/*
 .shopifyJSoverride body{
   background: #21C2A8;  
   background-size: 30px 30px;
   background-image: linear-gradient( 45deg, rgba(0,0,0, 0.1) 25%, transparent 25%, transparent 50%, rgba(0,0,0, 0.1) 50%, rgba(0,0,0, 0.1) 75%, transparent 75%, transparent );
 }
+*/
 
-.shopifyJSoverride #sidebar{top: 36px}
+
 
 .shopifyJSoverride tr.variant td:last-child {min-width:70px;}
 
