@@ -240,8 +240,8 @@ return {
 
 		if(typeof id === 'undefined'){return}
 		if(id){
-			var mycontent = $("iframe").contents().find("#tinymce").eq(0),
-			myhtml = mycontent.html();
+			var mycontent = $("iframe:first").contents().find("#tinymce:first");
+			var myhtml = mycontent.html();
 			if(typeof myhtml === 'undefined'){ return }
 
 			var metaJSON = {
@@ -733,7 +733,7 @@ return {
 
 	},
 	clearformatting:function(){
-		var mycontent = $("iframe").contents().find("#tinymce").eq(0);
+		var mycontent = $("iframe:first").contents().find("#tinymce:first");
 		var div = document.createElement("div");
 
 		div.innerHTML = mycontent.html();
@@ -742,7 +742,7 @@ return {
 	},
 	removeAttributes:function(){
 
-		var mycontent = $("iframe").contents().find("#tinymce").eq(0);
+		var mycontent = $("iframe:first").contents().find("#tinymce:first");
 		var selector = mycontent.find('*');
 		var whitelist = ['href','target','class','src'];
 		selector.each(function(i,elem) {
@@ -1459,7 +1459,7 @@ return {
 
 		*/
 
-		var images = $("iframe").contents().find("#tinymce").eq(0).find('img');
+		var images = $("iframe:first").contents().find("#tinymce:first").find('img');
 
 		if(images && images.length){
 			var meta = '';
