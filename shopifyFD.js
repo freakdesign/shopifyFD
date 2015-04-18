@@ -2855,7 +2855,7 @@ return {
 					var variantEditMetafieldBtn = $('<a />',{
 						'class':'edit-variant-metafield btn btn-slim next-field--connected next-field--connected--no-flex tooltip tooltip-bottom',
 						'data-val':variant_id
-					}).html('<span><svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" width="12" height="12" viewBox="0 0 12 12" enable-background="new 0 0 12 12" xml:space="preserve" style="margin-top: 7px;"><path fill="#21C2A8" d="M0 0v12h12V0H0zM11 11H1V1h10V11zM5 9h2V7h2V5H7V3H5v2H3v2h2V9z"></path></svg></span><span class="tooltip-container"><span class="tooltip-label">Click to edit Metafields</span></span>');
+					}).html('<span><svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" width="12" height="12" viewBox="0 0 12 12" enable-background="new 0 0 12 12" xml:space="preserve"><path fill="#21C2A8" d="M0 0v12h12V0H0zM11 11H1V1h10V11zM5 9h2V7h2V5H7V3H5v2H3v2h2V9z"></path></svg></span><span class="tooltip-container"><span class="tooltip-label">Click to edit Metafields</span></span>');
 
 					variants_ids['variant_'+i] = {'id':variant_id};
 					variantEditBtn.after(variantEditMetafieldBtn);
