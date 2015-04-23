@@ -2570,6 +2570,8 @@ return {
 			clearInterval(_.data('autosave'));
 			
 			var targetHTML = $('.next-layout__sidebar').eq(0); /*.section.description .section-summary*/
+			if(!targetHTML.length){targetHTML = $('.next-grid__cell--third:first')}
+			
 			if(targetHTML.length){
 				targetHTML.prepend(metafieldloader);
 				var loadinto = $('div.metafield-content');
