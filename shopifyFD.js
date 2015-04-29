@@ -628,28 +628,27 @@ return {
 		*/
 						
 		$.ajax({
-			  type: "POST",
-			  url: '/admin/products/'+_.data('products')[i].id+'/metafields.json',
-			  dataType: 'json',
-			  data: m,
-			  success: function(d){
-			  	if(debug_box){
-			  		var fdmv = debug_box.val();
+			type: "POST",
+			url: '/admin/products/'+_.data('products')[i].id+'/metafields.json',
+			dataType: 'json',
+			data: m,
+			success: function(d){
+				if(debug_box){
+					var fdmv = debug_box.val();
 					debug_box.val(fdmv+i+': '+_.data('products')[i].id+': ok\n');
 				}
-			  	if(i+1 < _.data('products').length){
-			  		_.bulk_save_metafield_queue(m,i+1,debug_box)
-			  	}else{
+				if(i+1 < _.data('products').length){
+					_.bulk_save_metafield_queue(m,i+1,debug_box)
+				}else{
 
-			  		 if(_.data('alpha') == 'products'){
-			  		 	_.updatedropdown();
-			  		 }
+					if(_.data('alpha') == 'products'){
+						_.updatedropdown();
+					}
 
-			  		_.notice("Bulk changes done!");
-			  	}
-			  }
+					_.notice("Bulk changes done!");
+				}
+			}
 		});
-
 
 	},
 	bulkmetafields:function(){
@@ -1294,6 +1293,8 @@ return {
 
 		var targetHTML = $('.section.description .section-summary').eq(0);
 		var headerButtons = $('.header-row .header-right').eq(0);
+		if(!headerButtons.length){headerButtons = $('.header .header__secondary-actions:first');}
+		if(!headerButtons.length){headerButtons = $('.header .header__primary-actions:first')}
 
 		if(targetHTML.length){
 			var itemViewLink = targetHTML.find('a').eq(0).attr('href');	
@@ -1591,7 +1592,7 @@ return {
 
 									if(s || v){
 										if(s){skuspan='<span title="SKU" class="sku label animated fadein">'+s+'</span>'}
-										a_list.eq(i).before(skuspan+'<span title="VariantID" class="variant label animated fadein">'+v+'</span>');
+										a_list.eq(i).before(skuspan+'<span title="VariantID" class="variant-label badge badge--small badge--left-margin animated fadein">'+v+'</span>');
 									}
 
 									if(i+1 < p.length){
@@ -4256,6 +4257,12 @@ return {
 
 			_.get_theme_data();
 
+			/* increase the default products per page */
+			var productListButton = $('a[data-nav-sub-item="product_list"]');
+			if(productListButton.length){
+				productListButton.attr('href',productListButton[0].href+'?limit=250');
+			}
+
 			/* 
 
 			Alpha Omega check. 
@@ -4273,7 +4280,7 @@ return {
 
 					var u_array = d.URL.split('#')[0].split('?')[0].split('/'),
 					alpha = u_array[u_array.length - 2],
-					omega = d.URL.split('/').pop();
+					omega = d.URL.split('/').pop().split('?')[0];
 
 					if(omega !== 'next' && omega !== 'prev' ){
 					if( alpha !== _.data('alpha') || omega !== _.data('omega') ){
