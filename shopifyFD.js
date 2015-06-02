@@ -44,7 +44,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	*/
 
-	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
+	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p><p><a id="adv_get_pages" class="btn fd-btn" href="">Get pages</a></p></div>';
 
 	var metafieldloader = '<div class="sub_section-summary fadein sidebar-cell"><h1>Metafields <span id="metacount" class="animated bounce">0</span></h1><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
 
@@ -430,6 +430,60 @@ return {
 			return false;
 
 		});
+
+		/* 
+		note the double up functions 
+		these should be merged into one
+		*/
+		$('#adv_get_pages').off('click').on('click',function(){
+
+			var t = $(this);
+			if(!_.data('products')){
+				$.ajax({
+				type: "GET",
+				url: '/admin/pages.json',
+				dataType: 'json',
+				success: function(d){
+					if(d.pages.length){
+						_.data('pages',d);
+						var toappend='',
+							select=$('<select />',{}).change(function(){
+								var t=$(this);
+								$('#metafield_value').val(t.val());
+							}).html('<option value="">Add page handle as value</option>');
+
+						for (var i = 0, len = d.pages.length; i < len; i++) {
+							toappend+='<option value="'+d.pages[i].handle+'">'+d.pages[i].title+'</option>';
+						}
+
+						select.append(toappend);
+						t.after(select).hide();
+					}
+				},
+				fail: function(){
+					_.notice('Failed to load pages',true);
+				}
+				});
+			}else{
+				var d = _.data('products');
+				var toappend='',
+					select=$('<select />',{}).change(function(){
+							var t=$(this);
+							$('#metafield_value').val(t.val());
+					}).html('<option value="">Add page handle as value</option>');
+
+					for (var i = 0, len = d.pages.length; i < len; i++) {
+						toappend+='<option value="'+d.pages[i].handle+'">'+d.pages[i].title+'</option>';
+					}
+
+					select.append(toappend);
+					t.after(select).hide();
+			}
+
+			return false;
+
+		});
+
 
 		$('#adv_get_collections').off('click').on('click',function(){
 			var t = $(this);
