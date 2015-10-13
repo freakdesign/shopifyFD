@@ -93,8 +93,13 @@ body, .global-search__pane{padding-top:32px}
 .shopifyJSoverride #metacount.active {display: inline-block;color:#fff;background: #21C2A8}
 
 /* Sub section - mostly for the metafield box */
-.shopifyJSoverride .sub_section-summary{margin-bottom:1.5em;background:#F5F6F7;padding: 1em;border: 1px solid #ddd;box-shadow: 0 2px 4px rgba(0,0,0,0.1);transition:border-color .25s}
-.shopifyJSoverride .sub_section-summary:hover{border: 1px solid #bbb}
+.shopifyJSoverride .sub_section-summary{
+  margin-bottom:1.5em;
+  background:#fff;
+  padding: 1em;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition:border-color .25s
+}
 .shopifyJSoverride .sub_section-summary .content{padding-left:0;padding-bottom:0;margin-bottom:0}
 .sub_section-summary h1, .sub_section-summary h2 {font-size: 18px;margin-bottom: 10px;font-weight: 300}
 

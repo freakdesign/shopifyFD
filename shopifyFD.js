@@ -58,7 +58,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a id="aboutapp" href="#">About ShopifyFD</a></li><li class="hidden"><a id="togglestyle" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="#" class="disabled tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Create an order</span></span>Order Create</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a id="aboutapp" href="#">About ShopifyFD</a></li><li class="hidden"><a id="togglestyle" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>ShopifyFD Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
@@ -1261,10 +1261,7 @@ return {
 	},
 	setup_discounts:function(){
 
-		/*var targetHTML = $('.header-row .header-right').eq(0);*/
-
 		var targetHTML = $('.header .header__secondary-actions:first');
-		
 
 		if(targetHTML.length){
 			var u = $('<ul/>',{
@@ -1291,14 +1288,16 @@ return {
 	},
 	setup_articles:function(){
 
-		var targetHTML = $('.section.description .section-summary').eq(0);
+		var targetHTML = $('.next-layout__sidebar').eq(0); /* var targetHTML = $('.section.description .section-summary').eq(0); */
+		if(!targetHTML.length){targetHTML = $('.next-grid__cell--third:first .next-card:first')}
+		
 		var headerButtons = $('.header-row .header-right').eq(0);
 		if(!headerButtons.length){headerButtons = $('.header .header__secondary-actions:first');}
 		if(!headerButtons.length){headerButtons = $('.header .header__primary-actions:first')}
 
 		if(targetHTML.length){
 			var itemViewLink = targetHTML.find('a').eq(0).attr('href');	
-			targetHTML.after(metafieldloader).remove();
+			targetHTML.after(metafieldloader);/* .remove() */
 
 			var loadinto = $('div.metafield-content');
 			_.loadmeta(loadinto,v);
@@ -1381,11 +1380,11 @@ return {
 	},
 	setup_blogs:function(){
 
-		var targetHTML = $('div.section.description');
+		targetHTML = $('.next-grid__cell--third:first');
 
 		if(targetHTML.length){
 
-			targetHTML.after(metafieldloaderSection);
+			targetHTML.prepend(metafieldloader);
 			var loadinto = $('div.metafield-content');
 			_.loadmeta(loadinto,v);
 
@@ -2151,6 +2150,87 @@ return {
 					}
 
 				}
+
+		},
+		bulk_redirects:function(d){
+
+			if(typeof d ==='undefined'){ return }
+			if(!d.length){ return }
+
+			var redirect = d[0];
+
+			if (typeof redirect !== 'object') { return }
+
+			var redirectTextareaLog = $('textarea[name="bulk-redirect-log"]');
+			var logVal = redirectTextareaLog.val();
+			$.ajax({
+				type: "POST",
+				url: '/admin/redirects.json',
+				data:redirect,
+				success: function(data){
+					logVal+=redirect.redirect.path + ',' + redirect.redirect.path + ',success\n';
+					redirectTextareaLog.val(logVal);
+					d.shift();
+					if(d.length > 0){
+						_.bulk_redirects(d);
+					}else{
+						_.notice('Bulk redirection additions complete');
+					}
+				},
+				error: function(data){
+					logVal+=redirect.redirect.path + ',' + redirect.redirect.path + ',' + data.responseJSON.errors.path[0] +'\n';
+					redirectTextareaLog.val(logVal);
+					d.shift();
+					if(d.length > 0){
+						_.bulk_redirects(d);
+					}else{
+						_.notice('Bulk redirection additions complete');
+					}
+				}
+
+			});
+			
+		},
+		setup_redirects:function(){
+
+			var targetHTML = $('.header .header__secondary-actions:first');
+			var nextCard = $('.next-card.has-bulk-actions');
+
+			if(nextCard.length){
+				var redirectPanel = $('<div class="next-grid next-grid--outer-grid" style="border-bottom: 1px solid #DADADA;margin-bottom: 1em;padding-bottom: 1em;"><div class="next-grid__cell next-grid__cell--third"><h2 class="next-heading">Bulk Redirects</h2><p>To bulk add redirects manually add the path (old url) and target (new url) separated with a comma to the input box. As with any bulk action, run a small sample first before processing 1000s of items.<br><br></p><ul><li>One redirect per line.</li><li>A log will show progress and any errors</li></ul></div><div class="next-grid__cell"><h2 class="next-heading">Paste URLs</h2><p>An example of the redirect is shown below:<br><code>http://freakdesign.com.au/old-url,http://freakdesign.com.au/new-url</code><br>or<br><code>/old-url,pages/new-url</code></p><br><textarea name="bulk-redirect-paste"></textarea><br><br><a href="#" class="btn fd-btn">Process</a><div class="fadein hidden bulk-redirect-log"><br><br><h2 class="next-heading">Activity Log</h2><textarea name="bulk-redirect-log"></textarea></div></div></div>');
+
+				var redirectButton = redirectPanel.find('a');
+				var redirectTextarea = redirectPanel.find('textarea[name="bulk-redirect-paste"]');
+				var redirectTextareaLog = redirectPanel.find('textarea[name="bulk-redirect-log"]');
+
+				redirectButton.on('click',function(e){
+					e.preventDefault();
+					var redirectVal = redirectTextarea.val().replace(/ /g, '');
+
+					if(redirectVal.length < 4){ return }
+					redirectArray = redirectVal.split("\n");
+
+					if(redirectArray.length){
+						var redirectData = [];
+						for (var i = 0; i < redirectArray.length; i++) {
+							var v = redirectArray[i].split(',');
+							if(v.length === 2){
+								var r = {'redirect': {'path': v[0],'target': v[1]}};
+								redirectData.push(r);
+							}
+						};
+						if(redirectData.length){
+							redirectTextareaLog.val('').parent().removeClass('hidden');
+							_.bulk_redirects(redirectData);
+						}
+					}
+				});
+
+				nextCard.prepend(redirectPanel);
+			}else{
+				_.notice('Could not add bulk redirect panel',true);
+			}
+
 
 		},
 		setup_collections:function(){
@@ -3050,11 +3130,14 @@ return {
 
 			*/
 			var targetHTML = $('.section.description .section-summary').eq(0);
+			if(!targetHTML.length){targetHTML = $('.next-grid__cell--third:first .next-card:first')}
 
 			if(targetHTML.length){
 				var previewButton = targetHTML.find('a').eq(0).clone(true);
 				var itemViewLink = previewButton.attr('href');	
-				targetHTML.after(metafieldloader).remove();
+
+
+				targetHTML.after(metafieldloader);/*.remove();*/
 
 				var loadinto = $('div.metafield-content');
 				_.loadmeta(loadinto,v);
@@ -3295,6 +3378,8 @@ return {
 			}
 		},
 		setup_shipping:function(go){
+
+			return;
 
 			if('undefined' !== typeof go){
 
@@ -3641,7 +3726,13 @@ return {
 		},
 		setup_custom_collections:function(){
 
-			var targetHTML = $('div.section.products').eq(0);
+			/*
+			var targetHTML = $('.next-layout__sidebar').eq(0); 
+			if(!targetHTML.length){targetHTML = $('.next-grid__cell--third:first')}
+			*/
+
+			var targetHTML = $('.next-layout__sidebar').eq(0); /*.section.description .section-summary*/
+			if(!targetHTML.length){targetHTML = $('.next-grid__cell--third:first')}
 
 			var headerButtons = $('.header-row .header-right').eq(0);
 			if(!headerButtons.length){headerButtons = $('.header .header__secondary-actions:first');}
@@ -3649,8 +3740,8 @@ return {
 
 			if(targetHTML.length){
 
-				targetHTML.after(metafieldloaderSection);
-
+				//targetHTML.after(metafieldloaderSection);
+				targetHTML.prepend(metafieldloader);/* .remove() */
 				var loadinto = $('div.metafield-content');
 				_.loadmeta(loadinto,v);
 
@@ -3938,16 +4029,16 @@ return {
 				'class':'section description'
 			}),
 			nextGrid = $('<div />',{
-				'class':'next-grid'
+				'class':'layout-content'
 			}),
 			nextGridWrap = $('<div />',{
-				'class':'next-grid__cell next-grid__cell--quarter'
+				'class':'layout-content__sidebar layout-content__first'/*next-grid__cell next-grid__cell--quarter*/
 			}),
 			summary = $('<div>', {
 				'class':'section-summary'
 			}),
 			sectionContent = $('<div>',{
-				'class':'next-grid__cell'
+				'class':'layout-content__main'
 			});
 
 			summary.html('<h1>Store Metafields</h1><p>Edit your shop level metafields here. Review the <a target="_blank" href="http://docs.shopify.com/themes/liquid-documentation/objects/metafield">Shopify documentation</a> for more info on Metafields.</p>');
@@ -3966,7 +4057,7 @@ return {
 		setup_customers:function(){
 			var targetHTML = $('.next-card.next-card--aside').eq(1);
 			if(targetHTML.length){
-				targetHTML.after('<div id="customer_meta_box" class="next-card next-card--aside"><div class="box-content p">'+metafieldloader+'</div>');
+				targetHTML.after('<div id="customer_meta_box" class="next-card next-card--aside"><div>'+metafieldloader+'</div>');
 				var loadinto = $('div.metafield-content');
 				_.loadmeta(loadinto,v);
 			}else{
@@ -3978,7 +4069,7 @@ return {
 			var targetHTML = $('#order-sidebar');
 			if(targetHTML.length){
 
-				targetHTML.append('<div id="customer_meta_box" class="next-card next-card--aside"><div class="box-content p">'+metafieldloader+'</div>');
+				targetHTML.append('<div id="customer_meta_box" class="next-card next-card--aside"><div>'+metafieldloader+'</div>');
 				var loadinto = $('div.metafield-content');
 				_.loadmeta(loadinto,v);
 
@@ -4171,7 +4262,7 @@ return {
 			https://dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css
 			"//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/s/shopifyFD.css";
 			*/
-			shopifyCSS.href = "//dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css";
+			shopifyCSS.href = "//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/s/shopifyFD.css";
 			document.getElementsByTagName('head')[0].appendChild(shopifyCSS);
 
 		},
@@ -4315,6 +4406,8 @@ return {
 							_.setup_collections();
 						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'link_lists' ){
 							_.setup_link_lists();
+						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'redirects' ){
+							_.setup_redirects();
 						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'links' ){
 							_.setup_link_lists();
 						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'themes' ){
