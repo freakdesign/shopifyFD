@@ -238,42 +238,41 @@ return {
 
 		*/
 
-		if(typeof id === 'undefined'){return}
-		if(id){
-			var mycontent = $("iframe:first").contents().find("#tinymce:first");
-			var myhtml = mycontent.html();
-			if(typeof myhtml === 'undefined'){ return }
+		if(typeof id === 'undefined' || !id){return}
 
-			var metaJSON = {
-				"metafield": {
-					"namespace": 'backups',
-					"key": id, /* consider using datestamp in the future for multiple backups */
-					"value": myhtml,
-					"value_type": "string"
-				}
-			};
+		var mycontent = $("iframe:first").contents().find("#tinymce:first");
+		var myhtml = mycontent.html();
+		if(typeof myhtml === 'undefined'){ return }
 
-			var url = d.URL+'/metafields.json';
-			if(_.data('alpha') === 'articles'){
-				url = '/admin/articles/' + id + '/metafields.json';
+		var metaJSON = {
+			"metafield": {
+				"namespace": 'backups',
+				"key": id, /* consider using datestamp in the future for multiple backups */
+				"value": myhtml,
+				"value_type": "string"
 			}
+		};
 
-			$.ajax({
-				type: "POST",
-				url: url,
-				dataType: 'json',
-				data: metaJSON,
-				success: function(d){
-					_.updatedropdown();
-					_.notice('Backup saved');
-				},
-				error: function(d){
-					var err = JSON.parse(d.responseText);
-					_.notice(err.errors.value[0],true);
-				}
-			});
-
+		var url = document.URL.split('?')[0]+'/metafields.json';
+		if(_.data('alpha') === 'articles'){
+			url = '/admin/articles/' + id + '/metafields.json';
 		}
+
+		$.ajax({
+			type: "POST",
+			url: url,
+			dataType: 'json',
+			data: metaJSON,
+			success: function(d){
+				_.updatedropdown();
+				_.notice('Backup saved');
+			},
+			error: function(d){
+				var err = JSON.parse(d.responseText);
+				_.notice(err.errors.value[0],true);
+			}
+		});
+
 	},
 	loadmeta:function(loadinto,v){
 
@@ -506,28 +505,36 @@ return {
 
 
 
-		$('#shopifyjs_deletemetafield').on('click',function(){
-			
-			var id=$('#metafield_id').val(),
-			url = d.URL+'/metafields/'+id+'.json';
+		$('#shopifyjs_deletemetafield').on('click',function(e){
+
+			e.preventDefault();
+
+			var url = document.URL;
+			var id = $('#metafield_id').val() || false;
+
+			if(!id){ _.notice('Object ID Missing',true);return }
+			if(url.indexOf('?show_all_images')>-1){ url = url.split('?show_all_images')[0] }
+
+			url = url+'/metafields/'+id+'.json';
 
 			if(_.data('omega') ==='general'){url = '/admin/metafields/'+id+'.json';}
 			if(_.data('alpha') ==='articles'){url = '/admin/articles/'+_.data('omega')+'/metafields/'+id+'.json';}
+
+			if(url.indexOf('?show_all_images')>-1){ return;	}
 			
-			if(id){
-				$.ajax({
-				  type: "DELETE",
-				  url: url,
-				  success: function(d){
-				  	_.flog(d);
-				  	_.notice('Metafield deleted');
-				  	_.updatedropdown();
-				  },
-					error:function(d){
-						_.notice('Failed to delete',true);
-					}
-				});
-			}
+			$.ajax({
+				type: "DELETE",
+				url: url,
+				success: function(d){
+					_.flog(d);
+					_.notice('Metafield deleted');
+					_.updatedropdown();
+				},
+				error:function(d){
+					_.notice('Failed to delete',true);
+				}
+			});
+
 		});
 
 		$('div.sub_section-summary a.savemymeta').off('click').on('click',function(){
@@ -560,27 +567,27 @@ return {
 
 			if(metafield_id.length>5){
 
-		var url = d.URL+'/metafields/'+metafield_id+'.json';
+				var url = document.URL.split('?')[0]+'/metafields/'+metafield_id+'.json';
 
-		if(_.data('alpha') ==='articles'){url = '/admin/articles/'+_.data('omega')+'/metafields/'+metafield_id+'.json';}
-		if(_.data('omega') ==='general'){url = '/admin/metafields/'+metafield_id+'.json';}
+				if(_.data('alpha') ==='articles'){url = '/admin/articles/'+_.data('omega')+'/metafields/'+metafield_id+'.json';}
+				if(_.data('omega') ==='general'){url = '/admin/metafields/'+metafield_id+'.json';}
 
-			$.ajax({
-				  type: "PUT",
-				  url: url,
-				  dataType: 'json',
-				  data: metaupdateJSON,
-				  success: function(d){
-				  	_.updatedropdown();
-				  	_.flog(d);
-				  	_.notice('Metafield updated');
-				  }
-			});
+				$.ajax({
+					  type: "PUT",
+					  url: url,
+					  dataType: 'json',
+					  data: metaupdateJSON,
+					  success: function(d){
+					  	_.updatedropdown();
+					  	_.flog(d);
+					  	_.notice('Metafield updated');
+					  }
+				});
 
 
-		}else{
+			}else{
 
-			var url = d.URL+'/metafields.json';
+			var url = document.URL.split('?')[0]+'/metafields.json';
 			if(_.data('omega') ==='general'){url = '/admin/metafields.json';}
 			if(_.data('alpha') ==='articles'){url = '/admin/articles/'+_.data('omega')+'/metafields.json';}
 
@@ -1006,9 +1013,12 @@ return {
 		delete a metafield attached to a variant
 
 		*/
+		var url = '/admin/variants/'+id+'/metafields/'+vid+'.json';
+		if(url.indexOf('?')>-1){ return }
+
 		$.ajax({
 				type: "DELETE",
-				url: '/admin/variants/'+id+'/metafields/'+vid+'.json',
+				url: url,
 				success: function(d){
 					_.flog(d);
 					_.setup_vrow(id);
@@ -1474,7 +1484,7 @@ return {
 			"metafield": {"namespace": 'helpers',"key": 'images',"value": meta,"value_type": "string"}
 			};
 
-			var url = d.URL+'/metafields.json';
+			var url = document.URL.split('?')[0]+'/metafields.json';
 			if(_.data('alpha') === 'articles'){
 				url = '/admin/articles/' + _.data('omega') + '/metafields.json';
 			}
@@ -2606,7 +2616,7 @@ return {
 				/* POST the metafield */
 				$.ajax({
 					type: "POST",
-					url: d.URL+'/metafields.json',
+					url: document.URL.split('?')[0]+'/metafields.json',
 					dataType: 'json',
 					data: metaJSON,
 					success: function(d){
@@ -4170,15 +4180,15 @@ return {
 			
 			*/
 
-			var url = d.URL+'/metafields.json';
+			var url = document.URL.split('?')[0]+'/metafields.json';
 
 			if(_.data('omega') ==='general'){url = '/admin/metafields.json';}
 			if(_.data('alpha') ==='articles'){url = '/admin/articles/'+_.data('omega')+'/metafields.json';}
 
 			$.getJSON(url, function(data) {
 				
-				var response = '',
-				m = data.metafields;
+				var response = '';
+				var m = data.metafields;
 
 				if(m.length){
 
@@ -4204,7 +4214,6 @@ return {
 				}
 
 				$('#metafieldselect').html(response);
-
 				_.clearmetaform();
 
 			});		
