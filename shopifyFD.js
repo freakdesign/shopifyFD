@@ -74,9 +74,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 	
 	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
 
-	var emergencyPanel = '<div class="emergency-panel">{contents}</div>';
 
-	var supportingSite = ['citizen-reign','morfars'];
 
 var _ = (function(){
 
@@ -139,52 +137,6 @@ return {
 			return false;
 		}
 	},
-	createCookie:function(name,value,days) {
-
-		/*
-		  ____                _          ____            _    _
-		 / ___|_ __ ___  __ _| |_ ___   / ___|___   ___ | | _(_) ___
-		| |   | '__/ _ \/ _` | __/ _ \ | |   / _ \ / _ \| |/ / |/ _ \
-		| |___| | |  __/ (_| | ||  __/ | |__| (_) | (_) |   <| |  __/
-		 \____|_|  \___|\__,_|\__\___|  \____\___/ \___/|_|\_\_|\___|
-
-		Creates a cookie. 
-
-		*/
-
-		if (days) {
-			var date = new Date();
-			date.setTime(date.getTime()+(days*24*60*60*1000));
-			var expires = "; expires="+date.toGMTString();
-		}else var expires = "";
-
-		document.cookie = name+"="+value+expires+"; path=/";
-
-	},
-	readCookie:function(name) {
-
-		/*
-		 ____                _    ____            _    _
-		|  _ \ ___  __ _  __| |  / ___|___   ___ | | _(_) ___
-		| |_) / _ \/ _` |/ _` | | |   / _ \ / _ \| |/ / |/ _ \
-		|  _ <  __/ (_| | (_| | | |__| (_) | (_) |   <| |  __/
-		|_| \_\___|\__,_|\__,_|  \____\___/ \___/|_|\_\_|\___|
-
-		well, this reads a cookie...
-
-		*/
-		var nameEQ = name + "=",
-		ca = document.cookie.split(';');
-
-		for(var i=0;i < ca.length;i++) {
-			var c = ca[i];
-			while (c.charAt(0)==' ') c = c.substring(1,c.length);
-			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-		}
-
-		return null;
-
-	},
 	notice:function(m,err){
 
 		/*
@@ -194,16 +146,15 @@ return {
 		| |\  | (_) | |_| | (_|  __/
 		|_| \_|\___/ \__|_|\___\___|
 
-		Show message at bottom of the screen
+		Show message at bottom of the screen using the inbult messaging system
 
 		*/
 
-		if('function' === typeof Shopify.Flash.error && 'function' === typeof Shopify.Flash.notice){
-			if(err){
-				Shopify.Flash.error(m);
-			}else{
-				Shopify.Flash.notice(m);
-			}
+		if(typeof Shopify.Flash.error !== 'function' || typeof Shopify.Flash.notice !== 'function'){ return }
+		if(err){
+			Shopify.Flash.error(m);
+		}else{
+			Shopify.Flash.notice(m);
 		}
 
 	},
@@ -238,12 +189,12 @@ return {
 
 		*/
 
-		if(typeof id === 'undefined' || !id){return}
+		if(typeof id === 'undefined' || !id){ return }
 
-		var mycontent = $("iframe:first").contents().find("#tinymce:first");
-		var myhtml = mycontent.html();
-		if(typeof myhtml === 'undefined'){ return }
+		var rtePanel = $("iframe:first").contents().find("#tinymce:first");
+		if(!rtePanel.length){ return }
 
+		var myhtml = rtePanel.html();
 		var metaJSON = {
 			"metafield": {
 				"namespace": 'backups',
@@ -290,8 +241,8 @@ return {
 
 		var url = '/admin/'+_.data('alpha')+'/'+_.data('omega')+'/metafields.json?limit=250';
 
-		if(_.data('omega') ==='general'){url = '/admin/metafields.json?limit=250';}
-		if(_.data('alpha') ==='articles'){url = '/admin/articles/'+_.data('omega')+'/metafields.json?limit=250';}
+		if(_.data('omega') ==='general'){ url = '/admin/metafields.json?limit=250' }
+		if(_.data('alpha') ==='articles'){ url = '/admin/articles/'+_.data('omega')+'/metafields.json?limit=250' }
 
 		$.getJSON(url, function(data) {
 
@@ -316,9 +267,9 @@ return {
 
 				if(m.length === 0){
 					metacount.removeClass('active');
-				}else{
+				}/*else{
 					metacount.addClass('active');
-				}
+				}*/
 
 				for (var i = 0, len = m.length; i < len; i++) {
 					h+= '<option data-type="' +m[i].value_type + '" data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
@@ -385,45 +336,45 @@ return {
 
 			var t = $(this);
 			if(!_.data('products')){
-			$.ajax({
-			type: "GET",
-			url: '/admin/products.json?limit=250',
-			dataType: 'json',
-			success: function(d){
-				if(d.products.length){
-					_.data('products',d);
-					var toappend='',
-						select=$('<select />',{}).change(function(){
-							var t=$(this);
-							$('#metafield_value').val(t.val());
-						}).html('<option value="">Add product handle as value</option>');
+				$.ajax({
+					type: "GET",
+					url: '/admin/products.json?limit=250',
+					dataType: 'json',
+					success: function(d){
+						if(d.products.length){
+							_.data('products',d);
+							var toappend='',
+								select=$('<select />',{}).change(function(){
+									var t=$(this);
+									$('#metafield_value').val(t.val());
+								}).html('<option value="">Add product handle as value</option>');
 
-					for (var i = 0, len = d.products.length; i < len; i++) {
-						toappend+='<option value="'+d.products[i].handle+'">'+d.products[i].title+'</option>';
+							for (var i = 0, len = d.products.length; i < len; i++) {
+								toappend+='<option value="'+d.products[i].handle+'">'+d.products[i].title+'</option>';
+							}
+
+							select.append(toappend);
+							t.after(select).hide();
+						}
+					},
+					fail: function(){
+						_.notice('Failed to load products',true);
 					}
-
-					select.append(toappend);
-					t.after(select).hide();
-				}
-			},
-			fail: function(){
-				_.notice('Failed to load products',true);
-			}
-			});
+				});
 			}else{
 				var d = _.data('products');
-				var toappend='',
-					select=$('<select />',{}).change(function(){
-							var t=$(this);
-							$('#metafield_value').val(t.val());
-					}).html('<option value="">Add product handle as value</option>');
+				var toappend='';
+				var select=$('<select />',{}).change(function(){
+					var t=$(this);
+					$('#metafield_value').val(t.val());
+				}).html('<option value="">Add product handle as value</option>');
 
-					for (var i = 0, len = d.products.length; i < len; i++) {
-						toappend+='<option value="'+d.products[i].handle+'">'+d.products[i].title+'</option>';
-					}
+				for (var i = 0, len = d.products.length; i < len; i++) {
+					toappend+='<option value="'+d.products[i].handle+'">'+d.products[i].title+'</option>';
+				}
 
-					select.append(toappend);
-					t.after(select).hide();
+				select.append(toappend);
+				t.after(select).hide();
 			}
 
 			return false;
@@ -3979,57 +3930,54 @@ return {
 
 		},
 		setup_files:function(){
-			/*
-			This function currently obselete due to recent dashboard edits.
-			*/
-			var targetHTML = $('.header-row .header-right').eq(0);
-			if(targetHTML.length){
 
-				var u = $('<ul/>',{
-					'class':'segmented',
-					'id':'get_all_images'
-				}),
-				l = $('<li/>'),
-				a = $('<a/>',{
-					'class':'btn',
-					'href':'#',
-					'style':'margin-left:1em'
-				}).html('Show all files').on('click',function(){
+			var targetHTML = $('.header .header__primary-actions:first');
+			if(!targetHTML.length){ return }
 
-					var t = $(this);
-					t.addClass('is-loading').attr('style','margin-left:1em;text-indent: -9999px;');
+			var u = $('<ul/>',{
+				'class':'segmented',
+				'id':'get_all_images'
+			});
+			var l = $('<li/>');
+			var a = $('<a/>',{
+				'class':'btn',
+				'href':'#',
+				'style':'margin-left:1em'
+			}).html('Show all files').on('click',function(){
 
-					$.ajax({
-						type: "GET",
-						url: '/admin/files.json?limit=2&fields=id',
-						success: function(d,textStatus, request){
-							if(d){
-								var limit = 50,
-								total_pics = request.getResponseHeader('X-Total-Results');
-								if(total_pics > limit){
-									var pic_pages = Math.ceil(total_pics/limit);
-									_.get_files(2,pic_pages);
-								}else{
-									_.notice('There are no more to load',true);
-									t.removeClass('is-loading').attr('style','margin-left:1em');
-								}
+				var t = $(this);
+				t.addClass('is-loading').attr('style','margin-left:1em;text-indent: -9999px;');
+
+				$.ajax({
+					type: "GET",
+					url: '/admin/files.json?limit=2&fields=id',
+					success: function(d,textStatus, request){
+						if(d){
+							var limit = 50,
+							total_pics = request.getResponseHeader('X-Total-Results');
+							if(total_pics > limit){
+								var pic_pages = Math.ceil(total_pics/limit);
+								_.get_files(2,pic_pages);
+							}else{
+								_.notice('There are no more to load',true);
+								t.removeClass('is-loading').attr('style','margin-left:1em');
 							}
-
-						},
-						error:function(){
-							t.removeClass('is-loading').attr('style','margin-left:1em');
-							_.notice('Error loading files',true);
 						}
-					});
 
-					return false;
-
+					},
+					error:function(){
+						t.removeClass('is-loading').attr('style','margin-left:1em');
+						_.notice('Error loading files',true);
+					}
 				});
 
-				l.append(a);
-				u.append(l);
-				targetHTML.prepend(u);
-			}
+				return false;
+
+			});
+
+			l.append(a);
+			u.append(l);
+			targetHTML.prepend(u);
 			
 		},
 		setup_settings_general:function(){
@@ -4058,7 +4006,9 @@ return {
 			nextGrid.append(nextGridWrap).append(sectionContent);
 			section.append(nextGrid);
 
-			$('#settings-general div.section').eq(0).after(section);
+			var targetHTML = $('#settings-general section:first');
+			targetHTML.after(section);
+			/*$('#settings-general div.section').eq(0).after(section);*/
 
 			var loadinto = $('div.metafield-content');
 			_.loadmeta(loadinto,v);
@@ -4428,7 +4378,7 @@ return {
 						} else if( _.data('alpha') === 'settings' && _.data('omega') === 'general' ){
 							_.setup_settings_general();
 						} else if( _.data('alpha') === 'settings' && _.data('omega') === 'files' ){
-							/*_.setup_files();*/
+							_.setup_files();
 						} else if( _.data('alpha') === 'settings' && _.data('omega') === 'shipping' ){
 							_.setup_shipping();
 						} else if( _.data('alpha') === 'settings' && _.data('omega') === 'taxes' ){
