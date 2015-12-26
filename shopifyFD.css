@@ -27,9 +27,9 @@
 #shopifyJSbar ul{list-style: none;margin:0;color:#fff}
 #shopifyJSbar li, #shopifyJSbar li a{display: inline-block}
 #shopifyJSbar li {float:left}
-#shopifyJSbar li:first-child{width: 197px;background: #21C2A8;font-size: 12px;line-height: 20px}
+#shopifyJSbar li:first-child{width: 230px;background: #21C2A8;}
 #shopifyJSbar li:nth-child(2){background: #1D2225}
-#shopifyJSbar li a{padding:.5em;border-left:1px solid #3F4645;transition:background .2s;color:#C8D1D1;height: 32px;}
+#shopifyJSbar li a{padding:0 .5em;transition:background .2s;color:#C8D1D1;height: 32px;line-height: 32px;font-size: 95%;}
 #shopifyJSbar li a.active{background:#1C1E1F;}
 #shopifyJSbar li a:hover{background:#139989;text-decoration: none;color:#fff}
 #shopifyJSbar li:nth-child(2) a:hover{background: #139989}
@@ -48,13 +48,18 @@ body, .global-search__pane{padding-top:32px}
 #gheader.black-header {z-index:99999}
 #global-notification {z-index:999999}
 
-.header-row, .shopifyJSoverride .next-nav {top:32px;}
 .shopifyJSoverride #sidebar{top: 36px}
+
+
+@media screen and (min-width: 769px){
+ .header-row, .shopifyJSoverride .next-nav {top:32px;}
+}
 
 @media screen and (max-width: 768px){
   #shopifyJSbar{
     display: none;
   }
+  .shopifyJSoverride .next-nav {border-top:2px solid #57666f;}
   body{padding-top:0px}
   .header-row {top:0px}
 }
@@ -67,7 +72,7 @@ body, .global-search__pane{padding-top:32px}
 
 /* Buttons */
 .shopifyJSoverride .section.buttons{padding:20px}
-.shopifyJSoverride .btn.delete{border-color: #AD2424;background: #CA2929;text-shadow:none;color:#fff;transition:background .25s}
+.shopifyJSoverride .btn.delete{border-color: #CA2929;background: #CA2929;text-shadow:none;color:#fff;transition:background .25s}
 
 /* Make those delete buttons far more obvious */
 .shopifyJSoverride .btn.delete:hover{background:#121212;color:#fff}
@@ -112,7 +117,7 @@ body, .global-search__pane{padding-top:32px}
 .metafield-copy-paste {margin-top: 1em}
 
 /* Editor extra */
-.shopifyJSoverride #rte_extra{background: #F0F0F0;padding: 5px;}
+.shopifyJSoverride #rte_extra{margin-top: .25em;}
 
 /* loading... */
 .shopifyJSoverride #content.loading .header-row {top:32px!important}
@@ -243,8 +248,8 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 .modalWindow > div.main.content {width: 500px;position: relative;margin: 10% auto!important;background: #fff;border-radius: 3px;padding:1em;text-align: left;box-shadow: 0 0 15px rgba(0,0,0,.5)}
 .modalWindow .content li{margin-bottom: 1em}
 .modalWindow .content > div {max-height:400px;overflow:auto}
-.modalWindow .close-modal{position:absolute;background:#121212;color:#fff;border:1px solid #000;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:1em;right:1em;border-radius:50%;font-weight: bold;font-size: 1em;}
-.modalWindow .close-modal:hover{background:red;color:#fff;border-color:red;}
+.modalWindow .close-modal{position:absolute;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:1em;right:1em;font-weight: bold;font-size: 1.2em;}
+.modalWindow .close-modal:hover{color:red;}
 .modalWindow header{border-bottom:1px solid #ccc;margin:0 0 .5em;padding:0 2em .25em 0;min-height: .25em}
 .modalWindow td{vertical-align: top}
 .modalWindow .warning{background:#d15757;color:#fff;line-height:1.3;margin:0 0 .5em}
@@ -424,12 +429,9 @@ tr.marked-for-deletion a{color:#fff}
 
 .fd-btn{
   background: #898B8A;
-  color: #fff;
-  /*padding: .25em .5em;
-  height: 2em;
-  line-height: 1.5em;*/
   transition: all .25s;
-  border: 1px solid #727781;
+  border: 1px solid #898B8A;
+  color: #efefef;
 }
 .fd-btn:hover{
   background: #21C2A8;

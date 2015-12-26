@@ -54,7 +54,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var metafield_copybox = '<div class="metafield-copy-paste"><a class="fd-btn btn" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
 
-	var rte_menu_html = '<div id="rte_extra"><a class="btn fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except<br>target,class,href & src</span></span>Clean HTML</a> <a class="btn fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
+	var rte_menu_html = '<div id="rte_extra"><a class="btn fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except for <br>target,class,href & src</span></span>Clean HTML</a> <a class="btn fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn fd-btn" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
 
 	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
@@ -66,7 +66,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
 
-	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopifyfd.com/">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://shopify.freakdesign.com.au" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
+	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopifyfd.com/">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://freakdesign.com.au/pages/shopifyfd" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
 
 	var aargh_msg = '<p>The page may need to be reloaded to see the changes.</p>';
 
@@ -1497,6 +1497,9 @@ return {
 
 		}
 	},
+	setup_transfers:function(){
+		return;
+	},
 	setup_products_list:function(){
 
 		/*
@@ -1510,7 +1513,6 @@ return {
 		*/
 		_.showSkuHeaderCount();
 
-		/*var targetHTML = $('.header-right .segmented').eq(0);*/
 		var targetHTML = $('.header .header__secondary-actions:first');
 		if(!targetHTML.length){targetHTML = $('.header .header__primary-actions:first')}
 
@@ -1521,17 +1523,17 @@ return {
 				var u = $('<ul/>',{
 					'class':'segmented',
 					'id':'showsku'
-				}),
-				l = $('<li/>'),
-				a = $('<a/>',{
+				});
+				var l = $('<li/>');
+				var a = $('<a/>',{
 					'class':'btn fd-btn animated fadein',
-					'href':'#',
+					'href':'/',
 					'title':'Show SKU and Variant IDs'
 				}).html('Show SKUs & ID').on('click',function(e){
 					e.preventDefault();
 					var p = [],
 					sku =[],
-					a_list = $('#all-products td.name a');
+					a_list = $('#all-products td.name a[href]');
 
 					a_list.each(function(){
 						p.push($(this).attr('href').split(/[/]+/).pop());
@@ -1551,7 +1553,7 @@ return {
 									skuspan ='';
 
 									if(s || v){
-										if(s){skuspan='<span title="SKU" class="sku label animated fadein">'+s+'</span>'}
+										if(s){skuspan='<span title="SKU" class="sku label badge badge--small badge--left-margin animated fadein">'+s+'</span>'}
 										a_list.eq(i).before(skuspan+'<span title="VariantID" class="variant-label badge badge--small badge--left-margin animated fadein">'+v+'</span>');
 									}
 
@@ -1585,7 +1587,7 @@ return {
 	setup_themes:function(){
 
 			var publishedTitle = $('.published-theme-title'),
-			customiseBtn = $('.btn.btn-primary').eq(0), /* for the published theme */
+			customiseBtn = $('.published-theme .btn-primary').eq(0), /* for the published theme */
 			customiseHREF = customiseBtn.attr('href'),
 			themeBoxes = $('div.unpublished-box');
 
@@ -1656,7 +1658,7 @@ return {
 
 							var llselect = $('<select />',{
 								'class':'header-select fadein'
-							}).append('<option>Choose another linklist to edit</option>',response).change(function(){
+							}).append('<option>Edit other Menu</option>',response).change(function(){
 								var v = $(this).val();
 								if(v){
 									 _.redirect('/admin/link_lists/'+v);
@@ -2102,7 +2104,7 @@ return {
 								}).html('<option value="">Jump to linklist</option>'+optionAppend);
 
 								var div = $('<div />');
-								div.append(selectLinkList,'<small style="display: block;background: #fff;padding: .5em;">Select a linklist to quickly jump to edit view. Useful for when you have many linklists...</small>');
+								div.append(selectLinkList,'<small style="margin:.5em 0">Select a linklist to quickly jump to edit view. Useful for when you have many linklists...</small>');
 								addLinkListBtn.after(div);
 							}
 
@@ -2225,7 +2227,7 @@ return {
 										var collectionTable = $('#collections-results'),
 										collectionLink = collectionTable.find('a[href="/admin/collections/'+d.collections[i].id+'"]:last');
 										if(collectionLink.find('span').length === 0){
-											collectionLink.append('<span class="sku label">'+d.collections[i].products_count+'</span>');
+											collectionLink.append('<span class="sku label badge badge--small badge--left-margin">'+d.collections[i].products_count+'</span>');
 										}
 									};
 								}
@@ -2645,7 +2647,7 @@ return {
 								}
 								var pselect = $('<select />',{
 									'class':'header-select fadein'
-								}).append('<option>Choose another product to edit</option>',response).change(function(){
+								}).append('<option>Edit other Product</option>',response).change(function(){
 									var v = $(this).val();
 									if(v){ _.redirect('/admin/products/'+v); }
 								});
@@ -3152,7 +3154,7 @@ return {
 							var pageSelect = $('<select />',{
 								id:'shopifyjs_llselect',
 								'class':'header-select fadein'
-							}).append('<option>Choose another page to edit</option>',response).change(function(){
+							}).append('<option>Edit other Page</option>',response).change(function(){
 								var v = $(this).val();
 								if(v){
 									 _.redirect('/admin/pages/'+v);
@@ -3982,40 +3984,39 @@ return {
 		},
 		setup_settings_general:function(){
 
-			var section = $("<div>", {
+			var section = $("<div />", {
 				id: "general_metafields",
 				'class':'section description'
-			}),
-			nextGrid = $('<div />',{
-				'class':'layout-content'
+			});
+			var sectionNew = $('<section />',{
+				'class':'ui-annotated-section'
 			}),
 			nextGridWrap = $('<div />',{
 				'class':'layout-content__sidebar layout-content__first'/*next-grid__cell next-grid__cell--quarter*/
 			}),
 			summary = $('<div>', {
-				'class':'section-summary'
+				'class':'ui-annotated-section__annotation'
 			}),
 			sectionContent = $('<div>',{
-				'class':'layout-content__main'
+				'class':'ui-annotated-section__content'
 			});
 
-			summary.html('<h1>Store Metafields</h1><p>Edit your shop level metafields here. Review the <a target="_blank" href="http://docs.shopify.com/themes/liquid-documentation/objects/metafield">Shopify documentation</a> for more info on Metafields.</p>');
+			summary.html('<div class="ui-annotated-section__title"><h2 class="next-heading next-heading--no-margin">Store Metafields</h2></div><div class="ui-annotated-section__description"><p>Edit your shop level metafields here. Review the <a target="_blank" href="http://docs.shopify.com/themes/liquid-documentation/objects/metafield">Shopify documentation</a> for more info on Metafields.</p></div>');
 			sectionContent.html(metafieldloader);
 
-			nextGridWrap.append(summary);
-			nextGrid.append(nextGridWrap).append(sectionContent);
-			section.append(nextGrid);
+			//nextGridWrap.append(summary);
+			//nextGrid.append(nextGridWrap).append(sectionContent);
+			sectionNew.append(summary,sectionContent);
 
 			var targetHTML = $('#settings-general section:first');
-			targetHTML.after(section);
-			/*$('#settings-general div.section').eq(0).after(section);*/
+			targetHTML.after(sectionNew);
 
 			var loadinto = $('div.metafield-content');
 			_.loadmeta(loadinto,v);
 
 		},
 		setup_customers:function(){
-			var targetHTML = $('.next-card.next-card--aside').eq(1);
+			var targetHTML = $('.next-card.next-card--aside:last');
 			if(targetHTML.length){
 				targetHTML.after('<div id="customer_meta_box" class="next-card next-card--aside"><div>'+metafieldloader+'</div>');
 				var loadinto = $('div.metafield-content');
@@ -4328,16 +4329,16 @@ return {
 
 					_.add_ui();
 
-					var u_array = d.URL.split('#')[0].split('?')[0].split('/'),
-					alpha = u_array[u_array.length - 2],
-					omega = d.URL.split('/').pop().split('?')[0];
+					var documentUrl = document.URL;
+					var u_array = documentUrl.split('#')[0].split('?')[0].split('/');
+					var alpha = u_array[u_array.length - 2];
+					var omega = documentUrl.split('/').pop().split('?')[0];
 
 					if(omega !== 'next' && omega !== 'prev' ){
-					if( alpha !== _.data('alpha') || omega !== _.data('omega') ){
+					if(alpha !== _.data('alpha') || omega !== _.data('omega')){
 
 						_.data('alpha',alpha);
 						_.data('omega',omega);
-						_.flog(_.data('alpha')+','+_.data('omega'));
 
 						if( _.data('alpha') === 'customers' && !isNaN(_.data('omega'))){
 							_.setup_customers();
@@ -4357,6 +4358,8 @@ return {
 								_.setup_products();
 						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'products' ){
 							_.setup_products_list();
+						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'transfers' ){
+							_.setup_transfers();
 						} else if( _.data('alpha') === 'orders' && !isNaN(_.data('omega'))){
 							_.setup_single_order();
 						} else if( _.data('alpha') === 'admin' && _.data('omega') === 'orders' ){
