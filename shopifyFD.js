@@ -2765,9 +2765,10 @@ return {
 			/* images */
 
 			var imageSection = $('div.next-card.images');
-			if(imageSection.length){
+			var imageSectionTarget = $('.next-card.images .wrappable__item.wrappable__item--no-flex:last');
+			if(imageSection.length && imageSectionTarget.length){
 				var removeImagesBtn = $('<a />',{
-					'class':'btn fd-btn delete tooltip tooltip-bottom'
+					'class':'btn btn--plain'
 				}).html('Remove all images<span class="tooltip-container"><span class="tooltip-label">Instant, and no undo</span></span>').on('click',function(e){
 					e.preventDefault();
 					var t = $(this);
@@ -2775,9 +2776,11 @@ return {
 					_.deleteProductImages(id);
 				});
 				
-				var removeImagesCell = $('<div class="next-grid__cell next-grid__cell--no-flex"></div>');
+				var removeImagesCell = $('<div class="wrappable__item wrappable__item--no-flex"></div>');
 				removeImagesCell.append(removeImagesBtn);
-				$('.next-card.images header .next-grid__cell:last').after(removeImagesCell);
+
+				//$('.next-card.images header .next-grid__cell:last').after(removeImagesCell);
+				imageSectionTarget.after(removeImagesCell);
 
 			}else{
 				_.notice('Unable to find image section',true);
