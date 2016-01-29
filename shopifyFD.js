@@ -2036,10 +2036,11 @@ return {
 					llf.prepend(a);
 				}
 				
-				var d = $('.section-summary').eq(0),
-				a1 = $('<a/>',{
+				//var d = $('.section-summary').eq(0),
+				var d = $('.ui-annotated-section__description').eq(0);
+				var a1 = $('<a/>',{
 					'class':'btn tooltip-bottom tooltip fd-btn',
-					style:'margin-bottom:.5em',
+					style:'margin-bottom:.5em;margin-top:1em',
 					href:'#'
 				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every collection</span></span>Create Collections linklist').on('click',function(){
 					$(this).addClass('is-loading disabled');
