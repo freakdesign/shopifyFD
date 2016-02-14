@@ -46,7 +46,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
 
-	var metafieldloader = '<div class="sub_section-summary fadein sidebar-cell"><h1>Metafields <span id="metacount" class="animated bounce">0</span></h1><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
+	var metafieldloader = '<div class="sub_section-summary fadein sidebar-cell"><h3 class="next-heading">Metafields <span id="metacount" class="animated bounce">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
 
 	var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
 
@@ -64,8 +64,6 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim tooltip tooltip-bottom disabled" href="#"><span class="tooltip-container"><span class="tooltip-label">Enable Autosave</span></span>Autosave</a></li>';
 
-	var recent_emails_box = '<table><tr><td>How many days back do we search?</td><td><input value="30" id="from_recent_order_id" placeholder="days" type="text" /></td></tr><tr><td>Fulfillment Status</td><td><select id="recent_fulfillment_status"><option value="any">Any</option><option value="partial">Partial</option><option value="unshipped">Unshipped</option><option value="shipped">Shipped</option></select></td></tr><tr><td><a class="btn getdata">Get Emails</a></td><small>For now this grabs the email only and adds it to the box below. If you would like to see this work differently - let me know!</small><td></td></tr></table><textarea id="recent_emails_output" class="debug" placeholder="Email addresses will load here..."></textarea>';
-
 	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopifyfd.com/">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://freakdesign.com.au/pages/shopifyfd" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
 
 	var aargh_msg = '<p>The page may need to be reloaded to see the changes.</p>';
@@ -74,13 +72,17 @@ if(url.indexOf("myshopify.com/admin")>1){
 	
 	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
 
+	var selector_next_secondary = '.ui-layout__section--secondary .ui-layout__item:last';
+	var next_secondary_HTML = '<div class="ui-layout__item"><div class="next-card"></div></div>';
+
+
 
 
 var _ = (function(){
 
 	var v = { 
 		debug: false,
-		drag_on:false,
+		drag_on:true,
 		alpha: false,
 		omega: false,
 		countries:false,
@@ -759,8 +761,6 @@ return {
 		return false; 
 	};
 	doc.ondrop = function (event) {
-		
-		
 
 	event.preventDefault && event.preventDefault();
 
@@ -1249,16 +1249,17 @@ return {
 	},
 	setup_articles:function(){
 
-		var targetHTML = $('.next-layout__sidebar').eq(0); /* var targetHTML = $('.section.description .section-summary').eq(0); */
-		if(!targetHTML.length){targetHTML = $('.next-grid__cell--third:first .next-card:first')}
+		var targetHTML = $(selector_next_secondary);
 		
-		var headerButtons = $('.header-row .header-right').eq(0);
-		if(!headerButtons.length){headerButtons = $('.header .header__secondary-actions:first');}
+		var headerButtons = $('.header .header__secondary-actions:first');
 		if(!headerButtons.length){headerButtons = $('.header .header__primary-actions:first')}
 
 		if(targetHTML.length){
 			var itemViewLink = targetHTML.find('a').eq(0).attr('href');	
-			targetHTML.after(metafieldloader);/* .remove() */
+
+			var nextCardSecondary = $(next_secondary_HTML);
+			nextCardSecondary.find('.next-card').append(metafieldloader);
+			targetHTML.after(nextCardSecondary);/* .remove() */
 
 			var loadinto = $('div.metafield-content');
 			_.loadmeta(loadinto,v);
@@ -3097,15 +3098,17 @@ return {
 			Get the page view all setup
 
 			*/
-			var targetHTML = $('.section.description .section-summary').eq(0);
-			if(!targetHTML.length){targetHTML = $('.next-grid__cell--third:first .next-card:first')}
+
+			// 
+			var targetHTML = $(selector_next_secondary);
 
 			if(targetHTML.length){
 				var previewButton = targetHTML.find('a').eq(0).clone(true);
 				var itemViewLink = previewButton.attr('href');	
+				var nextCardSecondary = $(next_secondary_HTML);
 
-
-				targetHTML.after(metafieldloader);/*.remove();*/
+				nextCardSecondary.find('.next-card').append(metafieldloader);
+				targetHTML.after(nextCardSecondary);
 
 				var loadinto = $('div.metafield-content');
 				_.loadmeta(loadinto,v);
@@ -3137,8 +3140,7 @@ return {
 			}
 			
 			/* PAGE SWITCHER */
-			var targetHTMLRightMenu = $('.header-row .header-right');
-			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $('.header .header__secondary-actions:first');}
+			var targetHTMLRightMenu = $('.header .header__secondary-actions:first');
 			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $('.header .header__primary-actions:first')}
 
 			if(targetHTMLRightMenu.length){
@@ -3938,7 +3940,7 @@ return {
 		},
 		setup_files:function(){
 
-			var targetHTML = $('.header .header__primary-actions:first');
+			var targetHTML = $('.header .header__primary-actions:first > div');
 			if(!targetHTML.length){ return }
 
 			var u = $('<ul/>',{
@@ -3950,33 +3952,49 @@ return {
 				'class':'btn',
 				'href':'#',
 				'style':'margin-left:1em'
-			}).html('Show all files').on('click',function(){
+			}).html('Download file list').on('click',function(){
 
 				var t = $(this);
-				t.addClass('is-loading').attr('style','margin-left:1em;text-indent: -9999px;');
+				
 
-				$.ajax({
-					type: "GET",
-					url: '/admin/files.json?limit=2&fields=id',
-					success: function(d,textStatus, request){
-						if(d){
-							var limit = 50,
-							total_pics = request.getResponseHeader('X-Total-Results');
-							if(total_pics > limit){
-								var pic_pages = Math.ceil(total_pics/limit);
-								_.get_files(2,pic_pages);
-							}else{
-								_.notice('There are no more to load',true);
-								t.removeClass('is-loading').attr('style','margin-left:1em');
+				(function(){
+					var fileArray = [];
+					t.addClass('is-loading').attr('style','margin-left:1em;text-indent: -9999px;');
+					var getFiles = function(url){
+						if(typeof(url) === 'undefined'){ var url = '/admin/settings/files' }
+						$.ajax({
+							url: url,
+							success: function(d){
+
+								var html = $(d);
+								var fields = html.find('.next-input.next-input--readonly');
+								for (var i = 0; i < fields.length; i++) {
+									fileArray.push(fields[i].value);
+								};
+								var next = html.find('#assets-table').next('.next-card__section').find('a:last');
+								var nextUrl = next[0].href;
+								if(nextUrl.indexOf('direction=next')>-1){
+									console.log('Fields grabbed. Next page now...');
+									getFiles(nextUrl);
+								}else{
+									console.log('============ DONE. DOWNLOAD FILE ============');
+									t.removeClass('is-loading').removeAttr('style');
+									var a = document.createElement("a");
+									document.body.appendChild(a);
+									a.style = "display: none";
+									var blob = new Blob(["\ufeff",fileArray],{type:'text/plain'}),
+									link = window.URL.createObjectURL(blob);
+									a.href = link;
+									a.download = 'shopify-files-list' + '.txt';
+									a.click();
+									window.URL.revokeObjectURL(link);
+
+								}
 							}
-						}
-
-					},
-					error:function(){
-						t.removeClass('is-loading').attr('style','margin-left:1em');
-						_.notice('Error loading files',true);
+						});
 					}
-				});
+					getFiles();
+				})();
 
 				return false;
 
@@ -4008,9 +4026,6 @@ return {
 
 			summary.html('<div class="ui-annotated-section__title"><h2 class="next-heading next-heading--no-margin">Store Metafields</h2></div><div class="ui-annotated-section__description"><p>Edit your shop level metafields here. Review the <a target="_blank" href="http://docs.shopify.com/themes/liquid-documentation/objects/metafield">Shopify documentation</a> for more info on Metafields.</p></div>');
 			sectionContent.html(metafieldloader);
-
-			//nextGridWrap.append(summary);
-			//nextGrid.append(nextGridWrap).append(sectionContent);
 			sectionNew.append(summary,sectionContent);
 
 			var targetHTML = $('#settings-general section:first');
@@ -4021,9 +4036,13 @@ return {
 
 		},
 		setup_customers:function(){
-			var targetHTML = $('.next-card.next-card--aside:last');
+
+			var targetHTML = $(selector_next_secondary);
+			
 			if(targetHTML.length){
-				targetHTML.after('<div id="customer_meta_box" class="next-card next-card--aside"><div>'+metafieldloader+'</div>');
+				var nextCardSecondary = $(next_secondary_HTML);
+				nextCardSecondary.find('.next-card').append(metafieldloader);
+				targetHTML.after(nextCardSecondary);
 				var loadinto = $('div.metafield-content');
 				_.loadmeta(loadinto,v);
 			}else{
@@ -4032,10 +4051,11 @@ return {
 		},
 		setup_single_order:function(){
 
-			var targetHTML = $('#order-sidebar');
+			var targetHTML = $(selector_next_secondary);
 			if(targetHTML.length){
-
-				targetHTML.append('<div id="customer_meta_box" class="next-card next-card--aside"><div>'+metafieldloader+'</div>');
+				var nextCardSecondary = $(next_secondary_HTML);
+				nextCardSecondary.find('.next-card').append(metafieldloader);
+				targetHTML.after(nextCardSecondary);
 				var loadinto = $('div.metafield-content');
 				_.loadmeta(loadinto,v);
 
@@ -4043,12 +4063,11 @@ return {
 				_.notice('ShopifyFD error : setup_single_order : target html not found',true);
 			}
 
-			var billing_box = $('.box.box-details').eq(5),
-			email = billing_box.find('a[bind-event-click="contactCustomer.show()"]');
+			var emailLink = $('.customer-email:last');
 
-			if(email.length){
+			if(emailLink.length){
 				var input = $('<input />',{
-					'value':email.text(),
+					'value':emailLink.text(),
 					'readonly':'readonly',
 					'class':'noprint',
 					'style':'margin:1em 0'
@@ -4056,19 +4075,14 @@ return {
 					$(this).select();
 				});
 
-				email.parent().after(input);
+				emailLink.parent().parent().after(input);
 			}
 
 		},
 		setup_orders:function(){
 
-			var targetHTML = $('.header-row .header-right').eq(0),
-			visible_orders = $('.order.no-wrap a'),
-			order_timer = false; 
-
-			/* ORDER CREATION IMPORT */
-				/* nothing here? ask for the beta version */
-			/* END ORDER CREATION IMPORT */
+			var visible_orders = $('.order.no-wrap a');
+			var order_timer = false; 
 
 			if(visible_orders.length){
 
@@ -4223,10 +4237,6 @@ return {
 			shopifyCSS.type = "text/css";
 			shopifyCSS.rel = "stylesheet";
 			shopifyCSS.id = "shopifyjs";
-			/*
-			https://dl.dropboxusercontent.com/s/m9ur11hivel2sou/shopifyFD.css
-			"//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/s/shopifyFD.css";
-			*/
 			shopifyCSS.href = "//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/s/shopifyFD.css";
 			document.getElementsByTagName('head')[0].appendChild(shopifyCSS);
 
