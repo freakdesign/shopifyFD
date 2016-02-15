@@ -92,9 +92,7 @@ body, .global-search__pane{padding-top:32px}
 
 /* Modal*/
 .shopifyJSoverride .modal body{overflow: hidden}
-.shopifyJSoverride #metacount {
-  background: #90A5A7;display: none;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff;float: right;
-}
+.shopifyJSoverride #metacount { background: #90A5A7;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff;float: right; }
 .shopifyJSoverride #metacount.active {display: inline-block;color:#fff;background: #21C2A8}
 
 /* Sub section - mostly for the metafield box */
@@ -114,59 +112,18 @@ body, .global-search__pane{padding-top:32px}
 
 .shopifyJSoverride .header-main {max-width: inherit;}
 .shopifyJSoverride .header-main .next-icon--website-slate-lightest {margin-left:.5em;}
-.metafield-copy-paste {margin-top: 1em}
-
-/* Editor extra */
-.shopifyJSoverride #rte_extra{margin-top: .25em;}
 
 /* loading... */
 .shopifyJSoverride #content.loading .header-row {top:32px!important}
 
 /* order */
-
-.shopifyJSoverride .order-edit-panel h3 {margin-bottom:.5em;}
 .shopifyJSoverride .search-row:first-child{margin-top:1em;}
-.shopifyJSoverride .order-edit-panel .price-display{
-  background: #D2EEF0;
-  display: inline-block;
-  padding: 1em 2em;
-  margin-right: 1em;
-  border: 1px solid #A2B7CE;
-  color: #474861;
-  font-weight: 700;
-  font-size: 2em;
-}
-.shopifyJSoverride .order-edit-panel .customer-details input{
-  margin-bottom: .5em;
-}
 
 .shopifyJSoverride .search-row{
   background: #efefef;
   font-size: 12px;
   margin-bottom: 1px;
   border-radius: 3px;
-}
-.order-edit-panel .line-item{
-  margin-bottom:.5em;
-  position: relative;
-  border-bottom: 1px dashed;
-  padding-bottom: .5em;
-}
-.order-edit-panel .line-item .ico-delete{
-  position: absolute;top:0;right:0;
-}
-.order-edit-panel .line-item>span{
-  display:inline-block;
-  max-width: 70%;
-}
-.order-edit-panel .line-item span span {
-  display:block;
-  font-size: 11px;
-  line-height: 1.4;
-}
-.order-edit-panel .line-item span span:first-child{color:#000;}
-.order-edit-panel .line-item i {
-  vertical-align:top;color:#000;
 }
 
 .shopifyJSoverride .search-row a {
@@ -223,14 +180,9 @@ body, .global-search__pane{padding-top:32px}
 
 .shopifyJSoverride .sku.label, .shopifyJSoverride .variant-label {float:right;}
 .shopifyJSoverride .unpublished-theme-title {position: relative;}
-.shopifyJSoverride .header-select {height:32px;border-radius:3px;color:#479ccf;max-width: 250px;}
-.shopifyJSoverride .header-select:focus {color:#121212;}
+.shopifyJSoverride .header-select {height:32px;max-width: 250px;}
 
 html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none; -moz-user-select: none;-ms-user-select: none;}
-
-/* Hide promo */
-#net_promoter_score,#shop-advisor-card[track-view="setup_facebook_store_milestone"], 
-.section.last-section.theme-store-cta-section {display:none;}
 
 /* Modal window, because wrestling the built in one is a pain in the bee-hind... */
 .shopifyJSoverride .modal-bg{z-index: 500}

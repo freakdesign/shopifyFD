@@ -44,17 +44,17 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	*/
 
-	var metafieldform = '<label style="margin-top:1em">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
+	var metafieldform = '<label class="next-label">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
 
-	var metafieldloader = '<div class="sub_section-summary fadein sidebar-cell"><h3 class="next-heading">Metafields <span id="metacount" class="animated bounce">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></div>';
+	var metafieldloader = '<div class="next-card fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <span id="metacount" class="animated bounce hidden">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
 
 	var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
 
 	var metafield_default = '<option value="">Select or create a metafield</option>';
 
-	var metafield_copybox = '<div class="metafield-copy-paste"><a class="fd-btn btn" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
+	var metafield_copybox = '<div class="metafield-copy-paste sst"><a class="fd-btn btn" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
 
-	var rte_menu_html = '<div id="rte_extra"><a class="btn fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except for <br>target,class,href & src</span></span>Clean HTML</a> <a class="btn fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn fd-btn" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
+	var rte_menu_html = '<div class="sst" id="rte_extra"><a class="btn fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except for <br>target,class,href & src</span></span>Clean HTML</a> <a class="btn fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn fd-btn" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
 
 	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
@@ -73,7 +73,8 @@ if(url.indexOf("myshopify.com/admin")>1){
 	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
 
 	var selector_next_secondary = '.ui-layout__section--secondary .ui-layout__item:last';
-	var next_secondary_HTML = '<div class="ui-layout__item"><div class="next-card"></div></div>';
+	var selector_next_primary = '.ui-layout__section--primary .ui-layout__item:last';
+	var next_item_HTML = '<div class="ui-layout__item"><div class="next-card"></div></div>';
 
 
 
@@ -265,13 +266,11 @@ return {
 				}
 
 				var metacount = $('#metacount');
-				metacount.text(m.length).addClass('active');
+				metacount.text(m.length).removeClass('hidden');
 
 				if(m.length === 0){
-					metacount.removeClass('active');
-				}/*else{
-					metacount.addClass('active');
-				}*/
+					metacount.addClass('hidden');
+				}
 
 				for (var i = 0, len = m.length; i < len; i++) {
 					h+= '<option data-type="' +m[i].value_type + '" data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
@@ -295,9 +294,9 @@ return {
 				_.data('datalistNamespace',namespaceArray);
 				_.data('datalistKey',keyArray);
 
-				h = '<select id="metafieldselect">' + metafield_default + h +'</select>';
+				h = '<select id="metafieldselect" class="ssb">' + metafield_default + h +'</select>';
 			}else{
-				h ='<select id="metafieldselect">' + metafield_default + '</select>';
+				h ='<select id="metafieldselect" class="ssb">' + metafield_default + '</select>';
 			}
 
 			loadinto.html(h).append(metafieldform);
@@ -490,7 +489,7 @@ return {
 
 		});
 
-		$('div.sub_section-summary a.savemymeta').off('click').on('click',function(){
+		$('.metafield-content a.savemymeta').off('click').on('click',function(){
 
 			var thistype = 'string';
 			if($(this).hasClass('int')){thistype = 'integer'}
@@ -1257,7 +1256,7 @@ return {
 		if(targetHTML.length){
 			var itemViewLink = targetHTML.find('a').eq(0).attr('href');	
 
-			var nextCardSecondary = $(next_secondary_HTML);
+			var nextCardSecondary = $(next_item_HTML);
 			nextCardSecondary.find('.next-card').append(metafieldloader);
 			targetHTML.after(nextCardSecondary);/* .remove() */
 
@@ -1290,7 +1289,7 @@ return {
 			}),
 			l = $('<li/>'),
 			c = $('<a/>',{
-				'class':'btn btn-separate',
+				'class':'fd-btn btn btn-separate',
 				'href':'#'
 			}).html('Duplicate').on('click',function(e){
 				e.preventDefault();
@@ -1541,6 +1540,8 @@ return {
 					});
 
 					if(p.length){
+						var t = $(this);
+						t.addClass('is-loading disabled');
 						var i=0,
 						getsku = function(p,i){
 
@@ -1562,6 +1563,7 @@ return {
 										getsku(p,i+1);
 									}else{
 										_.notice('SKUs and Variant IDs Loaded');
+										t.removeClass('is-loading').text('Data Loaded');
 									}
 
 								}	
@@ -1890,7 +1892,7 @@ return {
 					'href':'#',
 					'class':'tooltip-bottom tooltip',
 					'style':'margin-right:1.5em'
-				}).html('<span class="tooltip-container"><span class="tooltip-label">Make a copy of this linklist</span></span>Copy').on('click',function(e){
+				}).html('<span class="tooltip-container"><span class="tooltip-label">Make a copy of this linklist</span></span>Duplicate').on('click',function(e){
 					e.preventDefault();
 					var t = $(this),
 						a = t.parent().find('a[href^="/admin/link_lists"]').eq(0);
@@ -2040,28 +2042,25 @@ return {
 				//var d = $('.section-summary').eq(0),
 				var d = $('.ui-annotated-section__description').eq(0);
 				var a1 = $('<a/>',{
-					'class':'btn tooltip-bottom tooltip fd-btn',
-					style:'margin-bottom:.5em;margin-top:1em',
+					'class':'btn tooltip-bottom tooltip fd-btn sst',
 					href:'#'
-				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every collection</span></span>Create Collections linklist').on('click',function(){
+				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a menu with every collection</span></span>Create Collections menu').on('click',function(){
 					$(this).addClass('is-loading disabled');
 					create_collection_linklist();
 					return false;
 				}),
 				a2 = $('<a/>',{
-					'class':'btn tooltip-bottom tooltip fd-btn',
-					style:'margin-bottom:.5em',
+					'class':'btn tooltip-bottom tooltip fd-btn sst',
 					href:'#'
-				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with every page</span></span>Create Pages linklist').on('click',function(){
+				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a menu with every page</span></span>Create Pages menu').on('click',function(){
 					$(this).addClass('is-loading disabled');
 					create_pages_linklist();
 					return false;
 				}),
 				a3 = $('<a/>',{
-					'class':'btn tooltip-bottom tooltip fd-btn',
-					style:'margin-bottom:.5em',
+					'class':'btn tooltip-bottom tooltip fd-btn sst',
 					href:'#'
-				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a linklist with all vendors</span></span>Create Vendor linklist').on('click',function(){
+				}).html('<span class="tooltip-container"><span class="tooltip-label">Create a menu with all vendors</span></span>Create Vendor menu').on('click',function(){
 					$(this).addClass('is-loading disabled');
 					create_vendors_linklist();
 					return false;
@@ -2069,10 +2068,10 @@ return {
 
 				if(d.length){d.append('<br>',a1,'<br>',a2,'<br>',a3);}
 
-				var addLinkListBtn = $('.section-summary a[href="/admin/link_lists/new"]');
+				var addLinkListBtn = $('.ui-annotated-section__description a[href="/admin/link_lists/new"]');
 				if(addLinkListBtn.length){
 
-					var linklistEditButtons = $('#link_lists .next-grid__cell header a:last-child');
+					var linklistEditButtons = $('#link_lists .next-grid--no-outside-padding a:last-child');
 					if(linklistEditButtons.length){
 
 						var optionAppend = '';
@@ -2093,7 +2092,7 @@ return {
 
 							if(optionAppend.length){
 								var selectLinkList = $('<select />',{
-									'style':'margin-top:1em;border-radius:3px;border-color: #D3D3D3;color: #479ccf;width: 100%'
+									'style':'width: 100%'
 								}).on('change',function(){
 
 									var t = $(this);
@@ -2103,10 +2102,10 @@ return {
 										_.redirect(v);
 									}
 
-								}).html('<option value="">Jump to linklist</option>'+optionAppend);
+								}).html('<option value="">Select Menu</option>'+optionAppend);
 
-								var div = $('<div />');
-								div.append(selectLinkList,'<small style="margin:.5em 0">Select a linklist to quickly jump to edit view. Useful for when you have many linklists...</small>');
+								var div = $('<div />',{'class':'sst'});
+								div.append('<label class="next-label">Select a menu to quickly edit.</label>',selectLinkList);
 								addLinkListBtn.after(div);
 							}
 
@@ -2540,7 +2539,7 @@ return {
 					q.hide();
 				}
 
-				$('div.sub_section-summary').append(a);
+				$('.metafield-content').after(a);
 			}
 
 		},
@@ -2770,7 +2769,8 @@ return {
 			var imageSectionTarget = $('.next-card.images .wrappable__item.wrappable__item--no-flex:last');
 			if(imageSection.length && imageSectionTarget.length){
 				var removeImagesBtn = $('<a />',{
-					'class':'btn btn--plain'
+					'class':'btn btn--plain tooltip tooltip-bottom',
+					'style':'color:crimson '
 				}).html('Remove all images<span class="tooltip-container"><span class="tooltip-label">Instant, and no undo</span></span>').on('click',function(e){
 					e.preventDefault();
 					var t = $(this);
@@ -2787,26 +2787,6 @@ return {
 			}else{
 				_.notice('Unable to find image section',true);
 			}
-
-
-			/*var page_title = $('h1.header-main'),*/
-			
-			/*
-			if(page_title.length){
-				if(typeof productViewLink !== 'undefined'){
-					var viewInStore = $('<a />',{
-						href:productViewLink,
-						target:'_blank',
-						style:'display: inline-block;vertical-align: top;',
-						title:'View in Store'
-					});
-
-					viewInStore.append('<i class="next-icon next-icon--20 next-icon--header next-icon--website-slate-lightest"></i>');
-					page_title.append(viewInStore);
-				}
-
-			}
-			*/
 
 			var variants_ids = {};
 
@@ -3105,7 +3085,7 @@ return {
 			if(targetHTML.length){
 				var previewButton = targetHTML.find('a').eq(0).clone(true);
 				var itemViewLink = previewButton.attr('href');	
-				var nextCardSecondary = $(next_secondary_HTML);
+				var nextCardSecondary = $(next_item_HTML);
 
 				nextCardSecondary.find('.next-card').append(metafieldloader);
 				targetHTML.after(nextCardSecondary);
@@ -3731,7 +3711,7 @@ return {
 				}),
 				l = $('<li/>'),
 				c = $('<a/>',{
-					'class':'btn btn-separate',
+					'class':'fd-btn btn btn-separate',
 					'href':'#'
 				}).html('Duplicate').on('click',function(e){
 					e.preventDefault();
@@ -4040,7 +4020,7 @@ return {
 			var targetHTML = $(selector_next_secondary);
 			
 			if(targetHTML.length){
-				var nextCardSecondary = $(next_secondary_HTML);
+				var nextCardSecondary = $(next_item_HTML);
 				nextCardSecondary.find('.next-card').append(metafieldloader);
 				targetHTML.after(nextCardSecondary);
 				var loadinto = $('div.metafield-content');
@@ -4053,7 +4033,7 @@ return {
 
 			var targetHTML = $(selector_next_secondary);
 			if(targetHTML.length){
-				var nextCardSecondary = $(next_secondary_HTML);
+				var nextCardSecondary = $(next_item_HTML);
 				nextCardSecondary.find('.next-card').append(metafieldloader);
 				targetHTML.after(nextCardSecondary);
 				var loadinto = $('div.metafield-content');
@@ -4163,7 +4143,7 @@ return {
 				if(m.length){
 
 					_.data('m',m);
-					$('#metacount').text(m.length).addClass('active');
+					$('#metacount').text(m.length).removeClass('hidden');
 					for (var i = 0, len = m.length; i < len; i++) {
 						response+= '<option data-type="' +m[i].value_type + '" data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
 						v.metafields[m[i].id] = { namespace: m[i].namespace, value: m[i].value, key: m[i].key };
@@ -4176,7 +4156,7 @@ return {
 
 				}else{
 
-					$('#metacount').text('0').removeClass('active');
+					$('#metacount').text('0').addClass('hidden');
 					_.data('m',false);
 					$('#restorebackup').hide();
 					response = metafield_default;
