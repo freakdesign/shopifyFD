@@ -2203,7 +2203,6 @@ return {
 			_.showSkuHeaderCount();
 			_.data('collections',false);
 			
-			/* var targetHTML = $('.header-right').eq(0); */
 			var targetHTML = $('.header .header__secondary-actions:first');
 			if(!targetHTML.length){targetHTML = $('.header .header__secondary-actions:first');}
 			if(!targetHTML.length){targetHTML = $('.header .header__primary-actions:first')}
@@ -3676,16 +3675,10 @@ return {
 		},
 		setup_custom_collections:function(){
 
-			/*
-			var targetHTML = $('.next-layout__sidebar').eq(0); 
-			if(!targetHTML.length){targetHTML = $('.next-grid__cell--third:first')}
-			*/
 
-			var targetHTML = $('.next-layout__sidebar').eq(0); /*.section.description .section-summary*/
-			if(!targetHTML.length){targetHTML = $('.next-grid__cell--third:first')}
+			var targetHTML = $(selector_next_secondary); 
 
-			var headerButtons = $('.header-row .header-right').eq(0);
-			if(!headerButtons.length){headerButtons = $('.header .header__secondary-actions:first');}
+			var headerButtons = $('.header .header__secondary-actions:first');
 			if(!headerButtons.length){headerButtons = $('.header .header__primary-actions:first')}
 
 			if(targetHTML.length){
@@ -3832,7 +3825,6 @@ return {
 
 							countCollects();
 							
-
 						}
 
 
