@@ -44,9 +44,9 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	*/
 
-	var metafieldform = '<label class="next-label">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hidden btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hidden delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hidden"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
+	var metafieldform = '<label class="next-label">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hide" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hide btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hide delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hide"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
 
-	var metafieldloader = '<div class="next-card fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <span id="metacount" class="animated bounce hidden">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
+	var metafieldloader = '<div class="next-card fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <span id="metacount" class="animated bounce hide">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
 
 	var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
 
@@ -58,7 +58,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+_savelabel+'</a> <a class="btn btn-slim saveinteger" href="#">'+_savelabel+' as Integer</a> <a title="Delete" class="delete ico ico-16 ico-delete" href="#">delete</a></span></div>';
 
-	var appnav = '<li><a id="aboutapp" href="#">About ShopifyFD</a></li><li class="hidden"><a id="togglestyle" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
+	var appnav = '<li><a id="aboutapp" href="#">About ShopifyFD</a></li><li class="hide"><a id="togglestyle" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Toggle ShopifyFD style overrides</span></span>Toggle CSS</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li><a href="//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
 
 	var bulk_html_box = '<h2 class="warning"><strong>ShopifyFD Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
@@ -266,10 +266,10 @@ return {
 				}
 
 				var metacount = $('#metacount');
-				metacount.text(m.length).removeClass('hidden');
+				metacount.text(m.length).removeClass('hide');
 
 				if(m.length === 0){
-					metacount.addClass('hidden');
+					metacount.addClass('hide');
 				}
 
 				for (var i = 0, len = m.length; i < len; i++) {
@@ -318,7 +318,7 @@ return {
 
 			$('#advanced_meta_features').off('click').on('click',function(){
 				var adv_meta = $('#advanced_meta').eq(0);
-				adv_meta.toggleClass('hidden');
+				adv_meta.toggleClass('hide');
 				return false;
 			});
 
@@ -446,8 +446,8 @@ return {
 				$('#metafield_value').val(m.value);
 				$('#metafield_id').val(t.attr('data-id'));
 
-				$('#shopifyjs_deletemetafield').removeClass('hidden');
-				/*$('#shopifyjs_copymetafield').removeClass('hidden');*/
+				$('#shopifyjs_deletemetafield').removeClass('hide');
+				/*$('#shopifyjs_copymetafield').removeClass('hide');*/
 
 
 			}else{
@@ -717,8 +717,8 @@ return {
 		$('#metafield_key').val('').prop("disabled", false);
 		$('#metafield_value').val('');
 		$('#metafield_id').val('');
-		$('#shopifyjs_deletemetafield').addClass('hidden');
-		/*$('#shopifyjs_copymetafield').addClass('hidden');*/
+		$('#shopifyjs_deletemetafield').addClass('hide');
+		/*$('#shopifyjs_copymetafield').addClass('hide');*/
 
 	},
 	supports_html5_storage:function(){
@@ -2162,7 +2162,7 @@ return {
 			if(!nextCard.length){ nextCard = $('#url_redirects') }
 
 			if(nextCard.length){
-				var redirectPanel = $('<div class="next-grid next-grid--outer-grid" style="border-bottom: 1px solid #DADADA;margin-bottom: 1em;padding-bottom: 1em;"><div class="next-grid__cell next-grid__cell--third"><h2 class="next-heading">Bulk Redirects</h2><p>To bulk add redirects manually add the path (old url) and target (new url) separated with a comma to the input box. As with any bulk action, run a small sample first before processing 1000s of items.<br><br></p><ul><li>One redirect per line.</li><li>A log will show progress and any errors</li></ul></div><div class="next-grid__cell"><h2 class="next-heading">Paste URLs</h2><p>An example of the redirect is shown below:<br><code>http://freakdesign.com.au/old-url,http://freakdesign.com.au/new-url</code><br>or<br><code>/old-url,pages/new-url</code></p><br><textarea name="bulk-redirect-paste"></textarea><br><br><a href="#" class="btn fd-btn">Process</a><div class="fadein hidden bulk-redirect-log"><br><br><h2 class="next-heading">Activity Log</h2><textarea name="bulk-redirect-log"></textarea></div></div></div>');
+				var redirectPanel = $('<div class="next-grid next-grid--outer-grid" style="border-bottom: 1px solid #DADADA;margin-bottom: 1em;padding-bottom: 1em;"><div class="next-grid__cell next-grid__cell--third"><h2 class="next-heading">Bulk Redirects</h2><p>To bulk add redirects manually add the path (old url) and target (new url) separated with a comma to the input box. As with any bulk action, run a small sample first before processing 1000s of items.<br><br></p><ul><li>One redirect per line.</li><li>A log will show progress and any errors</li></ul></div><div class="next-grid__cell"><h2 class="next-heading">Paste URLs</h2><p>An example of the redirect is shown below:<br><code>http://freakdesign.com.au/old-url,http://freakdesign.com.au/new-url</code><br>or<br><code>/old-url,pages/new-url</code></p><br><textarea name="bulk-redirect-paste"></textarea><br><br><a href="#" class="btn fd-btn">Process</a><div class="fadein hide bulk-redirect-log"><br><br><h2 class="next-heading">Activity Log</h2><textarea name="bulk-redirect-log"></textarea></div></div></div>');
 
 				var redirectButton = redirectPanel.find('a');
 				var redirectTextarea = redirectPanel.find('textarea[name="bulk-redirect-paste"]');
@@ -2185,7 +2185,7 @@ return {
 							}
 						};
 						if(redirectData.length){
-							redirectTextareaLog.val('').parent().removeClass('hidden');
+							redirectTextareaLog.val('').parent().removeClass('hide');
 							_.bulk_redirects(redirectData);
 						}
 					}
@@ -2684,14 +2684,14 @@ return {
 			/* ADD SITEMAP BUTTON */
 			var sectionVisibility = $('.next-card.visibility .next-card__section:first');
 			if(sectionVisibility.length){
-				var seoHiddenBtn = $('<a />',{
+				var seohideBtn = $('<a />',{
 					'class':'btn fd-btn'
 				}).text('Hide from Sitemap').on('click',function(e){
 					e.preventDefault();
 					var metaJSON = {
 						"metafield": {
 							'namespace': 'seo',
-							'key': 'hidden',
+							'key': 'hide',
 							'value': 1,
 							'value_type': 'integer'
 						}
@@ -2705,7 +2705,7 @@ return {
 						data: metaJSON,
 						success: function(d){
 							 _.updatedropdown();
-							_.notice("SEO hidden metafield added!");
+							_.notice("SEO hide metafield added!");
 						},
 						error:function(){
 							_.notice("Failed to save metafield",true);
@@ -2714,7 +2714,7 @@ return {
 					});	
 
 				});
-				sectionVisibility.append('<p style="margin:1em 0">Add metafield to remove this product from the sitemap. It is <b>very</b> important that you <a href="http://docs.shopify.com/api/unlinked/hide-from-search-engines-and-sitemaps" target="_blank">understand</a> what doing this means. If you don\'t, leave it alone.</p>',seoHiddenBtn);
+				sectionVisibility.append('<p style="margin:1em 0">Add metafield to remove this product from the sitemap. It is <b>very</b> important that you <a href="http://docs.shopify.com/api/unlinked/hide-from-search-engines-and-sitemaps" target="_blank">understand</a> what doing this means. If you don\'t, leave it alone.</p>',seohideBtn);
 			}
 
 
@@ -2796,7 +2796,7 @@ return {
 
 				var addVariantButton = inventorySummary.find('a.btn');
 				var bulkPriceEdit = $('<div />',{
-					'class':'next-card__section fadein hidden',
+					'class':'next-card__section fadein hide',
 					'style':'background: #F5F6F7;'
 				});
 				var toggleBulkPriceEdit = $('<a />',{
@@ -2806,7 +2806,7 @@ return {
 
 				toggleBulkPriceEdit.on('click',function(e){
 					e.preventDefault();
-					bulkPriceEdit.toggleClass('hidden');
+					bulkPriceEdit.toggleClass('hide');
 				});
 
 				bulkPriceEdit.html('<h2>Edit all variants</h2><p style="margin: .5em 0 1em;font-size: 12px;border-bottom: 1px solid #ccc;padding-bottom: .5em;">Bulk Editing comes with risks. Proceed with caution.</p><label style="margin-top:1.5em">Set Compare at Price<br><small>0 will clear the compare at price</small></label><input type="number" style="width:50%" value="0"> <a class="bulk-compare-save tooltip tooltip-bottom btn fd-btn"><span class="tooltip-container"><span class="tooltip-label">Save Compare at Price for all variants</span></span>Save</a>');
@@ -2970,7 +2970,7 @@ return {
 
 				var a=$('<a/>',{
 					'href':'#',
-					'class':'btn fd-btn hidden',
+					'class':'btn fd-btn hide',
 					'style':'padding-left:.5em'
 				}).text('Edit selected weights').on('click',function(){
 
@@ -3035,7 +3035,7 @@ return {
 
 				}),
 				b=$('<span/>',{
-					'class':'hidden'
+					'class':'hide'
 				});
 
 				bulkpanel.append(a);
@@ -3045,9 +3045,9 @@ return {
 					var l = $('tr.variant input[type="checkbox"]:checked').length;
 
 					if(l > 1){
-						a.removeClass("hidden");
+						a.removeClass("hide");
 					}else{
-						a.addClass("hidden");
+						a.addClass("hide");
 					}
 
 				});
@@ -3161,516 +3161,265 @@ return {
 			}
 
 		},
-		shipping_remove_all:function(i,c){
-
-			/*
-
-			 ____                                     _     _             _
-			|  _ \ ___ _ __ ___   _____   _____   ___| |__ (_)_ __  _ __ (_)_ __   __ _
-			| |_) / _ \ '_ ` _ \ / _ \ \ / / _ \ / __| '_ \| | '_ \| '_ \| | '_ \ / _` |
-			|  _ <  __/ | | | | | (_) \ V /  __/ \__ \ | | | | |_) | |_) | | | | | (_| |
-			|_| \_\___|_| |_| |_|\___/ \_/ \___| |___/_| |_|_| .__/| .__/|_|_| |_|\__, |
-			                                                 |_|   |_|            |___/
-			Remove all shipping entries
-
-			*/
-
-			if(i>=0){
-				$.ajax({
-					type: "DELETE",
-					url: '/admin/countries/'+c[i].id+'.json',
-					dataType: 'json',
-					success: function(d){
-						_.notice('removed '+c[i].name);
-						i = i-1;
-						_.shipping_remove_all(i,c);
-					}
-				});
-			}else{
-				var url = '/admin/settings/shipping';
-				$.ajax({
-					'url': url,
-					'success': function(){
-						$('div.shipping-rate-table').remove();
-					}
-					});
-			}
-
-		},
-		save_new_rates_FIX:function(to_add,i,t){
-			/*
-			if this is not longer needed remember to change
-			the save_new_rates function call back to the 
-			original one...
-			*/
-			
-			if('undefined' === typeof i){ return; }			
-			if('undefined' === typeof to_add[i]){ return; }
-			if('undefined' === typeof t){ return; }
-
-			var cid = t.data('cid');
-			var rate = to_add[i];
-			var type = rate.type;
-
-			if(type == 'weight'){
-				rate.type = 'weight_based'
-			}else if(type == 'price'){
-				rate.type = 'price_based'
-			}else if(type = 'carrier'){
-				rate.type = 'carrier_based'
-			}
-
-			rate.country_id = cid; /* update to match the target country */
-			rate.new_type = rate.type; /* NEW setting. Not sure what the use is... */
-
-			/* be sure to include the utf8 var */
-			var data = {
-				utf8:'✓',
-				shipping_rate:rate
-			}
-
-			_.notice('Pasting "'+rate.name +'"...');
-
+		getCountries:function(settings){
+			_.notice('Loading current country list');
 			$.ajax({
-				type: "POST",
-				url: '/admin/shipping_rates',
-				data: data,
-				success: function(d, statusText, xhr){
-
-					t.parent().parent().find('input.paste-checkbox').remove().end().removeClass('active-row').find('table').append('<tbody><tr style="background:#efefef"><td>'+to_add[i].name+'</td><td>New rate pasted.</td><td>'+to_add[i].price+'</td></tr></tbody>');
-
-					if(i === (to_add.length-1)){
-						_.notice('Paste complete');
-					}else{
-						i++;
-						_.save_new_rates_FIX(to_add,i,t);
+				type: "GET",
+				url: '/admin/countries.json',
+				dataType: 'json',
+				success: function(d){
+					if(d.countries.length){
+						_.data('countries',d);
+						_.notice(d.countries.length + " countries loaded");
 					}
 				},
-				error:function(d, statusText, xhr){
-					_.notice('Error pasting. '+xhr, true);
+				error:function(){
+					_.notice('Loading failed',true);
+				}
+			});
+		},
+		getShippingZone:function(settings){
+
+			if(typeof settings.urls ==='undefined'){ return false }
+
+			_.notice('Copying rates ('+ settings.urls.length +')');
+			var currentZoneUrl = settings.urls[0];
+
+			if(currentZoneUrl.indexOf('price_based') < 0 && currentZoneUrl.indexOf('weight_based') < 0){ return false }
+
+			var zone = {};
+
+			if(currentZoneUrl.indexOf('price_based')>-1){
+				zone.shippingType='price_based';
+			}else{
+				zone.shippingType='weight_based';
+			}
+
+			$.ajax({
+				url: currentZoneUrl,
+				success: function(d){
+					var html = $(d);
+
+					zone.shippingRateName = html.find('#shipping_rate_name').val();
+					zone.shippingRatePrice = html.find('#shipping_rate_price').val();
+
+					if(zone.shippingType === 'price_based'){
+						zone.shippingRateMinOrder = html.find('#shipping_rate_min_order_subtotal').val();
+						zone.shippingRateMaxOrder = html.find('#shipping_rate_max_order_subtotal').val();	
+					}else{
+						zone.shippingRateWeightLow = html.find('#shipping_rate_weight_low').val();
+						zone.shippingRateWeightHigh = html.find('#shipping_rate_weight_high').val();
+					}
+
+					if(typeof settings.callback ==='function'){ settings.callback(zone,settings.urls) }
+
 				}
 			});
 
 		},
-		save_new_rates:function(to_add,i,t){
-			/*
-			The endpoints in the dashboard have been removed.
-			Use the slower but functional save_new_rate_FIX function for now.
-			*/
-			if('undefined' !== typeof to_add[i]){
-
-				var d = to_add[i],
-				o ={},
-				type = d.type,
-				path='';
-
-				delete d.type; /* remove this */
-
-				if('string' === typeof type){
-
-					if(type === 'weight'){
-						o = {weight_based_shipping_rate:{}};
-						o.weight_based_shipping_rate = d;
-						path='/admin/weight_based_shipping_rates.json';
-
-					}else if(type === 'price'){
-						o = {price_based_shipping_rate:{}}
-						o.price_based_shipping_rate = d,
-						path='/admin/price_based_shipping_rates.json';
-
-					}else if (type === 'carrier'){
-						o = {carrier_shipping_rate_provider:{}}
-						o.carrier_shipping_rate_provider = d,
-						path='/admin/carrier_shipping_rate_providers.json';
-					}
-
-					$.ajax({
-						type: "POST",
-						url: path,
-						dataType: 'json',
-						data: o,
-						success: function(d){
-
-							t.parent().parent().find('table').append('<tbody><tr style="background:#efefef"><td>'+to_add[i].name+'</td><td>New rate pasted.</td><td>'+to_add[i].price+'</td></tr></tbody>');
-
-							if(i === (to_add.length-1)){
-								_.notice('Paste complete');
-							}else{
-								i++;
-								_.save_new_rates(to_add,i,t);
-							}
-
-						},
-						error:function(){
-							_.notice('Error pasting.', true);
-						}
-					});
-
-				}else{
-					_.notice('missing type: ' + type, true);
-				}
-
-			}else{
-				_.notice('save_new_rates error - length',true);
+		deleteZones:function(zones){
+			if(typeof zones === 'undefined'){ return }
+			_.notice('Delete zone ('+zones.length+')');
+			var url = '/admin/settings/shipping_zones/'+zones[0];
+			var data = {
+				'utf8':'✓',
+				'_method':'delete'
 			}
-		},
-		bulkPasteShippingQueue:function(checkedInputs,i){
-			if(typeof checkedInputs === 'undefined'){ return }
-			if(typeof i === 'undefined'){ var i = 0 }
-
-			if(checkedInputs.length && i < checkedInputs.length){
-				var t = checkedInputs.eq(i);
-				t.parent().find('a.bulkpaste:first').click();
-				setTimeout(function(){
-					_.bulkPasteShippingQueue(checkedInputs,++i)
-				},5000);
-			}
-		},
-		setup_shipping:function(go){
-
-			return;
-
-			if('undefined' !== typeof go){
-
-				/* TEMP ERROR WARNING */
-				var sectionWarning = $('<div />',{'class':'box error animated fadein'}).html('Warning - The "Rates Copy and Paste" feature is experimental. Use with caution, and at your own risk.');
-				$('div.header-row:first').after(sectionWarning);
-				/* ================== */
-
-				var shippingSettingsHeader = $('#settings-shipping header').eq(0);
-				if(shippingSettingsHeader.length){
-
-					var new_buttons = $('<div class="header-right animated fadein"><div class="header-action"><a class="btn fd-btn tooltip-bottom tooltip bulk-paste-btn hidden" href="#"><span class="tooltip-container"><span class="tooltip-label">Paste to selected countries</span></span>Bulk Paste</a> <a class="btn tooltip-bottom tooltip bulk-check-btn fd-btn hidden" href="#"><span class="tooltip-container"><span class="tooltip-label">Check all regions</span></span>Check All</a> <a class="btn fd-btn tooltip-bottom tooltip bulk-options" href="#"><span class="tooltip-container"><span class="tooltip-label">Show bulk delete options</span></span>Bulk Delete Options</a> <a class="btn fd-btn tooltip-bottom tooltip export-as-json" href="#"><span class="tooltip-container"><span class="tooltip-label">Export countries</span></span>Export JSON</a></div></div>');
-					if(!$('.header__secondary-actions').length){
-						new_buttons.addClass('header__secondary-actions');
+			$.ajax({
+				type: "POST",
+				url: url,
+				data: data,
+				success: function(d){
+					$('a[href="/admin/settings/shipping_zones/'+zones[0]+'"]').parents('.zone-shipping-rate').addClass('disabled').css({'opacity':'.3'});
+					zones.shift();
+					if(zones.length){
+						_.deleteZones(zones);
+					}else{
+						$('.delete-zones').removeClass('is-loading');
+						_.notice('Zones deleted. Refresh page to confirm');
 					}
-					new_buttons.find('a.export-as-json').on('click',function(e){
-						e.preventDefault();
-						_.fd_modal(true, '<textarea readonly style="min-height:300px">' + JSON.stringify( _.data('countries').countries ) + '</textarea><p><br><a href="/admin/countries.json" target="_blank">View original JSON object in new window</a></p>','Export all countries', true);
-					});
-
-					new_buttons.find('a.bulk-options').on('click',function(){
-
-						var myhtml = $('<p class="box warning">This will delete ALL of your countries. There is no undo. Proceed at own risk!</p><div><div class="span1"><a href="#" class="btn delete_all delete">Delete</a></div><div class="span2">'+aargh_msg+'</div></div>');
-						myhtml.find('a.delete_all').on('click',function(){
-
-							$.ajax({
-								type: "GET",
-								url: '/admin/countries.json',
-								dataType: 'json',
-								success: function(d){
-									if(d.countries.length){
-										v.countries = d.countries;
-										_.notice(d.countries.length + " countries returned");
-										_.shipping_remove_all(d.countries.length-1,d.countries);
-									}
-								},
-								error:function(){
-									_.notice('Error removing country. Process stopped.',true);
-								}
-							});
-
-							return false;
-						});
-
-						_.fd_modal(true,myhtml,'Delete all countries',true);
-
-						return false;
-					});
-
-					new_buttons.find('a.bulk-check-btn').on('click',function(e){
-						e.preventDefault();
-						$('input.paste-checkbox:not(.hidden)').prop('checked',true).change();
-					});
-
-					new_buttons.find('a.bulk-paste-btn').on('click',function(e){
-						e.preventDefault();
-						var checkedInputs = $('input.paste-checkbox:checked:not(.hidden)');
-						_.bulkPasteShippingQueue(checkedInputs,0);
-					});
-
-					shippingSettingsHeader.append(new_buttons);
-
-				}else{
-					_.notice('ShopifyFD error : setup_shipping');
+				},
+				error: function(d){
+					$('.delete-zones').removeClass('is-loading');
+					_.notice('Error deleting rates. Refresh page to confirm',true);
+					return;
 				}
-
-				if($('div.shipping-rate-table').length === _.data('countries').countries.length){
-
-					var shipping_rates = {
-						weight_based_shipping_rates:[],
-						price_based_shipping_rates:[],
-						carrier_shipping_rate_providers:[]
-					};
-
-					var create_shipping_rate = function(c,to_add,t){
-
-						if(to_add.length){
-
-							var to_delete = [];
-
-							$.ajax({
-								type: "GET",
-								url: '/admin/countries/'+c+'.json',
-								dataType: 'json',
-								success: function(d){
-
-									/* 
-										now that we have the delete list - let's delete
-										we should queue them up, but let's try a mini burst 
-										This could cause issues. Watch carefully.
-
-									*/
-
-									var w = d.country.weight_based_shipping_rates,
-									p = d.country.price_based_shipping_rates,
-									c = d.country.carrier_shipping_rate_providers;
-
-									// build up the delete list
-
-									for (var i = 0, len = w.length; i < len; i++) {
-										to_delete.push([w[i].id,'weight_based']);
-									}
-
-									for (var i = 0, len = p.length; i < len; i++) {
-										to_delete.push([p[i].id,'price_based']);
-									}
-
-									for (var i = 0, len = c.length; i < len; i++) {
-										to_delete.push([c[i].id,'carrier_based']);
-									}
-
-									/*
-
-									for (var i = 0, len = to_delete.length; i < len; i++) {
-
-										var path = '';
-
-										if(to_delete[i][1] === 'weight'){
-											path='/admin/weight_based_shipping_rates/';
-										}else if(to_delete[i][1] === 'price'){
-											path='/admin/price_based_shipping_rates/';
-										}else if(to_delete[i][1] === 'carrier'){
-											path='/admin/carrier_shipping_rate_providers/';
-										}
-
-										$.ajax({
-											type: "DELETE",
-											url: path+to_delete[i][0]+'.json',
-											dataType: 'json',
-											success: function(d){},
-											error: function(d){
-												_.notice('Failed to replace rate',true);
-											}
-										});
-
-									} 
-									*/
-
-									for (var i = 0, len = to_delete.length; i < len; i++) {
-
-										var type = to_delete[i][1];
-
-										$.ajax({
-											type: "POST",
-											url: '/admin/shipping_rates/'+to_delete[i][0],
-											data:{
-												utf8:'✓',
-												_method:'delete',
-												shipping_rate:{
-													type:type
-												}
-											},
-											success: function(d){},
-											error: function(d){
-												_.notice('Failed to replace rate',true);
-											}
-										});
-									}
-
-									_.save_new_rates_FIX(to_add,0,t);
-
-								},
-								fail:function(){
-									_.notice('I failed to get the country.json',true);
-								}
-							}); /* end ajax */
-
-						}else{
-							_.notice('Missing items to add',true)
-						}	
-					}; /* end create_shipping_rate() */
-
-
-					$('div.shipping-rate-table').each(function(index){
-
-						var t=$(this);
-						var copy = $('<a/>',{
-							'href':'#',
-							'data-country':_.data('countries').countries[index].name,
-							'data-cid':_.data('countries').countries[index].id,
-							'data-index':index,
-							'class':'fadein btn fd-btn btn-slim copyrates tooltip tooltip-bottom',
-							'style':'float:right;margin-right:.5em'
-						}).html('<span class="tooltip-container"><span class="tooltip-label">Copy Rates to Memory</span></span>Copy').on('click',function(){
-
-							var t=$(this),
-								i = t.attr('data-index'),
-								cname = t.attr('data-country'),
-								cid = t.attr('data-cid');
-
-							$('a.copyrates').removeClass('btn-primary');
-							
-
-							$.ajax({
-								type: "GET",
-								url: '/admin/countries/'+cid+'.json',
-								dataType: 'json',
-								success: function(d){
-									shipping_rates.weight_based_shipping_rates = d.country.weight_based_shipping_rates;
-									shipping_rates.price_based_shipping_rates = d.country.price_based_shipping_rates;
-									shipping_rates.carrier_shipping_rate_providers = d.country.carrier_shipping_rate_providers;
-									_.notice('Ready to paste '+cname+'.');
-
-									/* lazy show all */
-									$('a.bulkpaste, input.paste-checkbox').removeClass('hidden');
-									t.addClass('btn-primary').parent().find('input.paste-checkbox').prop('checked', false).addClass('hidden');
-									t.parent().find('a.bulkpaste').addClass('hidden');
-
-									if($('input.paste-checkbox:checked').length === 0){
-										$('a.bulk-check-btn').removeClass('hidden');
-									}
-
-								},
-								error:function(){
-									_.notice('Error copying rates',true);
-								}
-							});
-
-							return false;
-						});
-						
-						var pasteCheckbox = $('<input />',{
-							'type':'checkbox',
-							'style':'float:right',
-							'class':'hidden paste-checkbox'
-						}).change(function() {
-
-							var t=$(this);
-							if(this.checked) {
-								t.parent().parent().addClass('active-row');
-							}else{
-								t.parent().parent().removeClass('active-row');
-							}
-
-							var inputCheckedLength = $('input.paste-checkbox:checked').length;
-
-							if(inputCheckedLength === 0){
-								$('a.bulk-check-btn').removeClass('hidden');
-								$('a.bulk-paste-btn').addClass('hidden');
-							}else{
-								$('a.bulk-check-btn').addClass('hidden');
-								$('a.bulk-paste-btn').removeClass('hidden');
-							}
-						});
-
-						var paste = $('<a/>',{
-							'href':'#',
-							'data-country':_.data('countries').countries[index].name,
-							'data-cid':_.data('countries').countries[index].id,
-							'data-index':index,
-							'class':'hidden fadein bulkpaste btn btn-slim fd-btn tooltip tooltip-bottom',
-							'style':'float:right;margin-right:.5em'
-						}).html('<span class="tooltip-container"><span class="tooltip-label">Will replace ALL existing rates.</span></span>Paste').on('click',function(){			
-							var t=$(this),
-							cid = t.attr('data-cid'),
-							shipping_rates_copy = shipping_rates,
-							weight = shipping_rates_copy.weight_based_shipping_rates,
-							price = shipping_rates_copy.price_based_shipping_rates,
-							carrier = shipping_rates_copy.carrier_shipping_rate_providers,
-							to_add = [],
-							count = 0;
-
-							/* harsh, but may avoid conflicts */
-							t.parent().parent().find('tbody').remove();
-							/*t.parent().find('a.copyrates').remove();*/
-
-							t.parent().find('a').addClass('hidden');
-
-							for (var i = 0, len = weight.length; i < len; i++) {
-								weight[i].country_id=cid;
-								delete weight[i].id;
-								weight[i].type = 'weight';
-
-								/* add to add list */
-								to_add[count] = weight[i];
-								count++;
-							}
-
-							for (var i = 0, len = price.length; i < len; i++) {
-								price[i].country_id=cid;
-								delete price[i].id;
-								price[i].type = 'price';
-
-								/* add to add list */
-								to_add[count] = price[i];
-								count++;
-
-							}
-
-							for (var i = 0, len = carrier.length; i < len; i++) {
-								carrier[i].country_id=cid;
-								delete carrier[i].id;
-								carrier[i].type = 'carrier';
-
-								/* add to add list */
-								to_add[count] = carrier[i];
-								count++;
-
-							}					
-
-							/* We have the add list, let's do this */
-							create_shipping_rate(cid,to_add,t);
-
-							return false;
-
-						}); /* end paste button */
-					
-						/* add the buttons */
-						var appendAfter = t.find('a[bind-event-click="addShippingRateModal.show()"]');
-						if(appendAfter.length){
-							appendAfter.after(copy,paste,pasteCheckbox);
-						}else{
-							_.notice('Error. Unable to add copy button.',true);
-							return false;
-						}
-
-					});
-
-				}else{
-					_.notice("Mismatch in country count. Reload this page.",true)
+			});
+		},
+		addZones:function(rates,zone){
+			_.notice('Pasting rates ('+rates.length+')');
+			var currentZone = rates[0];
+			var data = {
+				utf8:'✓',
+				'':[currentZone.shippingType],
+				shipping_rate:{
+					type:currentZone.shippingType,
+					new_type:currentZone.shippingType,
+					display_type:currentZone.shippingType,
+					name:currentZone.shippingRateName,
+					price:currentZone.shippingRatePrice
 				}
+			}
 
+			var amountTo = '';
+			var amountFrom = '';
+
+			if(currentZone.shippingType === 'weight_based'){
+				data.shipping_rate.weight_low = currentZone.shippingRateWeightLow;
+				data.shipping_rate.weight_high = currentZone.shippingRateWeightHigh;
+				amountFrom = currentZone.shippingRateWeightLow || '0';
+				amountTo = currentZone.shippingRateWeightHigh || 'and up';
+			}else if(currentZone.shippingType === 'price_based'){
+				data.shipping_rate.min_order_subtotal = currentZone.shippingRateMinOrder;
+				data.shipping_rate.max_order_subtotal = currentZone.shippingRateMaxOrder;
+				amountFrom = currentZone.shippingRateMinOrder || '0';
+				amountTo = currentZone.shippingRateMaxOrder || 'and up';
 			}else{
+				return;
+			}
 
-				_.notice('Loading current country list');
+			var ratesPasted = function(){
+				_.notice('Pasting complete. Reload page to check results');
+				$('.paste-zones').removeClass('disabled is-loading');
+			}
 
-				$.ajax({
-					type: "GET",
-					url: '/admin/countries.json',
-					dataType: 'json',
-					success: function(d){
-						if(d.countries.length){
-							_.data('countries',d);
-							_.notice(d.countries.length + " countries loaded");
-							_.setup_shipping(true);
-						}
-					},
-					error:function(){
-						_.notice('Loading failed',true);
+			var rateTableHtml = '<div class="table-wrapper table-wrapper--scrollable" style="opacity:.5"><table class="table--zone-rates next-table--no-outside-padding"><thead><tr><td>'+currentZone.shippingRateName+'</td><td></td></tr></thead><tbody><tr><td>'+amountFrom+' - '+amountTo+'</td><td class="type--right">'+currentZone.shippingRatePrice+'</td></tr></tbody></table></div>';
+
+			$.ajax({
+				type: "POST",
+				dataType:'html',
+				url: '/admin/shipping_rates/'+zone,
+				data:data,
+				success: function(d){
+					var zoneTables = $('a[href="/admin/settings/shipping_zones/'+zone+'"]').parents('.zone-shipping-rate').find('.zone-shipping-rates');
+					zoneTables.append(rateTableHtml);
+					rates.shift();
+					if(rates.length){ _.addZones(rates,zone) }else{
+						ratesPasted();
+					}
+				},
+				error: function(d){
+					_.notice('Error when pasting a rate',true);
+					rates.shift();
+					if(rates.length){ _.addZones(rates,zone) }else{
+						ratesPasted();
+					}
+				}
+			});
+
+		},
+		setup_shipping:function(){
+
+			var shippingZonePanels = $('.zone-shipping-rate');
+			if(shippingZonePanels.length){
+				var zonePanelLinks = $('.zone-shipping-rate > div').not('.zone-shipping-rates').find('a').parent();
+
+				var btnDeleteZone = $('<a />',{
+					'class':'btn fd-btn delete delete-zones',
+					'href':'#'
+				}).text('Delete all zones').on('click',function(e){
+					e.preventDefault();
+					var t = $(this);
+					t.addClass('is-loading disabled');
+
+					var zoneLinks = $('.zone-shipping-rate > div').find('a[href^="/admin/settings/shipping_zones/"]');
+					if(zoneLinks.length){
+						var zones = [];
+						for (var i = 0; i < zoneLinks.length; i++) {
+							zones.push(zoneLinks[i].href.split('/').pop())
+						};
+						_.deleteZones(zones);
 					}
 				});
+
+				var btnPasteRates = $('<a />',{
+					'class':'btn btn--plain disabled paste-zones',
+					'style':'border:none',
+					'href':'#'
+				}).text('Paste').on('click',function(e){
+					e.preventDefault();
+					var t = $(this);
+
+					var reset = function(){
+						t.removeClass('is-loading');
+						$('.paste-zones').removeClass('disabled');
+					}
+
+					t.addClass('is-loading');
+					$('.paste-zones').addClass('disabled');
+
+					var zoneId = t.parent().find('a').eq(2)[0].href.split('/').pop();
+					if(isNaN(zoneId)){
+						_.notice('Paste failed. ID did not match format expected.',true);
+						reset();
+						return;
+					}
+
+					if(!typeof _.data('copiedZones') ==='object'){ return;reset(); }
+					var zones = Object.create(_.data('copiedZones'));
+					_.addZones(zones,zoneId);
+
+				});
+
+				var btnCopyRates = $('<a />',{
+					'class':'btn btn--plain copy-zones',
+					'style':'border:none',
+					'href':'#'
+				}).text('Copy').on('click',function(e){
+					e.preventDefault();
+					var t = $(this);
+					$('.paste-zones').addClass('disabled');
+					var zoneLinks = t.parents('.zone-shipping-rate').eq(0).find('.zone-shipping-rates a');
+					if(!zoneLinks.length){ return }
+					var rateUrls = [];
+					zoneLinks.each(function(){
+						rateUrls.push($(this)[0].href);
+					});
+
+					t.addClass('is-loading');
+					
+
+					var next = t.next('a')[0].href.split('/').pop();
+					
+					if(isNaN(next)){
+						_.notice('Copy failed. ID did not match format expected.',true);
+						return;
+					}
+
+					_.getShippingZone({
+						urls:rateUrls,/* array */
+						callback:function(zone,rateUrls){
+							gatherZones(zone,rateUrls)
+						}
+					});
+
+					var allZones = [];
+					var gatherZones = function(zone,rateUrls){
+						allZones.push(zone);
+						if(rateUrls.length>1){
+							rateUrls.shift();
+							_.getShippingZone({
+								urls:rateUrls,/* array */
+								callback:function(zone,rateUrls){
+									gatherZones(zone,rateUrls)
+								}
+							});
+						}else{
+							t.removeClass('is-loading');
+							$('.paste-zones').removeClass('disabled');
+							_.notice(allZones.length + ' Rates Copied');
+						}
+					}
+					_.data('copiedZones',allZones);
+
+				});
+
+				zonePanelLinks.prepend(btnPasteRates,btnCopyRates);
+
+				$('#settings-shipping > .ui-annotated-section:eq(1) .ui-annotated-section__description').append('<p>The delete function below will immediately attempt to remove all zones and rates. There is no undo.</p>',btnDeleteZone);
 			}
+
+			return;
 
 		},
 		setup_custom_collections:function(){
@@ -3946,10 +3695,8 @@ return {
 								var next = html.find('#assets-table').next('.next-card__section').find('a:last');
 								var nextUrl = next[0].href;
 								if(nextUrl.indexOf('direction=next')>-1){
-									console.log('Fields grabbed. Next page now...');
 									getFiles(nextUrl);
 								}else{
-									console.log('============ DONE. DOWNLOAD FILE ============');
 									t.removeClass('is-loading').removeAttr('style');
 									var a = document.createElement("a");
 									document.body.appendChild(a);
@@ -4135,7 +3882,7 @@ return {
 				if(m.length){
 
 					_.data('m',m);
-					$('#metacount').text(m.length).removeClass('hidden');
+					$('#metacount').text(m.length).removeClass('hide');
 					for (var i = 0, len = m.length; i < len; i++) {
 						response+= '<option data-type="' +m[i].value_type + '" data-id="' +m[i].id + '">' +m[i].namespace + '.' + m[i].key + '</option>';
 						v.metafields[m[i].id] = { namespace: m[i].namespace, value: m[i].value, key: m[i].key };
@@ -4148,7 +3895,7 @@ return {
 
 				}else{
 
-					$('#metacount').text('0').addClass('hidden');
+					$('#metacount').text('0').addClass('hide');
 					_.data('m',false);
 					$('#restorebackup').hide();
 					response = metafield_default;
