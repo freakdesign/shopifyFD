@@ -2691,7 +2691,7 @@ return {
 					var metaJSON = {
 						"metafield": {
 							'namespace': 'seo',
-							'key': 'hide',
+							'key': 'hidden',
 							'value': 1,
 							'value_type': 'integer'
 						}
