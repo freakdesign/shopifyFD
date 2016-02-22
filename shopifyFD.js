@@ -2869,7 +2869,11 @@ return {
 			/* PUSH VARIANT ID AND METAFIELD ACTIONS */
 			var variantCellTarget = $('#product-inner-variants th:last-child');
 			if(variantCellTarget.length){
-				$('#product-inner-variants th:last-child').before('<th class="variants-table__heading--indent-right tr">Variant ID</th>');
+				/* handle the new scrolling table layout */
+				$('th[style="height: 52px; width: 86px;"]').attr('style','height:52px;width:120px');
+				$('td[style="height: 53px; width: 86px;"]').attr('style','height:53px;width:120px');
+
+				$('#product-inner-variants th:last-child').before('<th class="variants-table__heading--indent-right tr">VariantID#</th>');
 
 				var inventoryTH = $('th.tc:first');
 				if(inventoryTH.length){
@@ -3355,7 +3359,7 @@ return {
 						return;
 					}
 
-					if(!typeof _.data('copiedZones') ==='object'){ return;reset(); }
+					if(!typeof _.data('copiedZones') ==='object'){ reset();return; }
 					var zones = Object.create(_.data('copiedZones'));
 					_.addZones(zones,zoneId);
 
