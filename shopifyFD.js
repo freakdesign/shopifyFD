@@ -44,7 +44,7 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	*/
 
-	var metafieldform = '<label class="next-label">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hide" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hide btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hide delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hide"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
+	var metafieldform = '<label class="next-label">Add New Metafield</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+_savelabel+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hide btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hide delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+_deletelabel+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+_savelabel+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hide"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get 250 products</a></p></div>';
 
 	var metafieldloader = '<div class="next-card fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <span id="metacount" class="animated bounce hide">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
 
@@ -62,11 +62,9 @@ if(url.indexOf("myshopify.com/admin")>1){
 
 	var bulk_html_box = '<h2 class="warning"><strong>ShopifyFD Warning:</strong> This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect product metafields. There is no undo.</h2><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">Save</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
 
-	var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim tooltip tooltip-bottom disabled" href="#"><span class="tooltip-container"><span class="tooltip-label">Enable Autosave</span></span>Autosave</a></li>';
+	var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim" href="#">Autosave</a></li>';
 
 	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopifyfd.com/">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://freakdesign.com.au/pages/shopifyfd" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
-
-	var aargh_msg = '<p>The page may need to be reloaded to see the changes.</p>';
 
 	var bubble_html = '<div class="bubble hide fadein"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="pr"><ul class="unstyled"></ul></div></div></div>';
 	
@@ -91,7 +89,7 @@ var _ = (function(){
 		api_count:0, /* call count */
 		api_limit:250,
 		metafields:{},
-		autosave: false,
+		autosave: true,
 		content: $('#content'), /* must be refreshed on each load */
 		body:$('body')
 	};
@@ -178,7 +176,7 @@ return {
 		return false;
 
 	},
-	createbackup:function(id){
+	createbackup:function(id,autosave){
 
 		/*
 
@@ -198,14 +196,30 @@ return {
 		if(!rtePanel.length){ return }
 
 		var myhtml = rtePanel.html();
-		var metaJSON = {
-			"metafield": {
-				"namespace": 'backups',
-				"key": id, /* consider using datestamp in the future for multiple backups */
-				"value": myhtml,
-				"value_type": "string"
+		var metaJSON = {};
+		if(typeof autosave !== 'undefined'){
+			if(window.location.href.indexOf('/admin/products/')<0){ return false }
+			if(!$('#autosave').hasClass('active')){ return false }
+
+			$('#autosave').addClass('is-loading').removeClass('active');
+			metaJSON = {
+				"metafield": {
+					"namespace": 'autosave',
+					"key": 'html',
+					"value": myhtml,
+					"value_type": "string"
+				}
 			}
-		};
+		}else{
+			metaJSON = {
+				"metafield": {
+					"namespace": 'backups',
+					"key": id,
+					"value": myhtml,
+					"value_type": "string"
+				}
+			}
+		}
 
 		var url = document.URL.split('?')[0]+'/metafields.json';
 		if(_.data('alpha') === 'articles'){
@@ -219,14 +233,18 @@ return {
 			data: metaJSON,
 			success: function(d){
 				_.updatedropdown();
-				_.notice('Backup saved');
+				if (typeof autosave === 'undefined'){
+					_.notice('Backup saved');
+				}else{
+					$('#autosave').removeClass('is-loading').addClass('active');
+				}
 			},
 			error: function(d){
 				var err = JSON.parse(d.responseText);
 				_.notice(err.errors.value[0],true);
 			}
 		});
-
+		return true;
 	},
 	loadmeta:function(loadinto,v){
 
@@ -2728,32 +2746,26 @@ return {
 
 				$('#autosave').on('click',function(){
 
-					var t = $(this),
-					rte_save_btn = false;
+					var t = $(this);
 
-					if(t.hasClass('rte-command-active')){
+					if(t.hasClass('active')){
 
 						_.notice("Autosave disabled");
 						clearInterval(_.data('autosave'));
-
+						t.removeClass('active');
 					}else{
-
-						rte_save_btn = $('#products-show header input[type="submit"]');
 						_.notice("Autosave enabled");
+						t.addClass('active');
 						_.data('autosave',setInterval(function(){
-							if(rte_save_btn.length){
-								rte_save_btn.click();
+							if(window.location.href.indexOf('/admin/products/')>-1){
+								if(!_.createbackup(_.data('omega'),true)){
+									clearInterval(_.data('autosave'));
+								}
 							}else{
 								clearInterval(_.data('autosave'));
-								rte_save_btn = null;
-								_.notice("Autosave disabled");
 							}
 						},30000));
-
 					}
-
-					/* toggle class - not the nicest method */
-					$(this).toggleClass('rte-command-active');
 
 					return false;
 				});
@@ -2869,9 +2881,6 @@ return {
 			/* PUSH VARIANT ID AND METAFIELD ACTIONS */
 			var variantCellTarget = $('#product-inner-variants th:last-child');
 			if(variantCellTarget.length){
-				/* handle the new scrolling table layout */
-				$('th[style="height: 52px; width: 86px;"]').attr('style','height:52px;width:120px');
-				$('td[style="height: 53px; width: 86px;"]').attr('style','height:53px;width:120px');
 
 				$('#product-inner-variants th:last-child').before('<th class="variants-table__heading--indent-right tr">VariantID#</th>');
 
@@ -2888,9 +2897,9 @@ return {
 					var variantEditBtn = variantRows.eq(i).find('td:last a:first');
 					var variant_id = variantEditBtn.prop('href').split('/').pop();
 					var variantEditMetafieldBtn = $('<a />',{
-						'class':'edit-variant-metafield btn btn-slim next-field--connected next-field--connected--no-flex tooltip tooltip-bottom',
+						'class':'edit-variant-metafield btn btn-slim next-field--connected next-field--connected--no-flex',
 						'data-val':variant_id
-					}).html('<span><svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" width="12" height="12" viewBox="0 0 12 12" enable-background="new 0 0 12 12" xml:space="preserve"><path fill="#21C2A8" d="M0 0v12h12V0H0zM11 11H1V1h10V11zM5 9h2V7h2V5H7V3H5v2H3v2h2V9z"></path></svg></span><span class="tooltip-container"><span class="tooltip-label">Click to edit Metafields</span></span>');
+					}).html('<span><svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" width="12" height="12" viewBox="0 0 12 12" enable-background="new 0 0 12 12" xml:space="preserve"><path fill="#21C2A8" d="M0 0v12h12V0H0zM11 11H1V1h10V11zM5 9h2V7h2V5H7V3H5v2H3v2h2V9z"></path></svg></span>');
 
 					variants_ids['variant_'+i] = {'id':variant_id};
 					variantEditBtn.after(variantEditMetafieldBtn);
@@ -2901,6 +2910,9 @@ return {
 				}).promise().done(function(){
 					_.panel_editvariantmeta();
 				});
+
+				$('.table__cell--sticky--right').attr('style','height: 53px; width:110px');
+				$('.table-wrapper-sticky').attr('style','padding-left: 50px; padding-right: 110px;')
 			}
 
 
