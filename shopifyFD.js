@@ -1359,7 +1359,7 @@ return {
 	},
 	setup_blogs:function(){
 
-		targetHTML = $('.next-grid__cell--third:first');
+		targetHTML = $(selector_next_secondary);
 
 		if(targetHTML.length){
 
