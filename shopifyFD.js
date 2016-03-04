@@ -73,8 +73,8 @@ if(url.indexOf("myshopify.com/admin")>1){
 	var selector_next_secondary = '.ui-layout__section--secondary .ui-layout__item:last';
 	var selector_next_primary = '.ui-layout__section--primary .ui-layout__item:last';
 	var next_item_HTML = '<div class="ui-layout__item"><div class="next-card"></div></div>';
-
-
+	var header_primary_action = '.header .header__primary-actions:first';
+	var header_secondary_action = '.header .header__secondary-actions:first';
 
 
 var _ = (function(){
@@ -1239,7 +1239,7 @@ return {
 	},
 	setup_discounts:function(){
 
-		var targetHTML = $('.header .header__secondary-actions:first');
+		var targetHTML = $(header_secondary_action);
 
 		if(targetHTML.length){
 			var u = $('<ul/>',{
@@ -1268,8 +1268,8 @@ return {
 
 		var targetHTML = $(selector_next_secondary);
 		
-		var headerButtons = $('.header .header__secondary-actions:first');
-		if(!headerButtons.length){headerButtons = $('.header .header__primary-actions:first')}
+		var headerButtons = $(header_secondary_action);
+		if(!headerButtons.length){headerButtons = $(header_primary_action)}
 
 		if(targetHTML.length){
 			var itemViewLink = targetHTML.find('a').eq(0).attr('href');	
@@ -1531,8 +1531,8 @@ return {
 		*/
 		_.showSkuHeaderCount();
 
-		var targetHTML = $('.header .header__secondary-actions:first');
-		if(!targetHTML.length){targetHTML = $('.header .header__primary-actions:first')}
+		var targetHTML = $(header_secondary_action);
+		if(!targetHTML.length){targetHTML = $(header_primary_action)}
 
 		if(targetHTML.length){
 
@@ -1637,7 +1637,7 @@ return {
 			}
 
 			if(themeIDs.length > 1){
-				var targetHeaderButton = $('.header .header__secondary-actions:first'); /*$('.header-right a:last')*/
+				var targetHeaderButton = $(header_secondary_action); /*$('.header-right a:last')*/
 				if(targetHeaderButton.length){
 					var downloadAllThemesBtn= $('<a />',{
 						'class':'btn fd-btn'
@@ -1660,7 +1660,7 @@ return {
 	},
 		setup_link_lists_single:function(){
 
-			var targetHTML = $('.header .header__primary-actions:first'); /* $('.header-row .header-right') */
+			var targetHTML = $(header_primary_action); /* $('.header-row .header-right') */
 			if(targetHTML.length){
 				$.ajax({
 					type: "GET",
@@ -2175,7 +2175,7 @@ return {
 		},
 		setup_redirects:function(){
 
-			var targetHTML = $('.header .header__secondary-actions:first');
+			var targetHTML = $(header_secondary_action);
 			var nextCard = $('.next-card.has-bulk-actions');
 			if(!nextCard.length){ nextCard = $('#url_redirects') }
 
@@ -2221,9 +2221,8 @@ return {
 			_.showSkuHeaderCount();
 			_.data('collections',false);
 			
-			var targetHTML = $('.header .header__secondary-actions:first');
-			if(!targetHTML.length){targetHTML = $('.header .header__secondary-actions:first');}
-			if(!targetHTML.length){targetHTML = $('.header .header__primary-actions:first')}
+			var targetHTML = $(header_secondary_action);
+			if(!targetHTML.length){targetHTML = $(header_primary_action)}
 
 			if(targetHTML.length){
 				
@@ -2645,8 +2644,8 @@ return {
 			
 			/* PRODUCT SWITCHER */
 			var targetHTMLRightMenu = $('.header-row .header-right');
-			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $('.header .header__secondary-actions:first');}
-			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $('.header .header__primary-actions:first')}
+			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $(header_secondary_action);}
+			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $(header_primary_action)}
 
 			if(targetHTMLRightMenu.length){
 				$.ajax({
@@ -3135,8 +3134,8 @@ return {
 			}
 			
 			/* PAGE SWITCHER */
-			var targetHTMLRightMenu = $('.header .header__secondary-actions:first');
-			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $('.header .header__primary-actions:first')}
+			var targetHTMLRightMenu = $(header_secondary_action);
+			if(!targetHTMLRightMenu.length){targetHTMLRightMenu = $(header_primary_action)}
 
 			if(targetHTMLRightMenu.length){
 				$.ajax({
@@ -3443,8 +3442,8 @@ return {
 
 			var targetHTML = $(selector_next_secondary); 
 
-			var headerButtons = $('.header .header__secondary-actions:first');
-			if(!headerButtons.length){headerButtons = $('.header .header__primary-actions:first')}
+			var headerButtons = $(header_secondary_action);
+			if(!headerButtons.length){headerButtons = $(header_primary_action)}
 
 			if(targetHTML.length){
 
@@ -3799,7 +3798,6 @@ return {
 			}
 
 			var emailLink = $('.customer-email:last');
-
 			if(emailLink.length){
 				var input = $('<input />',{
 					'value':emailLink.text(),
@@ -3809,8 +3807,27 @@ return {
 				}).on('click',function(){
 					$(this).select();
 				});
-
 				emailLink.parent().parent().after(input);
+			}
+
+			targetHTML = $(header_secondary_action);
+			if(targetHTML.length && typeof _user_id !== 'undefined'){
+				var id = parseInt(window.location.href.split('/').pop());
+				$.ajax({
+					type:'GET',
+					url:'/admin/orders/'+id+'.json',
+					success: function(d){
+						if(d.order.checkout_token){
+							var btnOrderStatus = $('<a />',{
+								'class':'btn fd-btn',
+								'href':'https://checkout.shopify.com/'+ _user_id +'/checkouts/'+d.order.checkout_token+'/thank_you',
+								'target':'_blank'
+							}).text('Order Status Page').appendTo(targetHTML);
+						}
+
+					}
+				});
+
 			}
 
 		},
