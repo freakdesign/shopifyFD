@@ -3200,7 +3200,10 @@ return {
 			_.notice('Copying rates ('+ settings.urls.length +')');
 			var currentZoneUrl = settings.urls[0];
 
-			if(currentZoneUrl.indexOf('price_based') < 0 && currentZoneUrl.indexOf('weight_based') < 0){ return false }
+			if(currentZoneUrl.indexOf('price_based') < 0 && currentZoneUrl.indexOf('weight_based') < 0){ 
+				if(typeof settings.callback ==='function'){ settings.callback(zone,settings.urls) }
+				return false;	
+			}
 
 			var zone = {};
 
@@ -3392,8 +3395,6 @@ return {
 					});
 
 					t.addClass('is-loading');
-					
-
 					var next = t.next('a')[0].href.split('/').pop();
 					
 					if(isNaN(next)){
@@ -3410,7 +3411,9 @@ return {
 
 					var allZones = [];
 					var gatherZones = function(zone,rateUrls){
-						allZones.push(zone);
+						if(zone){
+							allZones.push(zone);
+						}
 						if(rateUrls.length>1){
 							rateUrls.shift();
 							_.getShippingZone({
@@ -3420,6 +3423,7 @@ return {
 								}
 							});
 						}else{
+							console.log(allZones);
 							t.removeClass('is-loading');
 							$('.paste-zones').removeClass('disabled');
 							_.notice(allZones.length + ' Rates Copied');
