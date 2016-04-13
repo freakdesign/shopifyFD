@@ -479,7 +479,7 @@ return {
 
 			e.preventDefault();
 
-			var url = document.URL;
+			var url = [location.protocol, '//', location.host, location.pathname].join('');
 			var id = $('#metafield_id').val() || false;
 
 			if(!id){ _.notice('Object ID Missing',true);return }
@@ -2881,7 +2881,7 @@ return {
 			var variantCellTarget = $('#product-inner-variants th:last-child');
 			if(variantCellTarget.length){
 
-				$('#product-inner-variants th:last-child').before('<th class="variants-table__heading--indent-right tr">VariantID#</th>');
+				variantCellTarget.before('<th class="variants-table__heading--indent-right tr">VariantID#</th>');
 
 				var inventoryTH = $('th.tc:first');
 				if(inventoryTH.length){
@@ -3423,7 +3423,6 @@ return {
 								}
 							});
 						}else{
-							console.log(allZones);
 							t.removeClass('is-loading');
 							$('.paste-zones').removeClass('disabled');
 							_.notice(allZones.length + ' Rates Copied');
@@ -3816,21 +3815,30 @@ return {
 
 			targetHTML = $(header_secondary_action);
 			if(targetHTML.length && typeof _user_id !== 'undefined'){
-				var id = parseInt(window.location.href.split('/').pop());
-				$.ajax({
-					type:'GET',
-					url:'/admin/orders/'+id+'.json',
-					success: function(d){
-						if(d.order.checkout_token){
-							var btnOrderStatus = $('<a />',{
-								'class':'btn fd-btn',
-								'href':'https://checkout.shopify.com/'+ _user_id +'/checkouts/'+d.order.checkout_token+'/thank_you',
-								'target':'_blank'
-							}).text('Order Status Page').appendTo(targetHTML);
-						}
+				var nativeOrdersButton = $('.header .header__secondary-actions a.next-list__item[target="_blank"]:first');
+				if(nativeOrdersButton.length && nativeOrdersButton[0].href.indexOf('/checkouts/')>-1){
+					var btnOrderStatus = $('<a />',{
+						'class':'btn fd-btn',
+						'href':nativeOrdersButton[0].href,
+						'target':'_blank'
+					}).text('Order Status Page').appendTo(targetHTML);
+				}else{
+					var id = parseInt(window.location.href.split('/').pop());
+					$.ajax({
+						type:'GET',
+						url:'/admin/orders/'+id+'.json',
+						success: function(d){
+							if(d.order.checkout_token){
+								var btnOrderStatus = $('<a />',{
+									'class':'btn fd-btn',
+									'href':'https://checkout.shopify.com/'+ _user_id +'/checkouts/'+d.order.checkout_token+'/thank_you',
+									'target':'_blank'
+								}).text('Order Status Page').appendTo(targetHTML);
+							}
 
-					}
-				});
+						}
+					});
+				}
 
 			}
 
