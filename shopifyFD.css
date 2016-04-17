@@ -178,7 +178,7 @@ body, .global-search__pane{padding-top:32px}
 .shopifyJSoverride .vbox .mybuttons {display: block;margin-top:.25em}
 .shopifyJSoverride .vbox .mybuttons a.delete {color: #C71919;float:right}
 
-.shopifyJSoverride .sku.label, .shopifyJSoverride .variant-label {float:right;}
+.shopifyJSoverride .sku.label, .shopifyJSoverride .variant-label {float:right;font-size: 11px;padding: 0 1em;margin-right: .5rem;line-height: inherit;font-family: monospace;}
 .shopifyJSoverride .unpublished-theme-title {position: relative;}
 .shopifyJSoverride .header-select {height:32px;max-width: 250px;}
 
@@ -197,14 +197,14 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 .modalWindow .half {width:50%}
 .modalWindow .em{margin-bottom:1em;}
 .modalWindow .active {display:block}
-.modalWindow > div.main.content {width: 500px;position: relative;margin: 10% auto!important;background: #fff;border-radius: 3px;padding:1em;text-align: left;box-shadow: 0 0 15px rgba(0,0,0,.5)}
+.modalWindow > div.main.content {max-width: 500px;position: relative;margin: 10% auto!important;background: #fff;padding:3em;text-align: left;box-shadow: 0 0 15px rgba(0,0,0,.5)}
 .modalWindow .content li{margin-bottom: 1em}
 .modalWindow .content > div {max-height:400px;overflow:auto}
 .modalWindow .close-modal{position:absolute;width:16px;height:16px;display:inline-block;line-height:16px;text-align:center;text-decoration:none;top:1em;right:1em;font-weight: bold;font-size: 1.2em;}
 .modalWindow .close-modal:hover{color:red;}
 .modalWindow header{border-bottom:1px solid #ccc;margin:0 0 .5em;padding:0 2em .25em 0;min-height: .25em}
 .modalWindow td{vertical-align: top}
-.modalWindow .warning{background:#d15757;color:#fff;line-height:1.3;margin:0 0 .5em}
+.modalWindow .warning{padding: 1em;background:#d15757;color:#fff;line-height:1.3;margin:0 0 .5em}
 .modalWindow ul{padding-left: 1em}
 .modalWindow .disabled { pointer-events: none; }
 
