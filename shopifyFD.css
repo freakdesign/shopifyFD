@@ -29,7 +29,7 @@
 #shopifyJSbar li {float:left}
 #shopifyJSbar li:first-child{width: 230px;background: #21C2A8;}
 #shopifyJSbar li:nth-child(2){background: #1D2225}
-#shopifyJSbar li a{padding:0 .5em;transition:background .2s;color:#C8D1D1;height: 32px;line-height: 32px;font-size: 95%;}
+#shopifyJSbar li a{padding:0 1em;transition:background .2s;color:#C8D1D1;height: 32px;line-height: 32px;font-size: 95%;}
 #shopifyJSbar li a.active{background:#1C1E1F;}
 #shopifyJSbar li a:hover{background:#139989;text-decoration: none;color:#fff}
 #shopifyJSbar li:nth-child(2) a:hover{background: #139989}
@@ -170,17 +170,23 @@ body, .global-search__pane{padding-top:32px}
 /* variant editing... */
 .shopifyJSoverride .vbox {background:#fff;padding: 1em 0 3em;border-bottom: 2px solid #818181}
 .shopifyJSoverride .vbox fieldset {padding:0;display:block;width:100%}
-.shopifyJSoverride .vbox input, .shopifyJSoverride .vbox select {width:24.24%; display:inline-block;margin:0 1% 0 0}
+.shopifyJSoverride .vbox input, .shopifyJSoverride .vbox select {width:32.66%; display:inline-block;margin:0 1% 0 0}
 .shopifyJSoverride .vbox fieldset input:last-child{margin-right:0}
 .shopifyJSoverride .vbox select.active{border: 1px solid #479286;background: #21C2A8;color:#fff}
 .shopifyJSoverride .vbox select.active:focus {background: #fff;color: #121212;}
+
+.shopifyJSoverride #mv_key {margin-right: 0}
+.shopifyJSoverride #mv_value {width:100%;margin: .25em 0 1em;}
+
 .shopifyJSoverride td.vid{cursor:pointer;font-size: .9em;text-decoration: underline}
 .shopifyJSoverride .vbox .mybuttons {display: block;margin-top:.25em}
 .shopifyJSoverride .vbox .mybuttons a.delete {color: #C71919;float:right}
 
+.shopifyJSoverride .single-variant .vbox{border-bottom: 0;padding-bottom:0}
+
 .shopifyJSoverride .sku.label, .shopifyJSoverride .variant-label {float:right;font-size: 11px;padding: 0 1em;margin-right: .5rem;line-height: inherit;font-family: monospace;}
 .shopifyJSoverride .unpublished-theme-title {position: relative;}
-.shopifyJSoverride .header-select {height:32px;max-width: 250px;}
+.shopifyJSoverride .header-select {height:32px;max-width: 180px;}
 
 html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none; -moz-user-select: none;-ms-user-select: none;}
 
@@ -230,16 +236,16 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
   border-radius: 3px;
   min-width: 200px;
   box-shadow: 0 0 10px rgba(111, 146, 152, 0.3);
+  z-index: 9;
 }
 
 /* animations */
 
-.fadein{-webkit-animation: fade-in .25s linear;-moz-animation: fade-in .25s linear;-o-animation: fade-in .25s linear;animation: fade-in .25s linear;}
-.fadeinslow{-webkit-animation: fade-in 1s linear;-moz-animation: fade-in 1s linear;-o-animation: fade-in 1s linear;animation: fade-in 1s linear;}
+.fadein{-webkit-animation: fade-in .15s linear;-moz-animation: fade-in .15s linear;-o-animation: fade-in .15s linear;animation: fade-in .15s linear;}
 
 .animated {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
+  -webkit-animation-duration: .5s;
+  animation-duration: .5s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
@@ -379,6 +385,7 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 tr.marked-for-deletion {background:#CA1800;color: #fff;}
 tr.marked-for-deletion a{color:#fff}
 
+/*
 .fd-btn{
   background: #898B8A;
   transition: all .25s;
@@ -386,6 +393,8 @@ tr.marked-for-deletion a{color:#fff}
   color: #efefef;
 }
 .fd-btn:hover{background: #21C2A8;color:#fff;}
+*/
+
 .next-card__section ~ .next-card__section {border-top: 1px solid #D8D8D8;}
 .new-variants-table__row.active{background: #eff9fd;}
 .table-hover tr#vrow:hover td {background: #fff}
@@ -393,4 +402,5 @@ tr.marked-for-deletion a{color:#fff}
 #all-products .name {max-width: 200px}
 .linklist-title {overflow: hidden;max-width: 80%;}
 #advanced_meta p {margin-bottom:.25em;}
+#autosave.active {background: #21C2A8;color: #fff;}
 .theme-id .tooltip {-webkit-user-select: text;-moz-user-select: text;-ms-user-select: text;user-select: text;}
