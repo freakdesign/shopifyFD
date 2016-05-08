@@ -90,7 +90,7 @@
 	var metafieldloader = '<div class="next-card-metafield next-card next-card--aside fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <span id="metacount" class="hide">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
 	var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
 	var metafield_default = '<option value="">'+translation.select_or_create_metafield+'</option>';
-	var metafield_copybox = '<div class="metafield-copy-paste sst"><a class="fd-btn btn" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
+	var metafield_copybox = '<div class="metafield-copy-paste sst"><a class="fd-btn btn btn-slim" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
 	var rte_menu_html = '<div class="sst" id="rte_extra"><a class="btn fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except for <br>target,class,href & src</span></span>Clean HTML</a> <a class="btn fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn fd-btn" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
 	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+translation.save+'</a> <a class="btn btn-slim saveinteger" href="#">'+translation.save+' as Integer</a> <a title="'+translation.delete+'" class="delete ico ico-16 ico-delete hidden" href="#">'+translation.delete+'</a></span></div>';
   var vbox_single_html = '<div class="vbox-single-card next-card"><div class="next-card__section"><h2 class="next-heading--quarter-margin">Variant Metafields</h2><div id="vrow" class="single-variant">'+vbox+'</div></div></div>'
@@ -1124,8 +1124,9 @@
     editVariantMetafieldBtn.on('click', function(e) {
       e.preventDefault();
       $('#vrow').remove();
+      editVariantMetafieldBtn.removeClass('active');
       var t = $(this);
-      if(t.hasClass('active')){ t.removeClass('active');return true }
+      if(t.hasClass('active')){ return true }
       t.addClass('active');
 
       var v = t.attr('data-val');
@@ -2479,31 +2480,30 @@
         }
       });
 
-      q.on('click',function(){
+      q.on('click',function(e){
+
+        e.preventDefault();
 
         if('undefined' !== typeof localStorage["metafieldCopy"]){
 
           var h = '';
+          var m = false;
           try {
             m = JSON.parse(localStorage["metafieldCopy"]);
           } catch (e) {
-            m = false;
+            return false;
           }
           
-          if(m){
-            for (var i = 0, len = m.length; i < len; i++) {
-              var metafieldValue = stripHTML(m[i].value);
-              h+= '<p><strong>'+m[i].namespace+'.'+m[i].key+' ('+m[i].value_type+')</strong><br>'+metafieldValue+'</p><hr>';
-            }
-            fd_modal(true,h,'In the virtual clipboard...');
-          }else{
-            notice('Error reading virtual clipboard. Empty?',true);
+          if(!m){ return }
+
+          for (var i = 0, len = m.length; i < len; i++) {
+            var metafieldValue = stripHTML(m[i].value);
+            h+= '<p><strong>'+m[i].namespace+'.'+m[i].key+' ('+m[i].value_type+')</strong><br>'+metafieldValue+'</p><hr>';
           }
-          
+          fd_modal(true,h,'In the virtual clipboard...');
 
         }
 
-        return false;
       });
 
       p.on('click',function(e){
@@ -3898,7 +3898,13 @@
     /* increase the default products per page */
     var productListButton = document.querySelectorAll('a[href="/admin/products"]');
     if(productListButton.length){
-      productListButton[0].href = productListButton[0].href+'?limit='+settings.apiLimit;
+      productListButton[0].href = '/admin/products?limit='+settings.apiLimit;
+    }
+
+    /* change app link to installed apps */
+    var navAppsButton = document.querySelectorAll('a[href="' + [location.protocol, '//', location.host].join('')+'/admin/apps"]');
+    if(navAppsButton.length){
+      navAppsButton[0].href = '/admin/apps/installed';
     }
 
     setInterval(function(){
@@ -3921,7 +3927,7 @@
           if(alpha === 'products' && !isNaN(omega)){
             okToRun = true; /* product page */
           }else if(alpha === 'admin' && omega === 'products'){
-            okToRun = true; /* products page */
+            okToRun = true; /* product[s] page */
           }
         }
 
