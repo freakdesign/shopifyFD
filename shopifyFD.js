@@ -1627,15 +1627,13 @@
       dataType: 'json',
       success: function(d){
         if(d){
-          link_lists = d.link_lists;
+          var link_lists = d.link_lists;
           var response = '';
           for (var i = 0, len = link_lists.length; i < len; i++) {
-
             if(_data('omega') !== link_lists[i].id.toString()){
               response +='<option value="'+link_lists[i].id+'">'+link_lists[i].title+'</option>';
             }
           }
-
           var llselect = $('<select />',{
             'class':'header-select fadein'
           }).append('<option>Edit other Menu</option>',response).change(function(){
@@ -2010,7 +2008,6 @@
           success: function(d){
             if(d){
               _data('link_lists',d);
-              link_lists = d.link_lists;
               llf.each(function(index){
                 var t = $(this);
                 t.parent().find('h3').append('<span class="fadein" style="color:#ccc;display: block;font-size: 11px;font-family: monospace;">'+d.link_lists[index].handle+'</span>');
@@ -2107,8 +2104,8 @@
     if(typeof d === 'undefined'){ return }
     if(!d.length){ return }
 
-    var redirect = d[0];
-    if (typeof redirect !== 'object') { return }
+    var redir = d[0];
+    if (typeof redir !== 'object') { return }
 
     var redirectTextareaLog = $('textarea[name="bulk-redirect-log"]');
     var logVal = redirectTextareaLog.val();
@@ -2116,9 +2113,10 @@
     $.ajax({
       type: "POST",
       url: '/admin/redirects.json',
-      data:redirect,
+      dataType:'json',
+      data:redir,
       success: function(data){
-        logVal+=redirect.redirect.path + ',' + redirect.redirect.path + ',success\n';
+        logVal+=data.redirect.path + ', ' + data.redirect.target + ', success\n';
         redirectTextareaLog.val(logVal);
         d.shift();
         if(d.length > 0){
@@ -2128,7 +2126,7 @@
         }
       },
       error: function(data){
-        logVal+=redirect.redirect.path + ',' + redirect.redirect.path + ',' + data.responseJSON.errors.path[0] +'\n';
+        logVal+=redir.redirect.path + ', ' + redir.redirect.target + ', ' + data.responseJSON.errors.path[0] +'\n';
         redirectTextareaLog.val(logVal);
         d.shift();
         if(d.length > 0){
@@ -2145,6 +2143,8 @@
 
   var setup_redirects = function(){
 
+      if(document.getElementsByClassName('bulk-redirect-panel').length){ return }
+
       var targetHTML = $(header_secondary_action);
       var nextCard = $('.next-card.has-bulk-actions');
       if(!nextCard.length){ nextCard = $('#url_redirects') }
@@ -2154,25 +2154,43 @@
         return false;
       }
 
-      var redirectPanel = $('<div class="next-grid next-grid--outer-grid" style="border-bottom: 1px solid #DADADA;margin-bottom: 1em;padding-bottom: 1em;"><div class="next-grid__cell next-grid__cell--third"><h2 class="next-heading">Bulk Redirects</h2><p>To bulk add redirects manually add the path (old url) and target (new url) separated with a comma to the input box. As with any bulk action, run a small sample first before processing 1000s of items.<br><br></p><ul><li>One redirect per line.</li><li>A log will show progress and any errors</li></ul></div><div class="next-grid__cell"><h2 class="next-heading">Paste URLs</h2><p>An example of the redirect is shown below:<br><code>http://freakdesign.com.au/old-url,http://freakdesign.com.au/new-url</code><br>or<br><code>/old-url,pages/new-url</code></p><br><textarea name="bulk-redirect-paste"></textarea><br><br><a href="#" class="btn fd-btn">Process</a><div class="fadein hide bulk-redirect-log"><br><br><h2 class="next-heading">Activity Log</h2><textarea name="bulk-redirect-log"></textarea></div></div></div>');
-
-      var redirectButton = redirectPanel.find('a');
+      var redirectPanel = $('<div class="bulk-redirect-panel next-grid next-grid--outer-grid" style="border-bottom: 1px solid #DADADA;margin-bottom: 1em;padding-bottom: 1em;"><div class="next-grid__cell next-grid__cell--third"><h2 class="next-heading">Bulk Redirects</h2><p>To bulk add redirects manually add the path (old url) and target (new url) separated with a comma to the input box. As with any bulk action, run a small sample first before processing 1000s of items.<br><br></p><ul><li>One redirect per line.</li><li>A log will show progress and any errors</li></ul></div><div class="next-grid__cell"><h2 class="next-heading">Paste URLs</h2><p>An example of the redirect is shown below:<br><code>http://freakdesign.com.au/old-url,http://freakdesign.com.au/new-url</code><br>or<br><code>/old-url,/pages/new-url</code></p><br><textarea name="bulk-redirect-paste"></textarea><br><br><button class="redirect-process btn fd-btn btn-primary">Add Redirects</button> <button class="redirect-reload btn fd-btn">Reload page</button><div class="fadein hide bulk-redirect-log"><br><br><h2 class="next-heading">Activity Log</h2><textarea name="bulk-redirect-log"></textarea></div></div></div>');
+      var redirectButton = redirectPanel.find('.redirect-process');
+      var reloadButton = redirectPanel.find('.redirect-reload');
       var redirectTextarea = redirectPanel.find('textarea[name="bulk-redirect-paste"]');
       var redirectTextareaLog = redirectPanel.find('textarea[name="bulk-redirect-log"]');
+
+      reloadButton.on('click',function(e){
+        e.preventDefault();
+        redirect('/admin/redirects?'+Math.floor(Math.random() * 1000000));
+      });
 
       redirectButton.on('click',function(e){
         e.preventDefault();
         var redirectVal = redirectTextarea.val().replace(/ /g, '');
 
         if(redirectVal.length < 4){ return }
-        redirectArray = redirectVal.split("\n");
+        var redirectArray = redirectVal.split("\n");
 
         if(redirectArray.length){
           var redirectData = [];
           for (var i = 0; i < redirectArray.length; i++) {
             var v = redirectArray[i].split(',');
             if(v.length === 2){
-              var r = {'redirect': {'path': v[0],'target': v[1]}};
+
+              v[0] = v[0].trim();
+              v[1] = v[1].trim();
+
+              if(v[1].substring(0,1) !== '/' && v[1].substring(0,4) !== 'http' ){
+                v[1]='/'+v[1];
+              }
+
+              var r = {
+                'redirect': {
+                  'path': v[0],
+                  'target': v[1]
+                }
+              };
               redirectData.push(r);
             }
           };
@@ -3928,6 +3946,8 @@
             okToRun = true; /* product page */
           }else if(alpha === 'admin' && omega === 'products'){
             okToRun = true; /* product[s] page */
+          }else if(alpha === 'admin' && omega === 'redirects'){
+            okToRun = true; /* redirect page */
           }
         }
 
