@@ -211,7 +211,7 @@
       url: '/admin/themes.json',
       success: function(d){
         if(d){
-          app.data.themes = d;
+          app.data.themes = d.themes;
           for (var i = 0, len = d.themes.length; i < len; i++) {
             if(d.themes[i].role ==='main'){
               app.data.themeId = d.themes[i].id
@@ -1564,55 +1564,98 @@
 
   var setup_themes = function(){
 
-      var publishedTitle = $('.published-theme-title');
-      var customiseBtn = $('.published-theme .btn-primary').eq(0); /* for the published theme */
-      var customiseHREF = customiseBtn.attr('href');
-      var themeBoxes = $('div.unpublished-box');
-
-      var themeIDs = [];
-      for (var i = 0; i < themeBoxes.length; i++) {
-        var themeID = themeBoxes[i].id.split('_').pop();
-        themeIDs.push(themeID);
-        var contentBox = themeBoxes.eq(i).find('.next-card__section.tc'),
-        div = $('<div />',{
-          'class':'theme-id'
-        }).html('<span class="tooltip-bottom tooltip"><span class="tooltip-container"><span class="tooltip-label">Theme ID</span></span>'+themeID+'</span>');
-        contentBox.append(div);
-      };
-
-      if(publishedTitle.length){
-        if(typeof customiseHREF !== 'undefined'){
-          if(customiseHREF.indexOf('/admin/themes')>-1){
-            var themeID = customiseHREF.split('/')[3];
-            themeIDs.push(themeID);
-            var span = $('<span />',{
-              'class':'theme-id published'
-            }).text(themeID);
-            publishedTitle.append(span);
+    if(typeof app.data.themes === 'undefined'){
+      $.ajax({
+        type: 'GET',
+        url: '/admin/themes.json',
+        success: function(d){
+          if(d){
+            app.data.themes = d.themes;
+            for (var i = 0, len = d.themes.length; i < len; i++) {
+              if(d.themes[i].role === 'main'){
+                app.data.themeId = d.themes[i].id
+              }
+            }
+            setup_themes()
           }
         }
-      }
+      });
+      return
+    }
 
-      if(themeIDs.length > 1){
-        var targetHeaderButton = $(header_secondary_action); /*$('.header-right a:last')*/
-        if(targetHeaderButton.length){
-          var downloadAllThemesBtn= $('<a />',{
-            'class':'btn fd-btn'
-          }).text('Export all themes').on('click',function(e){
-            e.preventDefault();
-            for (var i = 0; i < themeIDs.length; i++) {
-              var url = '/admin/themes/'+ themeIDs[i] +'/export';
-              $.ajax({ 
-                type: "POST", 
-                data:{'_method':'post'},
-                url: url 
-              });
-            };
-            notice(themeIDs.length + ' export requests sent. Check your inbox');
-          });
-          targetHeaderButton.append(downloadAllThemesBtn);
+    var getTheme = function(id){
+      if(typeof app.data.themes === 'undefined' || typeof id === 'undefined'){ return false }
+      id = parseInt(id);
+      for (var i = app.data.themes.length - 1; i >= 0; i--) {
+        if(app.data.themes[i].id === id){
+          return app.data.themes[i];
         }
       }
+    }
+
+    var dateFormat = function(a){
+      var d = new Date(a);
+      return d.toString();
+    };
+    
+    var publishedTitle = $('.published-theme-title');
+    var unpublishedTitles = $('.unpublished-theme-title');
+    var themeBoxes = $('div.unpublished-box');
+    var themeIDs = [];
+
+    for (var i = 0; i < themeBoxes.length; i++) {
+      var themeID = themeBoxes[i].id.split('_').pop();
+      themeIDs.push(themeID);
+      var themeTitle = themeBoxes.eq(i).find('.unpublished-theme-title');
+      var themeData = getTheme(themeID);
+      var themeDates = '';
+      if(themeData){
+        themeDates += '<br>Created at: '+ dateFormat(themeData.created_at);
+        themeDates += '<br>Updated at: '+ dateFormat(themeData.updated_at);
+      }
+      themeTitle.after('<div style="font-size:90%;opacity:.5" class="theme-data" data-id="'+themeID+'">Theme ID: '+themeID+themeDates+'</div>');
+    };
+
+    if(publishedTitle.length){
+      var customiseBtn = $('.published-theme .btn-primary').eq(0); /* for the published theme */
+      var customiseHREF = customiseBtn.attr('href');
+      if(typeof customiseHREF !== 'undefined'){
+        if(customiseHREF.indexOf('/admin/themes')>-1){
+          var themeID = customiseHREF.split('/')[3];
+          themeIDs.push(themeID);
+          var themeData = getTheme(themeID);
+          var themeDates = '';
+          if(themeData){
+          themeDates += '<br>Created at: '+ dateFormat(themeData.created_at);
+          themeDates += '<br>Updated at: '+ dateFormat(themeData.updated_at);
+          }
+          publishedTitle.after('<div style="font-size:90%;opacity:.5" class="theme-data" data-id="'+themeID+'">Theme ID: '+themeID+themeDates+'</div>');
+        }
+      }
+    }
+
+    if(themeIDs.length < 2){ return }
+
+    var target = $(header_secondary_action); /*$('.header-right a:last')*/
+    if(!target.length){ return }
+
+    var downloadAll= $('<a />',{
+      'class':'btn fd-btn'
+    }).text('Export all themes').on('click',function(e){
+      e.preventDefault();
+      for (var i = 0; i < themeIDs.length; i++) {
+        var url = '/admin/themes/'+ themeIDs[i] +'/export';
+        $.ajax({ 
+          type: "POST", 
+          data:{'_method':'post'},
+          url: url 
+        });
+      };
+      var plural = 1 < themeIDs.length ? 's' :'';
+      notice(themeIDs.length + ' export request'+plural+' sent. Check your inbox');
+    });
+    target.append(downloadAll);
+
 
   };
 
