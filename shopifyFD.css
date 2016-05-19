@@ -386,9 +386,10 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 .metafield-fullscreen-btn:hover{ opacity: .5 }
 .fullscreen-metafield {overflow: hidden}
 .fullscreen-metafield .metafield-fullscreen-btn {transform: scaleX(-1) scaleY(-1);}
-.fullscreen-metafield .next-card-metafield {position: fixed;left: 0;right: 0;z-index: 999999;height: 100%;top: 0;border-radius: 0;overflow-y: scroll;}
+.fullscreen-metafield .next-card-metafield {margin-top:0;position: fixed;left: 0;right: 0;z-index: 999999;height: 100%;top: 0;border-radius: 0;overflow-y: scroll;}
 .fullscreen-metafield .next-card-metafield #metafield_value { min-height:300px}
 .fullscreen-metafield div#global-notification {left:0; z-index:1000000;}
+.fullscreen-metafield .metafield-save-note {display: none;}
 
 .delete-checkbox{vertical-align: top!important;}
 #assets-table tr{transition:background .2s;}
