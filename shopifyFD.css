@@ -92,8 +92,9 @@ body, .global-search__pane{padding-top:32px}
 
 /* Modal*/
 .shopifyJSoverride .modal body{overflow: hidden}
-.shopifyJSoverride #metacount { background: #90A5A7;padding: .25em .5em;font-size: .8em;border-radius: 3px;color: #fff;float: right; }
-.shopifyJSoverride #metacount.active {display: inline-block;color:#fff;background: #21C2A8}
+
+#metacount { padding: 0 .5em;font-size: .6em;border-radius: 3px;color: #CDCFD1;float: right; }
+#metacount.active {display: inline-block;}
 
 /* Sub section - mostly for the metafield box */
 .shopifyJSoverride .sub_section-summary{
@@ -220,10 +221,10 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
   background: #fff;
   color: rgb(228, 37, 37);
 }
-
+/*
 .shopifyJSoverride .theme-id{color: #ccc;font-family: monospace;margin-top: 7px;}
 .shopifyJSoverride .theme-id.published{margin-left: 1em;margin-top:0;}
-
+*/
 .no-btn {height: inherit;line-height: inherit;border: none;padding: inherit;min-width: 1.25em;}
 .no-btn .ico{opacity:0;}
 
@@ -380,21 +381,20 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 @media print {
   #customer_meta_box, .noprint {display:none;}
 }
+
+.metafield-fullscreen-btn {cursor:pointer;top: .1em;opacity: .2;float: right}
+.metafield-fullscreen-btn:hover{ opacity: .5 }
+.fullscreen-metafield {overflow: hidden}
+.fullscreen-metafield .metafield-fullscreen-btn {transform: scaleX(-1) scaleY(-1);}
+.fullscreen-metafield .next-card-metafield {position: fixed;left: 0;right: 0;z-index: 999999;height: 100%;top: 0;border-radius: 0;overflow-y: scroll;}
+.fullscreen-metafield .next-card-metafield #metafield_value { min-height:300px}
+.fullscreen-metafield div#global-notification {left:0; z-index:1000000;}
+
 .delete-checkbox{vertical-align: top!important;}
 #assets-table tr{transition:background .2s;}
 tr.marked-for-deletion {background:#CA1800;color: #fff;}
 tr.marked-for-deletion a{color:#fff}
-
-/*
-.fd-btn{
-  background: #898B8A;
-  transition: all .25s;
-  border: 1px solid #898B8A;
-  color: #efefef;
-}
-.fd-btn:hover{background: #21C2A8;color:#fff;}
-*/
-
+.next-card-metafield {position: relative;}
 .next-card__section ~ .next-card__section {border-top: 1px solid #D8D8D8;}
 .new-variants-table__row.active{background: #eff9fd;}
 .table-hover tr#vrow:hover td {background: #fff}

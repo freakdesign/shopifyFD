@@ -87,7 +87,7 @@
 
 
 	var metafieldform = '<label class="metafield-next-label next-label">'+translation.add_new_metafield+'</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+translation.save+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hide btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hide delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+translation.delete+'</a><p style="margin:1em 0;line-height:1"><small>Please note: Using the save button top right will NOT save these metafields. Be sure to click '+translation.save+' above.<br><br><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hide"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get '+settings.apiLimit+' products</a></p></div>';
-	var metafieldloader = '<div class="next-card-metafield next-card next-card--aside fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <span id="metacount" class="hide">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
+	var metafieldloader = '<div class="next-card-metafield next-card next-card--aside fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <svg class="next-icon next-icon--size-16 metafield-fullscreen-btn"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-website"></use></svg><span id="metacount" class="hide">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
 	var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
 	var metafield_default = '<option value="">'+translation.select_or_create_metafield+'</option>';
 	var metafield_copybox = '<div class="metafield-copy-paste sst"><a class="fd-btn btn btn-slim" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
@@ -454,6 +454,21 @@
     */
 
     var url = getMetafieldUrl() + '?limit='+settings.apiLimit;
+    var body = $('body');
+    app.cache.fullscreenMetafield = $('.metafield-fullscreen-btn');
+
+    if(app.cache.fullscreenMetafield.length){
+
+      app.cache.fullscreenMetafield.on('click',function(){
+        if(body.hasClass('fullscreen-metafield')){
+          body.removeClass('fullscreen-metafield');
+        }else{
+          body.addClass('fullscreen-metafield');
+        }
+      });
+
+    }
+
     $.getJSON(url, function(data) {
 
       var h = '';
@@ -543,6 +558,18 @@
     $('#adv_get_products').off('click').on('click',function(){
 
       var t = $(this);
+      var add_select = function(d){
+        var toappend='';
+        var select=$('<select />').change(function(){
+          var t=$(this);
+          $('#metafield_value').val(t.val());
+        }).html('<option value="">Add product handle as value</option>');
+        for (var i = 0, len = d.products.length; i < len; i++) {
+          toappend+='<option value="'+d.products[i].handle+'">'+d.products[i].title+'</option>';
+        }
+        select.append(toappend);
+        t.after(select).hide();
+      };
 
       if(!_data('products')){
         $.ajax({
@@ -552,16 +579,7 @@
           success: function(d){
             if(d.products.length){
               _data('products',d);
-              var toappend='';
-              var select=$('<select />').change(function(){
-                var t=$(this);
-                $('#metafield_value').val(t.val());
-              }).html('<option value="">Add product handle as value</option>');
-              for (var i = 0, len = d.products.length; i < len; i++) {
-                toappend+='<option value="'+d.products[i].handle+'">'+d.products[i].title+'</option>';
-              }
-              select.append(toappend);
-              t.after(select).hide();
+              add_select(d);
             }
           },
           fail: function(){
@@ -570,18 +588,7 @@
         });
       }else{
         var d = _data('products');
-        var toappend='';
-        var select=$('<select />').change(function(){
-          var t=$(this);
-          $('#metafield_value').val(t.val());
-        }).html('<option value="">Add product handle as value</option>');
-
-        for (var i = 0, len = d.products.length; i < len; i++) {
-          toappend+='<option value="'+d.products[i].handle+'">'+d.products[i].title+'</option>';
-        }
-
-        select.append(toappend);
-        t.after(select).hide();
+        add_select(d);
       }
 
       return false;
@@ -590,6 +597,20 @@
 
     $('#adv_get_collections').off('click').on('click',function(){
       var t = $(this);
+      var add_select = function(d){
+        var toappend='';
+        var select=$('<select />',{}).change(function(){
+          var t=$(this);
+          $('#metafield_value').val(t.val());
+        }).html('<option value="">Add collection handle as value</option>');
+
+        for (var i = 0, len = d.collections.length; i < len; i++) {
+          toappend+='<option value="'+d.collections[i].handle+'">'+d.collections[i].title+'</option>';
+        }
+
+        select.append(toappend);
+        t.after(select).hide();
+      };
       if(!_data('collections')){
         $.ajax({
           type: 'GET',
@@ -598,18 +619,7 @@
           success: function(d){
             if(d.collections.length){
               _data('collections',d);
-              var toappend='';
-              var select=$('<select />',{}).change(function(){
-                var t=$(this);
-                $('#metafield_value').val(t.val());
-              }).html('<option value="">Add collection handle as value</option>');
-
-              for (var i = 0, len = d.collections.length; i < len; i++) {
-                toappend+='<option value="'+d.collections[i].handle+'">'+d.collections[i].title+'</option>';
-              }
-
-              select.append(toappend);
-              t.after(select).hide();
+              add_select(d);
             }
           },
           error: function(){
@@ -618,18 +628,7 @@
         });
       }else{
         var d = _data('collections');
-        var toappend='',
-          select=$('<select />',{}).change(function(){
-            var t=$(this);
-            $('#metafield_value').val(t.val());
-          }).html('<option value="">Add collection handle as value</option>');
-
-          for (var i = 0, len = d.collections.length; i < len; i++) {
-            toappend+='<option value="'+d.collections[i].handle+'">'+d.collections[i].title+'</option>';
-          }
-
-          select.append(toappend);
-          t.after(select).hide();
+        add_select(d);
       }
       return false;
 
