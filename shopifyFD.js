@@ -1122,10 +1122,12 @@
     var editVariantMetafieldBtn = $('.edit-variant-metafield');
     editVariantMetafieldBtn.on('click', function(e) {
       e.preventDefault();
-      $('#vrow').remove();
-      editVariantMetafieldBtn.removeClass('active');
       var t = $(this);
-      if(t.hasClass('active')){ return true }
+
+      $('#vrow').remove();
+      if(t.hasClass('active')){ t.removeClass('active');return }
+      
+      editVariantMetafieldBtn.removeClass('active');
       t.addClass('active');
 
       var v = t.attr('data-val');
@@ -2940,13 +2942,15 @@
           variantRows.each(function(i){
             var variantEditBtn = variantRows.eq(i).find('td:last a:first');
             var variant_id = variantEditBtn.prop('href').split('/').pop();
+            var variantEditCheck = $('input#variant_ids_'+variant_id);
             var variantEditMetafieldBtn = $('<a />',{
-              'class':'edit-variant-metafield btn btn-slim next-field--connected next-field--connected--no-flex',
+              'class':'edit-variant-metafield',
+              'style':'margin-left:3px',
               'data-val':variant_id
-            }).html('<span><svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" width="12" height="12" viewBox="0 0 12 12" enable-background="new 0 0 12 12" xml:space="preserve"><path fill="#21C2A8" d="M0 0v12h12V0H0zM11 11H1V1h10V11zM5 9h2V7h2V5H7V3H5v2H3v2h2V9z"></path></svg></span>');
+            }).html('<span><svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0" y="0" width="16" height="16" viewBox="0 0 12 12" enable-background="new 0 0 12 12" xml:space="preserve"><path fill="currentColor" d="M0 0v12h12V0H0zM11 11H1V1h10V11zM5 9h2V7h2V5H7V3H5v2H3v2h2V9z"></path></svg></span>');
 
             variants_ids['variant_'+i] = {'id':variant_id};
-            variantEditBtn.after(variantEditMetafieldBtn);
+            variantEditCheck.after(variantEditMetafieldBtn);
 
             var beforeHTML = '<td class="vid new-variants-table__cell"><input class="mock-edit-on-hover tr" data-action="selectall" data-val="'+variant_id+'" type="text" value="'+variant_id+'" /></td>';
             $(this).find('td:last-child').before(beforeHTML);
@@ -2955,10 +2959,10 @@
             panel_editvariantmeta();
             windowResize();
           });
-
+          /*
           $('.table__cell--sticky--right').attr('style','height: 53px; width:110px');
           $('.table-wrapper-sticky').attr('style','padding-left: 50px; padding-right: 110px;');
-
+          */
         }else if(!document.getElementsByClassName('vbox-single-card').length){
           /* single variant product */
           if(document.getElementById('product_variant_id') != null){

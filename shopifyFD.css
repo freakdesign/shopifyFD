@@ -64,7 +64,10 @@ body, .global-search__pane{padding-top:32px}
   .header-row {top:0px}
 }
 
-.shopifyJSoverride tr.variant td:last-child {min-width:70px;}
+/* .shopifyJSoverride tr.variant td:last-child {min-width:70px;} */
+
+.edit-variant-metafield { color:#ccc }
+.edit-variant-metafield.active {color: #21C2A8;}
 
 /* you know, for hiding stuff... */
 .shopifyJSoverride .hidden{display:none!important}
