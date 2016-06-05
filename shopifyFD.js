@@ -91,7 +91,7 @@
 	var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
 	var metafield_default = '<option value="">'+translation.select_or_create_metafield+'</option>';
 	var metafield_copybox = '<div class="metafield-copy-paste sst"><a class="fd-btn btn btn-slim" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
-	var rte_menu_html = '<div class="sst" id="rte_extra"><a class="btn fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except for <br>target,class,href & src</span></span>Clean HTML</a> <a class="btn fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn fd-btn" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
+	var rte_menu_html = '<div class="sst" id="rte_extra"><a class="btn btn-slim fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except for <br>target,class,href & src</span></span>Clean HTML</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim fd-btn" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
 	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+translation.save+'</a> <a class="btn btn-slim saveinteger" href="#">'+translation.save+' as Integer</a> <a title="'+translation.delete+'" class="delete ico ico-16 ico-delete hidden" href="#">'+translation.delete+'</a></span></div>';
   var vbox_single_html = '<div class="vbox-single-card next-card"><div class="next-card__section"><h2 class="next-heading--quarter-margin">Variant Metafields</h2><div id="vrow" class="single-variant">'+vbox+'</div></div></div>'
 	var appnav = '<li><a id="aboutapp" href="#">'+translation.about_shopifyfd+'</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li class="view-json-endpoint hidden"><a class="view-json-endpoint-link" href="#" target="_blank">View JSON</a></li><li><a href="'+paths.help+'" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
@@ -3142,6 +3142,10 @@
   };
 
 
+  var setup_bulk_editor = function(){
+    if(!window.location.search.length){ return }
+  }
+
   var setup_pages = function(){
 
     var targetHTML = $(selector_next_secondary);
@@ -4013,6 +4017,7 @@
           } else if( alpha === 'products' && !isNaN(omega)){ setup_products();
           } else if( alpha === 'variants' && !isNaN(omega)){ setup_variants();
           } else if( alpha === 'admin' && omega === 'apps' ){ /*setup_apps();*/
+          } else if( alpha === 'admin' && omega === 'bulk' ){ setup_bulk_editor();
           } else if( alpha === 'admin' && omega === 'channels' ){ /*setup_channels();*/
           } else if( alpha === 'admin' && omega === 'collections' ){ setup_collections();
           } else if( alpha === 'admin' && omega === 'discounts' ){ setup_discounts();

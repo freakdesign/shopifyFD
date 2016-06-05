@@ -96,7 +96,7 @@ body, .global-search__pane{padding-top:32px}
 /* Modal*/
 .shopifyJSoverride .modal body{overflow: hidden}
 
-#metacount { padding: 0 .5em;font-size: .6em;border-radius: 3px;color: #CDCFD1;float: right; }
+#metacount { padding: 0 .5em;border-radius: 3px;color: #CDCFD1;float: right; }
 #metacount.active {display: inline-block;}
 
 /* Sub section - mostly for the metafield box */
@@ -385,7 +385,7 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
   #customer_meta_box, .noprint {display:none;}
 }
 
-.metafield-fullscreen-btn {cursor:pointer;top: .1em;opacity: .2;float: right}
+.metafield-fullscreen-btn {cursor:pointer;top: .25em;;opacity: .2;float: right}
 .metafield-fullscreen-btn:hover{ opacity: .5 }
 .fullscreen-metafield {overflow: hidden}
 .fullscreen-metafield .metafield-fullscreen-btn {transform: scaleX(-1) scaleY(-1);}
