@@ -16,7 +16,7 @@
  ### #           **# ### 
      # - - - - - - #                 
       | | | | | | |
-	
+  
      freakdesign.com               
 
 
@@ -86,31 +86,31 @@
   loadCss();
 
 
-	var metafieldform = '<label class="metafield-next-label next-label">'+translation.add_new_metafield+'</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+translation.save+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hide btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hide delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+translation.delete+'</a><p style="margin:1em 0;line-height:1"><small><span class="metafield-save-note">Please note: Using the save button top right will NOT save these metafields. Be sure to click '+translation.save+' above.<br><br></span><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hide"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get '+settings.apiLimit+' products</a></p></div>';
-	var metafieldloader = '<div class="next-card-metafield next-card next-card--aside fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <svg class="next-icon next-icon--size-16 metafield-fullscreen-btn"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-website"></use></svg><span id="metacount" class="hide">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
-	var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
-	var metafield_default = '<option value="">'+translation.select_or_create_metafield+'</option>';
-	var metafield_copybox = '<div class="metafield-copy-paste sst"><a class="fd-btn btn btn-slim" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
-	var rte_menu_html = '<div class="sst" id="rte_extra"><a class="btn btn-slim fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except for <br>target,class,href & src</span></span>Clean HTML</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim fd-btn" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
-	var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+translation.save+'</a> <a class="btn btn-slim saveinteger" href="#">'+translation.save+' as Integer</a> <a title="'+translation.delete+'" class="delete ico ico-16 ico-delete hidden" href="#">'+translation.delete+'</a></span></div>';
+  var metafieldform = '<label class="metafield-next-label next-label">'+translation.add_new_metafield+'</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+translation.save+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hide btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hide delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+translation.delete+'</a><p style="margin:1em 0;line-height:1"><small><span class="metafield-save-note">Please note: Using the save button top right will NOT save these metafields. Be sure to click '+translation.save+' above.<br><br></span><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hide"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get '+settings.apiLimit+' products</a></p></div>';
+  var metafieldloader = '<div class="next-card-metafield next-card next-card--aside fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <svg class="next-icon next-icon--size-16 metafield-fullscreen-btn"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-website"></use></svg><span id="metacount" class="hide">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
+  var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
+  var metafield_default = '<option value="">'+translation.select_or_create_metafield+'</option>';
+  var metafield_copybox = '<div class="metafield-copy-paste sst"><a class="fd-btn btn btn-slim" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
+  var rte_menu_html = '<div class="sst" id="rte_extra"><a class="btn btn-slim fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except for <br>target,class,href & src</span></span>Clean HTML</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim fd-btn" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
+  var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+translation.save+'</a> <a class="btn btn-slim saveinteger" href="#">'+translation.save+' as Integer</a> <a title="'+translation.delete+'" class="delete ico ico-16 ico-delete hidden" href="#">'+translation.delete+'</a></span></div>';
   var vbox_single_html = '<div class="vbox-single-card next-card"><div class="next-card__section"><h2 class="next-heading--quarter-margin">Variant Metafields</h2><div id="vrow" class="single-variant">'+vbox+'</div></div></div>'
-	var appnav = '<li><a id="aboutapp" href="#">'+translation.about_shopifyfd+'</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li class="view-json-endpoint hidden"><a class="view-json-endpoint-link" href="#" target="_blank">View JSON</a></li><li><a href="'+paths.help+'" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
-	var bulk_html_box = '<p class="warning">This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect all product metafields. There is no undo.</p><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">'+translation.save+'</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
-	var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim" href="#">Autosave</a></li>';
-	var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopifyfd.com/">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://freakdesign.com.au/pages/shopifyfd" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
-	var bubble_html = '<div class="bubble hide fadein"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="pr"><ul class="unstyled"></ul></div></div></div>';
-	var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
-	var next_item_HTML = '<div class="ui-layout__item"><div class="next-card"></div></div>';  
+  var appnav = '<li><a id="aboutapp" href="#">'+translation.about_shopifyfd+'</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li class="view-json-endpoint hidden"><a class="view-json-endpoint-link" href="#" target="_blank">View JSON</a></li><li><a href="'+paths.help+'" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
+  var bulk_html_box = '<p class="warning">This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect all product metafields. There is no undo.</p><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">'+translation.save+'</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
+  var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim" href="#">Autosave</a></li>';
+  var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopifyfd.com/">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://freakdesign.com.au/pages/shopifyfd" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
+  var bubble_html = '<div class="bubble hide fadein"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="pr"><ul class="unstyled"></ul></div></div></div>';
+  var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
+  var next_item_HTML = '<div class="ui-layout__item"><div class="next-card"></div></div>';  
 
-	var selector_next_secondary = '.ui-layout__section--secondary .ui-layout__item:last';
-	var selector_next_primary = '.ui-layout__section--primary .ui-layout__item:last';
+  var selector_next_secondary = '.ui-layout__section--secondary .ui-layout__item:last';
+  var selector_next_primary = '.ui-layout__section--primary .ui-layout__item:last';
   var selector_sidebar = '.next-layout__sidebar:first';
   var selector_sidebar_child = '.next-layout__sidebar > div:first';
-	var selector_sidebar_cell = '.next-grid__cell--third:first';
-	var selector_mf_content = 'div.metafield-content';
+  var selector_sidebar_cell = '.next-grid__cell--third:first';
+  var selector_mf_content = 'div.metafield-content';
   var selector_general_settings = '#settings-general section:first';
-	var header_primary_action = '.header .header__primary-actions:first';
-	var header_secondary_action = '.header .header__secondary-actions:first';
+  var header_primary_action = '.header .header__primary-actions:first';
+  var header_secondary_action = '.header .header__secondary-actions:first';
 
 
   var alphaOmega = function(url){
@@ -3212,256 +3212,177 @@
   };
 
 
-  var getShippingZone = function(settings){
+  var isJson = function(a) {
+    try { JSON.parse(a) } catch (e) { return false }
+    return true;
+  }
 
-    if(typeof settings.urls ==='undefined'){ return false }
+  var setup_shipping_zones = function(){
 
-    notice('Copying rates ('+ settings.urls.length +')');
-    var currentZoneUrl = settings.urls[0];
+    var getShippingZones = function(callback){
+      $.ajax({
+        type: "GET",
+        dataType:'json',
+        url: '/admin/settings/shipping_zones.json',
+        success: function(d){
+          app.data.shipping_zones = d.shipping_zones;
+          if(typeof callback === 'function'){ callback(d) }
+        },
+        error: function(d){
+          notice('Error getting JSON rates',true);
+        }
+      });
+    };
 
-    if(currentZoneUrl.indexOf('price_based') < 0 && currentZoneUrl.indexOf('weight_based') < 0){ 
-      if(typeof settings.callback ==='function'){ settings.callback(zone,settings.urls) }
-      return false; 
+    var ratesCheck = function(){
+      var whitelist = ['price','weight'];
+      for (var i = 0; i < whitelist.length; i++) {
+        if( !isJson(localStorage['rates_'+whitelist[i]]) ){ continue }
+        $('button.paste-rates[data-type="'+whitelist[i]+'"]')[0].disabled = false;
+      };
+    };
+
+    var getZone = function(id,type){
+      for (var i = 0; i < app.data.shipping_zones.length; i++) {
+        if(app.data.shipping_zones[i].id === parseInt(id)){ 
+          if(typeof type === 'undefined'){
+            return app.data.shipping_zones[i]   
+          }else{
+            return app.data.shipping_zones[i][type+'_based_shipping_rates']
+          }
+          
+        }
+      };
+      return false
     }
 
-    var zone = {};
 
-    if(currentZoneUrl.indexOf('price_based')>-1){
-      zone.shippingType='price_based';
-    }else{
-      zone.shippingType='weight_based';
-    }
+    getShippingZones(function(d){
 
-    $.ajax({
-      url: currentZoneUrl,
-      success: function(d){
-        var html = $(d);
+      if(!supportsHTML5Storage()){ return }
 
-        zone.shippingRateName = html.find('#shipping_rate_name').val();
-        zone.shippingRatePrice = html.find('#shipping_rate_price').val();
+      var whitelist = ['price','weight'];
+      var buttons = {};
+      var rateRows = {};
 
-        if(zone.shippingType === 'price_based'){
-          zone.shippingRateMinOrder = html.find('#shipping_rate_min_order_subtotal').val();
-          zone.shippingRateMaxOrder = html.find('#shipping_rate_max_order_subtotal').val(); 
+      var fields = {
+        price:'<input type="hidden" name="shipping_zone[rates][][min_order_subtotal]" value="%min_order_subtotal%""><input type="hidden" name="shipping_zone[rates][][max_order_subtotal]" value="%max_order_subtotal%">',
+        weight:'<input type="hidden" name="shipping_zone[rates][][weight_low]" value="%weight_low%"><input type="hidden" name="shipping_zone[rates][][weight_high]" value="%weight_high%">'
+      }
+
+      var priceRowHtml = ['<tr class="pasted-rate" style="opacity:.5;font-style:italic"><td><input name="shipping_zone[rates][][name]" value="%name%"></td><td>%range%</td><td>%amount%</td><td class="shipping-rate__actions type--right"><input type="hidden" name="shipping_zone[rates][][id]" value=""><input type="hidden" name="shipping_zone[rates][][price]" value="%price%"><input type="hidden" name="shipping_zone[rates][][type]" value="%type%">','Pasted<button class="btn btn--plain btn-remove-paste"><svg class="next-icon next-icon--size-10 next-icon--slate-lighter"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-remove"></use></svg></button></td></tr>'];
+
+      var primaryButton = $('.header__primary-actions .btn-primary');
+
+      var makeRateRow = function(rate,type){
+        var row = priceRowHtml.join(fields[type]);
+
+        for (var key in rate) {
+          if (rate.hasOwnProperty(key)) {
+            if(['max_order_subtotal','weight_high'].indexOf(key)>-1 && !rate[key]){
+                row = row.replace('%'+key+'%','') ;
+            }else{
+              row = row.replace('%'+key+'%',rate[key])  
+            }
+          }
+        }
+
+        /* temp removal of range until we add that logic */
+        var range = '';
+        if(type === 'weight'){
+          range = parseInt(rate.weight_low).toFixed(2) + ' ' + Shopify.shop.settings.defaultWeightUnit + ' - ' + parseInt(rate.weight_high).toFixed(2) + ' ' + Shopify.shop.settings.defaultWeightUnit;
+        }else if(type === 'price'){
+          if(rate.max_order_subtotal){
+            range = Shopify.shop.settings.money_symbol + rate.min_order_subtotal + ' - ' + Shopify.shop.settings.money_symbol + rate.max_order_subtotal;
+          }else{
+            range = Shopify.shop.settings.money_symbol + rate.min_order_subtotal + ' and up';
+          }
+        }
+
+        row = row.replace('%range%',range); 
+        row = row.replace('%type%',type); 
+
+        if(parseInt(rate.price) === 0){
+          row = row.replace('%amount%','Free');
         }else{
-          zone.shippingRateWeightLow = html.find('#shipping_rate_weight_low').val();
-          zone.shippingRateWeightHigh = html.find('#shipping_rate_weight_high').val();
+          row = row.replace('%amount%',Shopify.shop.settings.money_symbol + rate.price);
+        }
+        
+        return row;
+      }
+
+      for (var i = 0; i < whitelist.length; i++) {
+
+        buttons[whitelist[i]] = $('button[data-bind-event-click="'+ whitelist[i] +'BasedShippingRateModal.open(), '+ whitelist[i] +'BasedShippingRateModal.new()"]');
+        rateRows[whitelist[i]] = $('.table-wrapper[data-bind-show="'+ whitelist[i] +'BasedShippingRatesViewer.hasRates()"] .js-rates-container');
+
+        if(!buttons[whitelist[i]].length){ continue }
+        if($('.copy-paste-rates[data-type="'+ whitelist[i] +'"]').length){ continue }
+
+        buttons[whitelist[i]].before('<button data-type="'+ whitelist[i] +'" class="copy-rates btn">Copy</button> <button data-type="'+ whitelist[i] +'" class="paste-rates btn" disabled>Paste</button> ');
+
+      };
+
+      var copyButtons = $('button.copy-rates');
+      var pasteButtons = $('button.paste-rates');
+
+      copyButtons.on('click',function(e){
+        e.preventDefault();
+        var t = $(this);
+        var type = t.data('type');
+        t.blur();
+        var ao = alphaOmega();
+        localStorage['rates_'+type] = JSON.stringify(getZone(ao[1],type));
+        ratesCheck();
+      });
+
+      pasteButtons.on('click',function(e){
+
+        e.preventDefault();
+        var t = $(this);
+        var type = t.data('type');
+        t.blur();
+
+        if(!isJson(localStorage['rates_'+type])){ return }
+        if(typeof rateRows[type] === 'undefined'){ return }
+
+        var rates = JSON.parse(localStorage['rates_'+type])
+        if(!rates.length){ return }
+
+        var ao = alphaOmega();
+        var section = $('div[data-bind-show="'+type+'BasedShippingRatesViewer.hasRates()"]');
+
+        section[0].classList.remove('hide');
+        var subdued = $('div[data-bind-show="!'+type+'BasedShippingRatesViewer.hasRates()"]');
+        if(subdued.length){
+          subdued[0].classList.add('hide');
+        }
+        
+        for (var i = 0; i < rates.length; i++) {
+          rateRows[type].append(makeRateRow(rates[i],type))
+        };
+
+        $('.btn-remove-paste').off('click').on('click',function(e){
+          e.preventDefault();
+          $(this).parents('.pasted-rate').remove();
+        });        
+
+        if(primaryButton.length){
+          primaryButton[0].disabled = false;
+          primaryButton[0].classList.remove('disabled');
         }
 
-        if(typeof settings.callback ==='function'){ settings.callback(zone,settings.urls) }
+      });
+    
+      ratesCheck();
 
-      }
     });
 
   };
-
-
-  var deleteZones = function(zones){
-    if(typeof zones === 'undefined'){ return }
-    notice('Delete zone ('+zones.length+')');
-    var url = '/admin/settings/shipping_zones/'+zones[0];
-    var data = {
-      'utf8':'✓',
-      '_method':'delete'
-    }
-    $.ajax({
-      type: "POST",
-      url: url,
-      data: data,
-      success: function(d){
-        $('a[href="/admin/settings/shipping_zones/'+zones[0]+'"]').parents('.zone-shipping-rate').addClass('disabled').css({'opacity':'.3'});
-        zones.shift();
-        if(zones.length){
-          deleteZones(zones);
-        }else{
-          $('.delete-zones').removeClass('is-loading');
-          notice('Zones deleted. '+translation.reload_page);
-        }
-      },
-      error: function(d){
-        $('.delete-zones').removeClass('is-loading');
-        notice('Error deleting rates. '+translation.reload_page,true);
-        return;
-      }
-    });
-  };
-
-
-  var addZones = function(rates,zone){
-    notice('Pasting rates ('+rates.length+')');
-    var currentZone = rates[0];
-    var data = {
-      utf8:'✓',
-      '':[currentZone.shippingType],
-      shipping_rate:{
-        type:currentZone.shippingType,
-        new_type:currentZone.shippingType,
-        display_type:currentZone.shippingType,
-        name:currentZone.shippingRateName,
-        price:currentZone.shippingRatePrice
-      }
-    }
-
-    var amountTo = '';
-    var amountFrom = '';
-
-    if(currentZone.shippingType === 'weight_based'){
-      data.shipping_rate.weight_low = currentZone.shippingRateWeightLow;
-      data.shipping_rate.weight_high = currentZone.shippingRateWeightHigh;
-      amountFrom = currentZone.shippingRateWeightLow || '0';
-      amountTo = currentZone.shippingRateWeightHigh || 'and up';
-    }else if(currentZone.shippingType === 'price_based'){
-      data.shipping_rate.min_order_subtotal = currentZone.shippingRateMinOrder;
-      data.shipping_rate.max_order_subtotal = currentZone.shippingRateMaxOrder;
-      amountFrom = currentZone.shippingRateMinOrder || '0';
-      amountTo = currentZone.shippingRateMaxOrder || 'and up';
-    }else{
-      return;
-    }
-
-    var ratesPasted = function(){
-      notice('Pasting complete. '+translation.reload_page);
-      $('.paste-zones').removeClass('disabled is-loading');
-    }
-
-    var rateTableHtml = '<div class="table-wrapper table-wrapper--scrollable" style="opacity:.5"><table class="table--zone-rates next-table--no-outside-padding"><thead><tr><td>'+currentZone.shippingRateName+'</td><td></td></tr></thead><tbody><tr><td>'+amountFrom+' - '+amountTo+'</td><td class="type--right">'+currentZone.shippingRatePrice+'</td></tr></tbody></table></div>';
-
-    $.ajax({
-      type: "POST",
-      dataType:'html',
-      url: '/admin/shipping_rates/'+zone,
-      data:data,
-      success: function(d){
-        var zoneTables = $('a[href="/admin/settings/shipping_zones/'+zone+'"]').parents('.zone-shipping-rate').find('.zone-shipping-rates');
-        zoneTables.append(rateTableHtml);
-        rates.shift();
-        if(rates.length){ addZones(rates,zone) }else{
-          ratesPasted();
-        }
-      },
-      error: function(d){
-        notice('Error when pasting a rate',true);
-        rates.shift();
-        if(rates.length){ addZones(rates,zone) }else{
-          ratesPasted();
-        }
-      }
-    });
-
-  };
-
 
   var setup_shipping = function(){
-
-    var shippingZonePanels = $('.zone-shipping-rate');
-    if(!shippingZonePanels.length){ return false }
-
-    var zonePanelLinks = $('.zone-shipping-rate > div').not('.zone-shipping-rates').find('a').parent();
-
-    var btnDeleteZone = $('<a />',{
-      'class':'btn fd-btn delete delete-zones',
-      'href':'#'
-    }).text('Delete all zones').on('click',function(e){
-      e.preventDefault();
-      var t = $(this);
-      t.addClass('is-loading disabled');
-
-      var zoneLinks = $('.zone-shipping-rate > div').find('a[href^="/admin/settings/shipping_zones/"]');
-      if(zoneLinks.length){
-        var zones = [];
-        for (var i = 0; i < zoneLinks.length; i++) {
-          zones.push(zoneLinks[i].href.split('/').pop())
-        };
-        deleteZones(zones);
-      }
-    });
-
-    var btnPasteRates = $('<a />',{
-      'class':'btn btn--plain disabled paste-zones',
-      'style':'border:none',
-      'href':'#'
-    }).text('Paste').on('click',function(e){
-      e.preventDefault();
-      var t = $(this);
-      var reset = function(){
-        t.removeClass('is-loading');
-        $('.paste-zones').removeClass('disabled');
-      }
-
-      t.addClass('is-loading');
-      $('.paste-zones').addClass('disabled');
-
-      var zoneId = t.parent().find('a').eq(2)[0].href.split('/').pop();
-      if(isNaN(zoneId)){
-        notice('Paste failed. ID did not match format expected.',true);
-        reset();
-        return;
-      }
-
-      if(!typeof _data('copiedZones') ==='object'){ reset();return; }
-      var zones = Object.create(_data('copiedZones'));
-      addZones(zones,zoneId);
-
-    });
-
-    var btnCopyRates = $('<a />',{
-      'class':'btn btn--plain copy-zones',
-      'style':'border:none',
-      'href':'#'
-    }).text('Copy').on('click',function(e){
-      e.preventDefault();
-      var t = $(this);
-      $('.paste-zones').addClass('disabled');
-      var zoneLinks = t.parents('.zone-shipping-rate').eq(0).find('.zone-shipping-rates a');
-      if(!zoneLinks.length){ return }
-      var rateUrls = [];
-      zoneLinks.each(function(){
-        rateUrls.push($(this)[0].href);
-      });
-
-      t.addClass('is-loading');
-      var next = t.next('a')[0].href.split('/').pop();
-      
-      if(isNaN(next)){
-        notice('Copy failed. ID did not match format expected.',true);
-        return;
-      }
-
-      getShippingZone({
-        urls:rateUrls,/* array */
-        callback:function(zone,rateUrls){
-          gatherZones(zone,rateUrls)
-        }
-      });
-
-      var allZones = [];
-      var gatherZones = function(zone,rateUrls){
-        if(zone){
-          allZones.push(zone);
-        }
-        if(rateUrls.length>1){
-          rateUrls.shift();
-          getShippingZone({
-            urls:rateUrls,/* array */
-            callback:function(zone,rateUrls){
-              gatherZones(zone,rateUrls)
-            }
-          });
-        }else{
-          t.removeClass('is-loading');
-          $('.paste-zones').removeClass('disabled');
-          notice(allZones.length + ' Rates Copied');
-        }
-      }
-      _data('copiedZones',allZones);
-
-    });
-
-    zonePanelLinks.prepend(btnPasteRates,btnCopyRates);
-
-    $('#settings-shipping > .ui-annotated-section:eq(1) .ui-annotated-section__description').append('<p>The delete function below will immediately attempt to remove all zones and rates. There is no undo.</p>',btnDeleteZone);
-
-
+    $('.ui-annotated-section__annotation .ui-annotated-section__description').eq(1).append('<br><br><p>Shipping rates copy and paste has moved into each shipping zone.</p>');
+    return;
   };
 
 
@@ -4035,6 +3956,7 @@
           } else if( alpha === 'settings' && omega === 'files' ){ setup_files();
           } else if( alpha === 'settings' && omega === 'general' ){ setup_settings_general();
           } else if( alpha === 'settings' && omega === 'shipping' ){ setup_shipping();
+          } else if( alpha === 'shipping_zones' && !isNaN(omega)){ setup_shipping_zones();
           } else if( alpha === 'settings' && omega === 'taxes' ){ setupTaxes();
           }
         }
