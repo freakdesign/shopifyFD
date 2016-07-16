@@ -71,7 +71,7 @@
 
   /* File paths */
   var paths = {
-    css:'//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/s/shopifyFD.css',
+    css:'//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/s/shopifyFD.css?20160717',
     help:'//freakdesign-us.s3.amazonaws.com/shopify/shopifyFD/freakdesign-shopifyfd-for-shopify-guide.pdf'
   }
 
@@ -96,7 +96,7 @@
   var vbox_single_html = '<div class="vbox-single-card next-card"><div class="next-card__section"><h2 class="next-heading--quarter-margin">Variant Metafields</h2><div id="vrow" class="single-variant">'+vbox+'</div></div></div>'
   var appnav = '<li><a id="aboutapp" href="#">'+translation.about_shopifyfd+'</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li class="view-json-endpoint hidden"><a class="view-json-endpoint-link" href="#" target="_blank">View JSON</a></li><li><a href="'+paths.help+'" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
   var bulk_html_box = '<p class="warning">This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect all product metafields. There is no undo.</p><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">'+translation.save+'</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
-  var autosave_html = '<li><a id="autosave" tabindex="-1" class="btn btn-slim" href="#">Autosave</a></li>';
+  var autosave_html = ' <a id="autosave" tabindex="-1" class="btn btn-slim" href="#">Autosave</a>';
   var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopifyfd.com/">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://freakdesign.com.au/pages/shopifyfd" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
   var bubble_html = '<div class="bubble hide fadein"><div class="bubble-content p"><h3 class="large">Orders</h3><div class="pr"><ul class="unstyled"></ul></div></div></div>';
   var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
@@ -1388,8 +1388,20 @@
       save_images_to_meta();
     });
 
+    var rteShowHtml = $('#rte-show-html');
+    if(rteShowHtml.length){
+      var fullscreenRteBtn = $('<button name="" type="button" class="btn rte-tools__source-btn btn-slim fullscreen-rte-btn"><svg class="next-icon next-icon--color-slate next-icon--size-12"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-website"></use></svg></button>');
+      fullscreenRteBtn.on('click',function(e){
+        e.preventDefault();
+        var descriptionRte = document.querySelectorAll('[data-context="descriptionRte"]');
+        if(descriptionRte.length){
+          descriptionRte[0].classList.toggle('fullscreen-rte')
+        }
+      })
+      rteShowHtml.before(fullscreenRteBtn);
+    }
+    
   };
-
 
   var save_images_to_meta = function(){
     /* Take any images from the rte and save as a metafield */
@@ -2810,7 +2822,7 @@
       if (document.getElementById('rte_extra') === null){
 
         $('#product-description_iframecontainer').eq(0).after(rte_menu_html);
-        $('.rtetools-buttons ul.segmented:last').append(autosave_html);
+        $('#rte_extra').append(autosave_html);
 
         setup_rte();
 

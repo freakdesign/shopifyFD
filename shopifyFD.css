@@ -23,7 +23,7 @@
 */
 
 #shopifyJSbar.loading{top:-40px}
-#shopifyJSbar{background:#57666f;position:fixed;top:0;left:0;width:100%;z-index:9999;transition:top .5s}
+#shopifyJSbar{background:#57666f;position:fixed;top:0;left:0;width:100%;z-index:540;transition:top .5s}
 #shopifyJSbar ul{list-style: none;margin:0;color:#fff}
 #shopifyJSbar li, #shopifyJSbar li a{display: inline-block}
 #shopifyJSbar li {float:left}
@@ -48,45 +48,45 @@ body, .global-search__pane{padding-top:32px}
 #gheader.black-header {z-index:99999}
 #global-notification {z-index:999999}
 
-.shopifyJSoverride #sidebar{top: 36px}
+#sidebar{top: 36px}
 
 
 @media screen and (min-width: 769px){
- .header-row, .shopifyJSoverride .next-nav {top:32px;}
+ .header-row, .next-nav {top:32px;}
 }
 
 @media screen and (max-width: 768px){
   #shopifyJSbar{
     display: none;
   }
-  .shopifyJSoverride .next-nav {border-top:2px solid #57666f;}
+  .next-nav {border-top:2px solid #57666f;}
   body{padding-top:0px}
   .header-row {top:0px}
 }
 
-/* .shopifyJSoverride tr.variant td:last-child {min-width:70px;} */
+/* tr.variant td:last-child {min-width:70px;} */
 
 .edit-variant-metafield { color:#ccc }
 .edit-variant-metafield.active {color: #21C2A8;}
 
 /* you know, for hiding stuff... */
-.shopifyJSoverride .hidden{display:none!important}
-.shopifyJSoverride .label.hidden { display: inline; }
+.hidden{display:none!important}
+.label.hidden { display: inline; }
 
 /* Buttons */
-.shopifyJSoverride .section.buttons{padding:20px}
-.shopifyJSoverride .btn.delete{border-color: #CA2929;background: #CA2929;text-shadow:none;color:#fff;transition:background .25s}
+.section.buttons{padding:20px}
+.btn.delete{border-color: #CA2929;background: #CA2929;text-shadow:none;color:#fff;transition:background .25s}
 
 /* Make those delete buttons far more obvious */
-.shopifyJSoverride .btn.delete:hover{background:#121212;color:#fff}
-.shopifyJSoverride .btn.destroy{background:#E71414;color:#fff;text-shadow:none;border:none}
+.btn.delete:hover{background:#121212;color:#fff}
+.btn.destroy{background:#E71414;color:#fff;text-shadow:none;border:none}
 
 /* table adjustment */
-.shopifyJSoverride th.inventory.tc{min-width: 50px}
+th.inventory.tc{min-width: 50px}
 
 /* file listing */
-.shopifyJSoverride #settings-general td.image.thumb, .shopifyJSoverride #settings-general th.image {display:table-cell!important}
-.shopifyJSoverride .active-row {
+#settings-general td.image.thumb, #settings-general th.image {display:table-cell!important}
+.active-row {
   background: #E7F3F3;
   padding: 1em 20px 0;
   margin: 0 -20px 0;
@@ -94,62 +94,62 @@ body, .global-search__pane{padding-top:32px}
 .active-row a.bulkpaste{display: none;}
 
 /* Modal*/
-.shopifyJSoverride .modal body{overflow: hidden}
+.modal body{overflow: hidden}
 
 #metacount { padding: 0 .5em;border-radius: 3px;color: #CDCFD1;float: right; }
 #metacount.active {display: inline-block;}
 
 /* Sub section - mostly for the metafield box */
-.shopifyJSoverride .sub_section-summary{
+.sub_section-summary{
   margin-bottom:1.5em;
   background:#fff;
   padding: 1em;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   transition:border-color .25s
 }
-.shopifyJSoverride .sub_section-summary .content{padding-left:0;padding-bottom:0;margin-bottom:0}
+.sub_section-summary .content{padding-left:0;padding-bottom:0;margin-bottom:0}
 .sub_section-summary h1, .sub_section-summary h2 {font-size: 18px;margin-bottom: 10px;font-weight: 300}
 
-.shopifyJSoverride .section>.section-summary { padding-left:1.5em; }
-.shopifyJSoverride .row-attached-to-top { position: relative;}
-.shopifyJSoverride .view-in-store {background-position: 100% -2561px}
+.section>.section-summary { padding-left:1.5em; }
+.row-attached-to-top { position: relative;}
+.view-in-store {background-position: 100% -2561px}
 
-.shopifyJSoverride .header-main {max-width: inherit;}
-.shopifyJSoverride .header-main .next-icon--website-slate-lightest {margin-left:.5em;}
+.header-main {max-width: inherit;}
+.header-main .next-icon--website-slate-lightest {margin-left:.5em;}
 
 /* loading... */
-.shopifyJSoverride #content.loading .header-row {top:32px!important}
+#content.loading .header-row {top:32px!important}
 
 /* order */
-.shopifyJSoverride .search-row:first-child{margin-top:1em;}
+.search-row:first-child{margin-top:1em;}
 
-.shopifyJSoverride .search-row{
+.search-row{
   background: #efefef;
   font-size: 12px;
   margin-bottom: 1px;
   border-radius: 3px;
 }
 
-.shopifyJSoverride .search-row a {
+.search-row a {
   padding: .5em;
   display:block;
   position: relative;
   text-decoration: none;
 }
-.shopifyJSoverride .search-row a.active, .shopifyJSoverride .search-row a:hover {
+.search-row a.active, .search-row a:hover {
   color:#fff;
   background: #479ccf;
 }
 
-.shopifyJSoverride .search-table tr:hover td {background:#efefef}
+.search-table tr:hover td {background:#efefef}
 
-.shopifyJSoverride .search-table {
+.search-table {
   border: 1px solid #E4E4E4;
   border-radius: 3px;
   table-layout: fixed;
 }
 
-.shopifyJSoverride .search-table a {
+.search-table a {
   display: inline-block;
   width: 2em;
   height: 2em;
@@ -160,10 +160,10 @@ body, .global-search__pane{padding-top:32px}
   color: #fff;
   background: #479ccf;
 }
-.shopifyJSoverride .search-table a:hover{
+.search-table a:hover{
   background:#509338;
 }
-.shopifyJSoverride .search-row a:after {
+.search-row a:after {
   content: '+';
   width: 1em;
   position: absolute;
@@ -172,30 +172,30 @@ body, .global-search__pane{padding-top:32px}
 
 
 /* variant editing... */
-.shopifyJSoverride .vbox {background:#fff;padding: 1em 0 3em;border-bottom: 2px solid #818181}
-.shopifyJSoverride .vbox fieldset {padding:0;display:block;width:100%}
-.shopifyJSoverride .vbox input, .shopifyJSoverride .vbox select {width:32.66%; display:inline-block;margin:0 1% 0 0}
-.shopifyJSoverride .vbox fieldset input:last-child{margin-right:0}
-.shopifyJSoverride .vbox select.active{border: 1px solid #479286;background: #21C2A8;color:#fff}
-.shopifyJSoverride .vbox select.active:focus {background: #fff;color: #121212;}
+.vbox {background:#fff;padding: 1em 0 3em;border-bottom: 2px solid #818181}
+.vbox fieldset {padding:0;display:block;width:100%}
+.vbox input, .vbox select {width:32.66%; display:inline-block;margin:0 1% 0 0}
+.vbox fieldset input:last-child{margin-right:0}
+.vbox select.active{border: 1px solid #479286;background: #21C2A8;color:#fff}
+.vbox select.active:focus {background: #fff;color: #121212;}
 
-.shopifyJSoverride #mv_key {margin-right: 0}
-.shopifyJSoverride #mv_value {width:100%;margin: .25em 0 1em;}
+#mv_key {margin-right: 0}
+#mv_value {width:100%;margin: .25em 0 1em;}
 
-.shopifyJSoverride td.vid{cursor:pointer;font-size: .9em;text-decoration: underline}
-.shopifyJSoverride .vbox .mybuttons {display: block;margin-top:.25em}
-.shopifyJSoverride .vbox .mybuttons a.delete {color: #C71919;float:right}
+td.vid{cursor:pointer;font-size: .9em;text-decoration: underline}
+.vbox .mybuttons {display: block;margin-top:.25em}
+.vbox .mybuttons a.delete {color: #C71919;float:right}
 
-.shopifyJSoverride .single-variant .vbox{border-bottom: 0;padding-bottom:0}
+.single-variant .vbox{border-bottom: 0;padding-bottom:0}
 
-.shopifyJSoverride .sku.label, .shopifyJSoverride .variant-label {float:right;font-size: 11px;padding: 0 1em;margin-right: .5rem;line-height: inherit;font-family: monospace;}
-.shopifyJSoverride .unpublished-theme-title {position: relative;}
-.shopifyJSoverride .header-select {height:32px;max-width: 180px;}
+.sku.label, .variant-label {float:right;font-size: 11px;padding: 0 1em;margin-right: .5rem;line-height: inherit;font-family: monospace;}
+.unpublished-theme-title {position: relative;}
+.header-select {height:32px;max-width: 180px;}
 
 html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none; -moz-user-select: none;-ms-user-select: none;}
 
 /* Modal window, because wrestling the built in one is a pain in the bee-hind... */
-.shopifyJSoverride .modal-bg{z-index: 500}
+.modal-bg{z-index: 500}
 .modalWindow {
   position: fixed;top: 0;right: 0;bottom: 0;left: 0;
   background: rgba(1, 12, 2, 0.7);z-index: 99999;
@@ -220,18 +220,18 @@ html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none;
 
 /* next-grid */
 
-.shopifyJSoverride .next-grid .section-summary .box.warning{
+.next-grid .section-summary .box.warning{
   background: #fff;
   color: rgb(228, 37, 37);
 }
 /*
-.shopifyJSoverride .theme-id{color: #ccc;font-family: monospace;margin-top: 7px;}
-.shopifyJSoverride .theme-id.published{margin-left: 1em;margin-top:0;}
+.theme-id{color: #ccc;font-family: monospace;margin-top: 7px;}
+.theme-id.published{margin-left: 1em;margin-top:0;}
 */
 .no-btn {height: inherit;line-height: inherit;border: none;padding: inherit;min-width: 1.25em;}
 .no-btn .ico{opacity:0;}
 
-.shopifyJSoverride .bubble{
+.bubble{
   top:-1em;
   background: #F7FCFB;
   position: absolute;
@@ -408,3 +408,10 @@ tr.marked-for-deletion a{color:#fff}
 #advanced_meta p {margin-bottom:.25em;}
 #autosave.active {background: #21C2A8;color: #fff;}
 .theme-id .tooltip {-webkit-user-select: text;-moz-user-select: text;-ms-user-select: text;user-select: text;}
+
+.fullscreen-rte-btn{ outline:none }
+.fullscreen-rte { position: fixed;top: 0;left: 0;right: 0;bottom: 0;width: 100%;height: 100%;z-index: 550;background:#fff; }
+.fullscreen-rte .editor-container { height:calc(100% - 110px) }
+.fullscreen-rte #product-description_ifr { width: 100%;height: 100%;display: block; }
+.fullscreen-rte #product-description_iframecontainer {height:100% }
+.fullscreen-rte .fullscreen-rte-btn { transform: scaleX(-1) scaleY(-1) }
