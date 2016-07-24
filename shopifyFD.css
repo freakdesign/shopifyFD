@@ -61,7 +61,7 @@ body, .global-search__pane{padding-top:32px}
   .header-row {top:0px}
 }
 
-.edit-variant-metafield { color: #21c2a8;position: absolute;left: -25px;}
+.edit-variant-metafield { color: #21c2a8;position: absolute;bottom: -4px;left: 18px;}
 .edit-variant-metafield.active {color: #21C2A8;}
 
 /* you know, for hiding stuff... */
