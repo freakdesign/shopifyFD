@@ -1873,7 +1873,7 @@
               var loc = h.getResponseHeader('X-XHR-Redirected-To'); /* this is not always sent */
               if(loc){
 
-                linklistID = loc.split('/').pop();
+                var linklistID = loc.split('/').pop();
 
                 if(!isNaN(linklistID)){
                   notice('Link list added');
@@ -1900,123 +1900,58 @@
 
         };
 
-        /*
-        var create_a_linklist = function(linklist){
-
-          $.ajax({
-            type: "POST",
-            url: '/admin/link_lists.json',
-            data:JSON.stringify(linklist),
-            contentType: "application/json;charset=utf-8", 
-            success: function(d){
-              notice('Link list added');
-              redirect('/admin/link_lists/'+d.link_list.id);
-            },
-            error:function(a){
-              if(a.status === 406){
-                notice('Linklist creation attempted. Reload page.');
-                redirect('/admin/links');
-              }else{
-                notice('Error creating linklist',true); 
-              }
-              
-            }
-          });
-
-        };
-        */
-
         var a = $('<a/>',{
           'href':'#',
           'class':'tooltip-bottom tooltip',
           'style':'margin-right:1.5em'
         }).html('<span class="tooltip-container"><span class="tooltip-label">Make a copy of this linklist</span></span>Duplicate').on('click',function(e){
           e.preventDefault();
-          var t = $(this),
-            a = t.parent().find('a[href^="/admin/link_lists"]').eq(0);
+          var t = $(this);
+          var a = t.parent().find('a[href^="/admin/link_lists"]:first');
+          if(!a.length){
+            notice('Can not copy this linklist. ID was not found',true);
+            return;
+          }
+          
+          t.addClass('btn is-loading');
+          var linkId = a.attr('href').split('/').pop();
 
-            if(a.length){
-              t.addClass('btn is-loading no-btn');
-              href = a.attr('href').split('/').pop();
+          /* prepare for html loading and parse */
+          if(isNaN(linkId)){ return }
+          linkId = parseInt(linkId);
 
-              /* prepare for html loading and parse */
-              if(!isNaN(href)){
-              $.ajax({
-                type: 'GET',
-                url: '/admin/link_lists/'+href,
-                success: function(d){
+          var ll = _data('link_lists');
+          var currentList = false;
 
-                  var html = $(d);
-                  var targetString = '#edit_link_list_'+href;
-                  var target = html.find(targetString);
-
-                  if(target.length){
-
-                    /* remove the extra inputs we don't want */
-                    target.find('input[name="_method"]').remove();
-                    target.find('input[name="authenticity_token"]').remove();
-
-                    /* mark as a copy */
-                    var title = target.find('input[name="link_list[title]"]');
-                    title.val(title.val()+' [COPY]');
-                    
-                    /* find the type select dropdown */
-                    var types = target.find('select[name="link_list[links][][link_type]"]');
-
-                    /* this is a real dirty way of injecting data */
-                    types.each(function(index){
-                      var t = $(this);
-                      var v = t.val();
-                      if(v==='collection'){
-
-                        var selectTarget = target.find('div[context="collectionPicker'+index+'"]').eq(0);
-                        var collectionDef =  selectTarget.attr('define').split(',');
-
-                        if(typeof collectionDef[2] !== 'undefined'){
-                          var subjectID = parseInt(collectionDef[2].replace(/\D/g,''));
-                          selectTarget.after('<input name="link_list[links][][subject_id]" value="'+subjectID+'" />');
-                        }
-
-                      }else if(v==='page'){
-
-                        var selectTarget = target.find('div[context="pagePicker'+index+'"]').eq(0);
-                        var pageDef =  selectTarget.attr('define').split(',');
-
-                        if(typeof pageDef[2] !== 'undefined'){
-                          var subjectID = parseInt(pageDef[2].replace(/\D/g,''));
-                          selectTarget.after('<input name="link_list[links][][subject_id]" value="'+subjectID+'" />');
-                        }
-
-                      }else if(v==='product'){
-
-                        var selectTarget = target.find('div[context="productPicker'+index+'"]').eq(0);
-                        var productDef =  selectTarget.attr('define').split(',');
-
-                        if(typeof productDef[2] !== 'undefined'){
-                          var subjectID = parseInt(productDef[2].replace(/\D/g,''));
-                          selectTarget.after('<input name="link_list[links][][subject_id]" value="'+subjectID+'" />');
-                        }
-                        
-                      }
-                      
-                    });
-                    
-                    create_a_linklist_FIX(target.serialize());
-
-                  }
-
-
-                },
-                error:function(s,b,e){
-                  t.removeClass('btn is-loading no-btn');
-                  notice(e,true);
-                }
-              });
-              }
-
-            }else{
-              notice('Can not copy this linklist. ID was not found',true);
+          for (var i = 0; i < ll.length; i++) {
+            if(linkId === ll[i].id){
+              currentList = ll[i];
+              break;
             }
+          }
+          
+          if(!currentList){ return }
+
+          var makeLinklistFromJson = function(a){
+            var form;
+            form+='utf8=✓';
+            form+='&link_list[title]='+ a.title +' [COPY]';
+            form+='&link_list[handle]='+ a.handle +'-copy';
+            for (var i = 0; i < a.links.length; i++) {
+              form+='&link_list[links][][title]='+ a.links[i].title;
+              form+='&link_list[links][][link_type]='+ a.links[i].link_type;
+              form+='&link_list[links][][subject_params]='+ (a.links[i].subject_params || '' );
+              form+='&link_list[links][][subject_id]='+ (a.links[i].subject_id || '');
+              form+='&link_list[links][][subject]='+ a.links[i].subject;
+  
+            };
+            return form;
+
+          };
+
+          create_a_linklist_FIX(makeLinklistFromJson(currentList));
+            
+
         });
   
         var deleteBtn = $('<a />',{
@@ -2062,8 +1997,8 @@
           url: '/admin/link_lists.json',
           dataType: 'json',
           success: function(d){
-            if(d){
-              _data('link_lists',d);
+            if(d && d.link_lists){
+              _data('link_lists',d.link_lists);
               llf.each(function(index){
                 var t = $(this);
                 t.parent().find('h3').append('<span class="fadein" style="color:#ccc;display: block;font-size: 11px;font-family: monospace;">'+d.link_lists[index].handle+'</span>');
