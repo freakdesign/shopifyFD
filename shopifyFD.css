@@ -51,7 +51,7 @@ body, .global-search__pane{padding-top:32px}
 
 
 @media screen and (min-width: 769px){
- .header-row, .next-nav {top:32px;}
+ .header-row, .next-nav , .ui-title-bar{top:32px;}
 }
 
 @media screen and (max-width: 768px){
