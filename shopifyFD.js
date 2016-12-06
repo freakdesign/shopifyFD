@@ -3329,7 +3329,7 @@
   };
 
   var setup_shipping = function(){
-    $('.ui-annotated-section__annotation .ui-annotated-section__description').eq(1).append('<br><br><p>Shipping rates copy and paste has moved into each shipping zone.</p>');
+    $('.ui-annotated-section__annotation .ui-annotated-section__description').eq(2).append('<br><br><p>Shipping rates copy and paste has moved into each shipping zone.</p>');
     return;
   };
 
