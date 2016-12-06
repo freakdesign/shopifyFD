@@ -2678,7 +2678,7 @@
       if(!document.getElementsByClassName('additional-product-actions').length){
 
         var productOuterVariants = $('#product-outer-variants');
-        var additionalSection = $('<div class="additional-product-actions next-card"><div class="next-card"><div class="next-card__header"><div class="wrappable"><div class="wrappable__item"><h2 class="next-heading">Additional actions</h2></div></div></div><section class="next-card__section additional-product-content"></section></div>');
+        var additionalSection = $('<div class="additional-product-actions ui-layout__item"><div class="next-card"><div class="next-card__header"><div class="wrappable"><div class="wrappable__item"><h2 class="next-heading">Additional actions</h2></div></div></div><section class="next-card__section additional-product-content"></section></div>');
         var additionalSectionContent = additionalSection.find('.additional-product-content');
 
 
