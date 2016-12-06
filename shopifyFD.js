@@ -1,4 +1,4 @@
-/*!
+/*
 
 
 
@@ -107,6 +107,7 @@
   var selector_sidebar = '.next-layout__sidebar:first';
   var selector_sidebar_child = '.next-layout__sidebar > div:first';
   var selector_sidebar_cell = '.next-grid__cell--third:first';
+  var selector_sidebar_cell_alt = '.ui-layout__section--secondary .ui-layout__item:first';
   var selector_mf_content = 'div.metafield-content';
   var selector_general_settings = '#settings-general section:first';
   var header_primary_action = '.header .header__primary-actions:first';
@@ -2609,6 +2610,7 @@
 
       if(!document.getElementsByClassName('next-card-metafield').length){
         var targetHTML = $(selector_sidebar_cell);
+        if(!targetHTML.length){ targetHTML = $(selector_sidebar_cell_alt) }
         if(targetHTML.length){
           targetHTML.prepend(metafieldloader);
           var loadinto = $(selector_mf_content);
