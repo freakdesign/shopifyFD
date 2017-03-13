@@ -110,9 +110,13 @@
   var selector_sidebar_cell_alt = '.ui-layout__section--secondary .ui-layout__item:first';
   var selector_mf_content = 'div.metafield-content';
   var selector_general_settings = '#settings-general section:first';
+
   var header_primary_action = '.header .header__primary-actions:first';
   var header_secondary_action = '.header .header__secondary-actions:first';
-
+  var header_ui_title_bar = '.ui-title-bar';
+  var header_ui_title = '.ui-title-bar .ui-title-bar__heading-group';
+  var header_ui_buttons = 'ui-title-bar__actions:first';
+  var header_ui_buttons_secondary = '.ui-title-bar__actions.ui-title-bar__actions--secondary:first';
 
   var alphaOmega = function(url){
     /* return url parts for location / object detection */
@@ -1233,7 +1237,7 @@
 
   var setup_discounts = function(){
 
-    var targetHTML = $(header_secondary_action);
+    var targetHTML = $(header_ui_title);
     if(!targetHTML.length){ notice('ShopifyFD error : setup_discounts : target html not found',true); return false }
 
     var u = $('<ul/>',{
@@ -1250,7 +1254,7 @@
 
     l.append(c);
     u.append(l);
-    targetHTML.prepend(u);  
+    targetHTML.after(u);  
 
   };
 
@@ -1258,9 +1262,8 @@
   var setup_articles = function(){
 
     var targetHTML = $(selector_next_secondary);
-    var headerButtons = $(header_secondary_action);
-    if(!headerButtons.length){headerButtons = $(header_primary_action)}
 
+    var headerButtons = $(header_ui_buttons_secondary);
     if(targetHTML.length){
 
       var nextCardSecondary = $(next_item_HTML);
@@ -1278,7 +1281,8 @@
     if(headerButtons.length){
       var u = $('<ul/>',{
         'class':'segmented',
-        'id':'copy-object'
+        'id':'copy-object',
+        'style':'margin-right:10px'
       }),
       l = $('<li/>'),
       c = $('<a/>',{
@@ -1319,7 +1323,7 @@
 
       l.append(c);
       u.append(l);
-      headerButtons.prepend(u);
+      headerButtons.before(u);
 
     }else{
       notice('ShopifyFD error : setup_articles : Header button missing',true);
@@ -1462,7 +1466,7 @@
 
     if(document.getElementsByClassName('sku-count-cell').length){ return }
 
-    var firstGridCell = $('div.header-row:first');
+    var firstGridCell = $('.next-tab__container:first');
     if(!firstGridCell.length){ return false }
 
     var skuGridCell = $('<div />',{
@@ -1482,10 +1486,10 @@
         }catch (e) {}
 
         if(totalSkus){
-          var skuNoticeHtml = '<div class="box notice header-notice has-ico"><i class="ico next-icon--16 next-icon--notice-blue in-gutter"></i>You are using %1 skus</div>';
+          var skuNoticeHtml = '<div style="background: #e3e7ea;"class="header-notice">You are using %1 skus</div>';
           skuNoticeHtml = skuNoticeHtml.replace('%1',totalSkus);
           skuGridCell.html(skuNoticeHtml);
-          firstGridCell.after(skuGridCell);
+          firstGridCell.before(skuGridCell);
         }
       }
     });
@@ -1502,8 +1506,8 @@
 
     showSkuHeaderCount();
 
-    var targetHTML = $(header_secondary_action);
-    if(!targetHTML.length){targetHTML = $(header_primary_action)}
+    var targetHTML = $(header_ui_title);
+
 
     if(!targetHTML.length){ 
       notice('Error : setup_products_list : html not found',true); 
@@ -1514,7 +1518,8 @@
 
     var u = $('<ul/>',{
       'class':'segmented',
-      'id':'showsku'
+      'id':'showsku',
+      'style':'margin-right: 10px;'
     });
     var l = $('<li/>');
     var a = $('<a/>',{
@@ -1572,7 +1577,7 @@
 
     l.append(a);
     u.append(l);
-    targetHTML.append(u);
+    targetHTML.after(u);
   };
 
 
@@ -1650,11 +1655,12 @@
 
     if(themeIDs.length < 2){ return }
 
-    var target = $(header_secondary_action); /*$('.header-right a:last')*/
+    var target = $(header_ui_title); 
     if(!target.length){ return }
 
     var downloadAll= $('<a />',{
-      'class':'btn fd-btn'
+      'class':'btn fd-btn',
+      'style':'margin-right: 10px;'
     }).text('Export all themes').on('click',function(e){
       e.preventDefault();
       for (var i = 0; i < themeIDs.length; i++) {
@@ -1668,13 +1674,16 @@
       var plural = 1 < themeIDs.length ? 's' :'';
       notice(themeIDs.length + ' export request'+plural+' sent. Check your inbox');
     });
-    target.append(downloadAll);
+    target.after(downloadAll);
 
 
   };
 
 
   var setup_link_lists_single = function(){
+
+    notice('ShopifyFD for a single menu is currently disabled. Will be back soon.');
+    return;
 
     var targetHTML = $(header_primary_action);
     if(!targetHTML.length){ return false }
@@ -1715,6 +1724,10 @@
 
   var setup_link_lists = function(){
       /* Setup the button and actions for link list duplication and creation */
+
+      notice('ShopifyFD for menus is currently disabled. Will be back soon.');
+      return;
+
       var llf = $('.next-card__section .next-grid__cell--no-flex');
       var create_collection_linklist = function(){
 
@@ -2203,138 +2216,88 @@
       jsonEndpointShow(true);
       _data('collections',false);
       
-      var targetHTML = $(header_secondary_action);
-      if(!targetHTML.length){targetHTML = $(header_primary_action)}
-
-      if(targetHTML.length){
+      var targetHTML = $(header_ui_title);
+      if(!targetHTML.length){ notice('ShopifyFD error : setup_collections : target html not found'); return }
         
-        var u = $('<ul/>',{
-            'class':'segmented',
-            'style':'margin-right: .5em'
-            }),
-            l = $('<li/>'),
-            getCountBtn = $('<a/>',{
-              'class':'btn fd-btn',
-              style:'margin-left:.5em',
-              href:'#'
-            }).text('Show Product Count').on('click',function(e){
-              e.preventDefault();
-              $.ajax({
-                type: 'GET',url: '/admin/collections.json?limit='+settings.apiLimit,dataType: 'json',
-                success: function(d){
-                if(d.collections.length){
-                  _data('collections',d);
-                  for (var i = d.collections.length - 1; i >= 0; i--) {
-                    var collectionTable = $('#collections-results'),
-                    collectionLink = collectionTable.find('a[href="/admin/collections/'+d.collections[i].id+'"]:last');
-                    if(collectionLink.find('span').length === 0){
-                      collectionLink.append('<span class="sku label badge badge--small badge--left-margin">'+d.collections[i].products_count+'</span>');
-                    }
-                  };
-                }
-                }
-              });
-            }),
-            a = $('<a/>',{
-              'class':'btn fd-btn',
-              'href':'#',
-              'title':'Add tags to entire collection'
-            }).html('Bulk edit tags').on('click',function(){
-              fd_modal(true,bulk_tags,'Edit tags for all products in a collection',true);
-              var fdmodal = $("#fdmodal"),
-              a = fdmodal.find('select[data-action="action"]'),
-              b = fdmodal.find('a').eq(1),
-              c = fdmodal.find('select[data-action="collection"]'),
-              t = fdmodal.find('input').eq(0);
-
-              a.change(function(event) {
-                "purge"==a.val()||"set"==a.val()?("purge"==a.val()&&t.val("").attr("disabled","disabled"),b.addClass("delete")):(t.removeAttr("disabled"),b.removeClass("delete"));
-              });
-
-              var set_tags = function(_d,i,t,callback){
-                /* Overwrite the existing tags */
-                var id = _d.products[i].id,
-                data = {
-                  "product": {
-                  "id": id,
-                  "tags": t
+      var u = $('<ul/>',{
+          'class':'segmented'
+          }),
+          l = $('<li/>'),
+          getCountBtn = $('<a/>',{
+            'class':'btn fd-btn',
+            style:'margin-left:.5em',
+            href:'#'
+          }).text('Show Product Count').on('click',function(e){
+            e.preventDefault();
+            $.ajax({
+              type: 'GET',url: '/admin/collections.json?limit='+settings.apiLimit,dataType: 'json',
+              success: function(d){
+              if(d.collections.length){
+                _data('collections',d);
+                for (var i = d.collections.length - 1; i >= 0; i--) {
+                  var collectionTable = $('#collections-results'),
+                  collectionLink = collectionTable.find('a[href="/admin/collections/'+d.collections[i].id+'"]:last');
+                  if(collectionLink.find('span').length === 0){
+                    collectionLink.append('<span class="sku label badge badge--small badge--left-margin">'+d.collections[i].products_count+'</span>');
                   }
                 };
-
-                b.text(i+1+'/'+_d.products.length);
-
-                $.ajax({
-                type: "PUT",
-                url: '/admin/products/'+id+'.json',
-                data: data,
-                dataType: 'json',
-                success: function(d){
-                  ++i;
-                  if(i<_d.products.length){
-                    set_tags(_d,i,t,callback)
-                  }else{
-                    if(typeof callback === 'function'){
-                      callback();
-                    }
-                  }
-                }
-                });
               }
+              }
+            });
+          }),
+          a = $('<a/>',{
+            'class':'btn fd-btn',
+            'href':'#',
+            'title':'Add tags to entire collection'
+          }).html('Bulk edit tags').on('click',function(){
+            fd_modal(true,bulk_tags,'Edit tags for all products in a collection',true);
+            var fdmodal = $("#fdmodal"),
+            a = fdmodal.find('select[data-action="action"]'),
+            b = fdmodal.find('a').eq(1),
+            c = fdmodal.find('select[data-action="collection"]'),
+            t = fdmodal.find('input').eq(0);
 
-              var delete_tags = function(_d,i,t,callback){
+            a.change(function(event) {
+              "purge"==a.val()||"set"==a.val()?("purge"==a.val()&&t.val("").attr("disabled","disabled"),b.addClass("delete")):(t.removeAttr("disabled"),b.removeClass("delete"));
+            });
 
-                if(_d.products[i].tags){
+            var set_tags = function(_d,i,t,callback){
+              /* Overwrite the existing tags */
+              var id = _d.products[i].id,
+              data = {
+                "product": {
+                "id": id,
+                "tags": t
+                }
+              };
 
-                  var a1 = t.replace(/, /g, ',').split(','),
-                    a2 = _d.products[i].tags.replace(/, /g, ',').split(','),
-                    a3 = $(a2).not(a1).get() + '',
-                    id = _d.products[i].id,
-                    data = {
-                      "product": {
-                      "id": id,
-                      "tags": a3
-                      }
-                    };
+              b.text(i+1+'/'+_d.products.length);
 
-                  b.text(i+1+'/'+_d.products.length);
-
-                  $.ajax({
-                    type: "PUT",
-                    url: '/admin/products/'+id+'.json',
-                    data: data,
-                    dataType: 'json',
-                    success: function(d){
-                      ++i;
-                      if(i<_d.products.length){
-                        delete_tags(_d,i,t,callback)
-                      }else{
-                        if(typeof callback === 'function'){
-                          callback();
-                        }
-                      }
-                    }
-                  });
-
+              $.ajax({
+              type: "PUT",
+              url: '/admin/products/'+id+'.json',
+              data: data,
+              dataType: 'json',
+              success: function(d){
+                ++i;
+                if(i<_d.products.length){
+                  set_tags(_d,i,t,callback)
                 }else{
-
-                  ++i;
-                  if(i<_d.products.length){
-                    delete_tags(_d,i,t,callback)
-                  }else{
-                    if(typeof callback === 'function'){
-                      callback();
-                    }
+                  if(typeof callback === 'function'){
+                    callback();
                   }
-
                 }
-
               }
+              });
+            }
 
-              var put_tags = function(_d,i,t,callback){
+            var delete_tags = function(_d,i,t,callback){
+
+              if(_d.products[i].tags){
 
                 var a1 = t.replace(/, /g, ',').split(','),
-                  a2 = _d.products[i].tags.split(','),
-                  a3 = array_unique(a1.concat(a2))+'',
+                  a2 = _d.products[i].tags.replace(/, /g, ',').split(','),
+                  a3 = $(a2).not(a1).get() + '',
                   id = _d.products[i].id,
                   data = {
                     "product": {
@@ -2343,7 +2306,7 @@
                     }
                   };
 
-                  b.text(i+1+'/'+_d.products.length);
+                b.text(i+1+'/'+_d.products.length);
 
                 $.ajax({
                   type: "PUT",
@@ -2353,103 +2316,148 @@
                   success: function(d){
                     ++i;
                     if(i<_d.products.length){
-                      put_tags(_d,i,t,callback)
+                      delete_tags(_d,i,t,callback)
                     }else{
-                      callback();
+                      if(typeof callback === 'function'){
+                        callback();
+                      }
                     }
                   }
                 });
 
+              }else{
+
+                ++i;
+                if(i<_d.products.length){
+                  delete_tags(_d,i,t,callback)
+                }else{
+                  if(typeof callback === 'function'){
+                    callback();
+                  }
+                }
+
               }
 
-              b.on('click',function(){
+            }
 
-              if(c.val().length){
+            var put_tags = function(_d,i,t,callback){
 
-                if(a.val()==='add' && t.val().length){
-
-                  $.ajax({
-                  type: 'GET',
-                  url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
-                  dataType: 'json',
-                  success: function(d){
-                    b.addClass('disabled'); 
-                    put_tags(d,0,t.val(),function(){
-                      notice('Done. Tags have been added');
-                      b.text('Update tags').removeClass('disabled');
-                    });
+              var a1 = t.replace(/, /g, ',').split(','),
+                a2 = _d.products[i].tags.split(','),
+                a3 = array_unique(a1.concat(a2))+'',
+                id = _d.products[i].id,
+                data = {
+                  "product": {
+                  "id": id,
+                  "tags": a3
                   }
-                  });
-                }
+                };
 
-
-                if(a.val()==='purge' || a.val()==='set'){
-
-                  $.ajax({
-                  type: 'GET',
-                  url: '/admin/products.json?collection_id='+c.val()+'&fields=id',
-                  dataType: 'json',
-                  success: function(d){
-                    b.addClass('disabled'); 
-                    set_tags(d,0,t.val(),function(){
-                      notice('Done.');
-                      b.text('Update tags').removeClass('disabled');
-                    });
-                  }
-                  });
-                }
-
-                if(a.val()==='remove'){
-
-                  $.ajax({
-                  type: 'GET',
-                  url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
-                  dataType: 'json',
-                  success: function(d){
-                    b.addClass('disabled'); 
-                    delete_tags(d,0,t.val(),function(){
-                      notice('Matched tags have been removed.');
-                      b.text('Update tags').removeClass('disabled');
-                    });
-                  }
-                  });
-                }
-
-              }else{ notice('Choose a collection',true); }
-
-                return false;
-
-              });
-
-              a.hide();
+                b.text(i+1+'/'+_d.products.length);
 
               $.ajax({
-                type: 'GET',url: '/admin/collections.json?limit='+settings.apiLimit,dataType: 'json',
+                type: "PUT",
+                url: '/admin/products/'+id+'.json',
+                data: data,
+                dataType: 'json',
                 success: function(d){
-                  if(d.collections.length){
-                    _data('collections',d);
-                    var toappend='';
-
-                    for (var i = 0, len = d.collections.length; i < len; i++) {
-                      toappend+='<option value="'+d.collections[i].id+'">'+d.collections[i].title+'</option>';
-                    }
-
-                    c.append(toappend).find('option:eq(0)').text('Select a collection');
-                    a.show();
+                  ++i;
+                  if(i<_d.products.length){
+                    put_tags(_d,i,t,callback)
+                  }else{
+                    callback();
                   }
                 }
               });
 
+            }
+
+            b.on('click',function(){
+
+            if(c.val().length){
+
+              if(a.val()==='add' && t.val().length){
+
+                $.ajax({
+                type: 'GET',
+                url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
+                dataType: 'json',
+                success: function(d){
+                  b.addClass('disabled'); 
+                  put_tags(d,0,t.val(),function(){
+                    notice('Done. Tags have been added');
+                    b.text('Update tags').removeClass('disabled');
+                  });
+                }
+                });
+              }
+
+
+              if(a.val()==='purge' || a.val()==='set'){
+
+                $.ajax({
+                type: 'GET',
+                url: '/admin/products.json?collection_id='+c.val()+'&fields=id',
+                dataType: 'json',
+                success: function(d){
+                  b.addClass('disabled'); 
+                  set_tags(d,0,t.val(),function(){
+                    notice('Done.');
+                    b.text('Update tags').removeClass('disabled');
+                  });
+                }
+                });
+              }
+
+              if(a.val()==='remove'){
+
+                $.ajax({
+                type: 'GET',
+                url: '/admin/products.json?collection_id='+c.val()+'&fields=id,tags',
+                dataType: 'json',
+                success: function(d){
+                  b.addClass('disabled'); 
+                  delete_tags(d,0,t.val(),function(){
+                    notice('Matched tags have been removed.');
+                    b.text('Update tags').removeClass('disabled');
+                  });
+                }
+                });
+              }
+
+            }else{ notice('Choose a collection',true); }
+
               return false;
+
             });
 
-        l.append(a,getCountBtn);
-        u.append(l);
-        targetHTML.prepend(u);
+            a.hide();
 
-      }else{
-        notice('ShopifyFD error : setup_collections : target html not found');
-      }
+            $.ajax({
+              type: 'GET',url: '/admin/collections.json?limit='+settings.apiLimit,dataType: 'json',
+              success: function(d){
+                if(d.collections.length){
+                  _data('collections',d);
+                  var toappend='';
+
+                  for (var i = 0, len = d.collections.length; i < len; i++) {
+                    toappend+='<option value="'+d.collections[i].id+'">'+d.collections[i].title+'</option>';
+                  }
+
+                  c.append(toappend).find('option:eq(0)').text('Select a collection');
+                  a.show();
+                }
+              }
+            });
+
+            return false;
+          });
+
+      l.append(a,getCountBtn);
+      u.append(l);
+      targetHTML.after(u);
+
+
   };
 
 
@@ -3116,8 +3124,7 @@
     }
     
     /* PAGE SWITCHER */
-    var targetHTMLRightMenu = $(header_secondary_action);
-    if(!targetHTMLRightMenu.length){ targetHTMLRightMenu = $(header_primary_action) }
+    var targetHTMLRightMenu = $(header_ui_title);
 
     if(targetHTMLRightMenu.length){
       $.ajax({
@@ -3126,7 +3133,7 @@
         dataType: 'json',
         success: function(d){
           if(d){
-            pages = d.pages;
+            var pages = d.pages;
             var response = '';
             for (var i = 0, len = pages.length; i < len; i++) {
 
@@ -3136,7 +3143,8 @@
             }
             var pageSelect = $('<select />',{
               id:'shopifyjs_llselect',
-              'class':'header-select fadein'
+              'class':'header-select',
+              'style':'margin-right: 10px;'
             }).append('<option>Edit other Page</option>',response).change(function(){
               var v = $(this).val();
               if(v){
@@ -3144,7 +3152,7 @@
               }
             });
             pageSelect.find('option').sort(selectSort).appendTo(pageSelect);
-            targetHTMLRightMenu.prepend(pageSelect);
+            targetHTMLRightMenu.after(pageSelect);
 
           }
           
@@ -3337,8 +3345,7 @@
   var setup_custom_collections = function(){
 
     var targetHTML = $(selector_next_secondary); 
-    var headerButtons = $(header_secondary_action);
-    if(!headerButtons.length){headerButtons = $(header_primary_action)}
+    var headerButtons = $(header_ui_title_bar);
 
     if(targetHTML.length){
 
@@ -3512,7 +3519,7 @@
 
   var setup_files = function(){
 
-    var targetHTML = $('.header .header__primary-actions:first > div');
+    var targetHTML = $(header_ui_title);
     if(!targetHTML.length){ return }
 
     var u = $('<ul/>',{
@@ -3569,7 +3576,7 @@
 
     l.append(a);
     u.append(l);
-    targetHTML.prepend(u);
+    targetHTML.after(u);
     
   };
 
@@ -3651,35 +3658,6 @@
         $(this).select();
       });
       emailLink.parent().parent().after(input);
-    }
-
-    targetHTML = $(header_secondary_action);
-    if(targetHTML.length && typeof _user_id !== 'undefined'){
-      var nativeOrdersButton = $('.header .header__secondary-actions a.next-list__item[target="_blank"]:first');
-      if(nativeOrdersButton.length && nativeOrdersButton[0].href.indexOf('/checkouts/')>-1){
-        var btnOrderStatus = $('<a />',{
-          'class':'btn fd-btn',
-          'href':nativeOrdersButton[0].href,
-          'target':'_blank'
-        }).text('Order Status Page').appendTo(targetHTML);
-      }else{
-        var id = parseInt(window.location.href.split('/').pop());
-        $.ajax({
-          type:'GET',
-          url:'/admin/orders/'+id+'.json',
-          success: function(d){
-            if(d.order.checkout_token){
-              var btnOrderStatus = $('<a />',{
-                'class':'btn fd-btn',
-                'href':'https://checkout.shopify.com/'+ _user_id +'/checkouts/'+d.order.checkout_token+'/thank_you',
-                'target':'_blank'
-              }).text('Order Status Page').appendTo(targetHTML);
-            }
-
-          }
-        });
-      }
-
     }
 
   };
@@ -3880,7 +3858,7 @@
           } else if( alpha === 'articles' && !isNaN(omega)){ setup_articles();
           } else if( alpha === 'blogs' && !isNaN(omega)){ setup_blogs();
           } else if( alpha === 'collections' && !isNaN(omega)){ setup_custom_collections();
-          } else if( alpha === 'link_lists' && !isNaN(omega)){ setup_link_lists_single();
+          } else if( alpha === 'menus' && !isNaN(omega)){ setup_link_lists_single();
           } else if( alpha === 'orders' && !isNaN(omega)){ setup_single_order();
           } else if( alpha === 'pages' && !isNaN(omega)){ setup_pages();
           } else if( alpha === 'products' && !isNaN(omega)){ setup_products();
@@ -3891,7 +3869,7 @@
           } else if( alpha === 'admin' && omega === 'collections' ){ setup_collections();
           } else if( alpha === 'admin' && omega === 'discounts' ){ setup_discounts();
           } else if( alpha === 'admin' && omega === 'draft_orders' ){ /*setup_draft_orders();*/
-          } else if( alpha === 'admin' && omega === 'link_lists' ){ setup_link_lists();
+          } else if( alpha === 'admin' && omega === 'menus' ){ setup_link_lists();
           } else if( alpha === 'admin' && omega === 'links' ){ setup_link_lists();
           } else if( alpha === 'admin' && omega === 'orders' ){ setup_orders();
           } else if( alpha === 'admin' && omega === 'products' ){ setup_products_list();
