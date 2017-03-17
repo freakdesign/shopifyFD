@@ -86,7 +86,7 @@
   loadCss();
 
 
-  var metafieldform = '<label class="metafield-next-label next-label">'+translation.add_new_metafield+'</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn fd-btn savemymeta" id="shopifyjs_savemetafield">'+translation.save+'</a> <a class="int btn fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hide btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hide delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+translation.delete+'</a><p style="margin:1em 0;line-height:1"><small><span class="metafield-save-note">Please note: Using the save button top right will NOT save these metafields. Be sure to click '+translation.save+' above.<br><br></span><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hide"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get '+settings.apiLimit+' products</a></p></div>';
+  var metafieldform = '<label class="metafield-next-label next-label">'+translation.add_new_metafield+'</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim fd-btn savemymeta" id="shopifyjs_savemetafield">'+translation.save+'</a> <a class="int btn btn-slim fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hide btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hide delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+translation.delete+'</a><p style="margin:1em 0;line-height:1"><small><span class="metafield-save-note">Please note: Using the save button top right will NOT save these metafields. Be sure to click '+translation.save+' above.<br><br></span><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hide"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get '+settings.apiLimit+' products</a></p></div>';
   var metafieldloader = '<div class="next-card-metafield next-card next-card--aside fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <svg class="next-icon next-icon--size-16 metafield-fullscreen-btn"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-website"></use></svg><span id="metacount" class="hide">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
   var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
   var metafield_default = '<option value="">'+translation.select_or_create_metafield+'</option>';
@@ -1680,10 +1680,12 @@
   };
 
 
-  var setup_link_lists_single = function(){
+  var setup_link_lists_single = function(v){
 
+    /*
     notice('ShopifyFD for a single menu is currently disabled. Will be back soon.');
     return;
+    */
 
     var targetHTML = $(header_primary_action);
     if(!targetHTML.length){ return false }
@@ -1725,8 +1727,10 @@
   var setup_link_lists = function(){
       /* Setup the button and actions for link list duplication and creation */
 
+      /*
       notice('ShopifyFD for menus is currently disabled. Will be back soon.');
       return;
+      */
 
       var llf = $('.next-card__section .next-grid__cell--no-flex');
       var create_collection_linklist = function(){
@@ -1874,8 +1878,9 @@
 
         };
 
-        var create_a_linklist_FIX = function(linklist){
+        var create_a_linklist_FIX = function(linklist,v){
 
+          if(typeof v === 'undefined'){ var v = 1 }
           if(typeof linklist === 'undefined'){return}
 
           $.ajax({
@@ -1886,9 +1891,7 @@
 
               var loc = h.getResponseHeader('X-XHR-Redirected-To'); /* this is not always sent */
               if(loc){
-
                 var linklistID = loc.split('/').pop();
-
                 if(!isNaN(linklistID)){
                   notice('Link list added');
                   redirect('/admin/link_lists/'+linklistID);
@@ -3633,7 +3636,7 @@
   };
 
 
-  var setup_single_order = function(){
+  var setup_single_order = function(a){
 
     var targetHTML = $(selector_next_secondary);
     if(targetHTML.length){
@@ -3860,6 +3863,7 @@
           } else if( alpha === 'collections' && !isNaN(omega)){ setup_custom_collections();
           } else if( alpha === 'menus' && !isNaN(omega)){ setup_link_lists_single();
           } else if( alpha === 'orders' && !isNaN(omega)){ setup_single_order();
+          } else if( alpha === 'draft_orders' && !isNaN(omega)){ setup_single_order('drafts');
           } else if( alpha === 'pages' && !isNaN(omega)){ setup_pages();
           } else if( alpha === 'products' && !isNaN(omega)){ setup_products();
           } else if( alpha === 'variants' && !isNaN(omega)){ setup_variants();
