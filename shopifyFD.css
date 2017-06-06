@@ -16,33 +16,12 @@
  ### #           **# ### 
      # - - - - - - #                 
       | | | | | | |
-	
+  
      freakdesign.com               
 
 
 */
 
-#shopifyJSbar.loading{top:-40px}
-#shopifyJSbar{background:#57666f;position:fixed;top:0;left:0;width:100%;z-index:540;transition:top .5s}
-#shopifyJSbar ul{list-style: none;margin:0;color:#fff}
-#shopifyJSbar li, #shopifyJSbar li a{display: inline-block}
-#shopifyJSbar li {float:left}
-#shopifyJSbar li:first-child{width: 240px;background: #21C2A8;}
-#shopifyJSbar li:nth-child(2){background: #1D2225}
-#shopifyJSbar li a{padding:0 1em;transition:background .2s;color:#C8D1D1;height: 32px;line-height: 32px;font-size: 95%;}
-#shopifyJSbar li a.active{background:#1C1E1F;}
-#shopifyJSbar li a:hover{background:#139989;text-decoration: none;color:#fff}
-#shopifyJSbar li:nth-child(2) a:hover{background: #139989}
-#shopifyJSbar li:last-child{float:right}
-#shopifyJSbar li:first-child a{border-left: none;width: 100%;text-align: center;color:#fff;}
-#shopifyJSbar li:last-child a, #shopifyJSbar li:nth-child(2) a{border-left:none}
-#shopifyJSbar .ico-16{margin:2px 0 0 2px;}
-#shopifyJSbar *, #shopifyJSbar *:before, #shopifyJSbar *:after {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
-#shopifyJSnav .btn.is-loading, #shopifyJSnav .btn.is-loading:hover{background-color: #FAFAFA!important;border-radius: 0;color: rgba(0,0,0,0);}
-
-
-body, .global-search__pane{padding-top:32px}
-.activity-switch {top: 44px;}
 
 #wrapper{padding-bottom: 5em}
 #gheader.black-header {z-index:99999}

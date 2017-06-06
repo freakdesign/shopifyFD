@@ -85,7 +85,7 @@
   }
   loadCss();
 
-
+  var shopifyfd_nav = '<ul id="shopifyfdnav" class="fadein ui-nav__group ui-nav__group--parent"><li class="ui-nav__item ui-nav__item--parent"><a href="https://freakdesign.com.au/pages/shopifyfd" target="_blank" class="ui-nav__link ui-nav__link--parent" style="color: #21c2a8;"><svg class="next-icon next-icon--size-20 next-icon--no-nudge" style="fill:#27c3aa"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-settings"></use> </svg><span class="ui-nav__label ui-nav__label--parent">ShopifyFD</span></a></li></ul>';
   var metafieldform = '<label class="metafield-next-label next-label">'+translation.add_new_metafield+'</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim fd-btn savemymeta" id="shopifyjs_savemetafield">'+translation.save+'</a> <a class="int btn btn-slim fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hide btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hide delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+translation.delete+'</a><p style="margin:1em 0;line-height:1"><small><span class="metafield-save-note">Please note: Using the save button top right will NOT save these metafields. Be sure to click '+translation.save+' above.<br><br></span><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hide"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get '+settings.apiLimit+' products</a></p></div>';
   var metafieldloader = '<div class="next-card-metafield next-card next-card--aside fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <svg class="next-icon next-icon--size-16 metafield-fullscreen-btn"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-website"></use></svg><span id="metacount" class="hide">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
   var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
@@ -106,6 +106,7 @@
   var selector_next_primary = '.ui-layout__section--primary .ui-layout__item:last';
   var selector_sidebar = '.next-layout__sidebar:first';
   var selector_sidebar_child = '.next-layout__sidebar > div:first';
+  var variant_edit_card = '#variant-edit-card';
   var selector_sidebar_cell = '.next-grid__cell--third:first';
   var selector_sidebar_cell_alt = '.ui-layout__section--secondary .ui-layout__item:first';
   var selector_mf_content = 'div.metafield-content';
@@ -114,9 +115,10 @@
   var header_primary_action = '.header .header__primary-actions:first';
   var header_secondary_action = '.header .header__secondary-actions:first';
   var header_ui_title_bar = '.ui-title-bar';
-  var header_ui_title = '.ui-title-bar .ui-title-bar__heading-group';
+  var header_ui_title = '.ui-title-bar .ui-title-bar__heading-group'; /* header_ui_action_bar_links */
   var header_ui_buttons = 'ui-title-bar__actions:first';
   var header_ui_buttons_secondary = '.ui-title-bar__actions.ui-title-bar__actions--secondary:first';
+  var header_ui_action_bar_links = '.action-bar__top-links';
 
   var alphaOmega = function(url){
     /* return url parts for location / object detection */
@@ -231,35 +233,16 @@
 
   var add_ui = function(){
 
-    if($('#shopifyJSbar').length > 0){ return false }
+    if(document.getElementById('shopifyfdnav')){ return false }
 
-    var bar = $("<div />", { id: "shopifyJSbar",'class':'loading noprint fadein' });
-    var wrapper = $("<div>", {'class': "wrapper clearfix"});
-    var nav = $("<ul>", {id: "shopifyJSnav"});
+    /* get the first nav group */
+    var navGroup = document.querySelectorAll('.ui-nav .ui-nav__group')[0];
+    if(!navGroup){ return }
 
-    nav.html(appnav).find('a').on('click',function(e){
-
-      if(isloading()){ return }
-      var t = $(this);
-      var id=t.prop('id');
-
-      if(id === 'bulkmetafields'){ 
-        bulkmetafields();
-        return false;
-      }else if(id === 'aboutapp'){ 
-        about_app();
-        return false;
-      }
-
-    });
-
-    /* put the jigsaw together */
-    wrapper.append(nav);
-    bar.append(wrapper);
-    
-    /* add to page */
-    $('body').append(bar);
-    bar.removeClass('loading');
+    /* create the wrapper and insert */
+    var el = document.createElement('div');
+    el.innerHTML = shopifyfd_nav;
+    navGroup.parentNode.insertBefore(el, navGroup.nextSibling);
 
   }
 
@@ -806,6 +789,10 @@
   };
 
   var jsonEndpointShow = function(a){
+
+    /* disable in polaris */
+    return;
+
     var target = document.getElementsByClassName('view-json-endpoint');
     if(!target.length){ return }
 
@@ -1202,7 +1189,7 @@
           fd_modal(false);
         });
       }else{
-        var mclose = $('<a href="#" class="close-modal">&times;</a>');
+        var mclose = $('<a href="#" class="close-modal"></a>');
         mclose.on('click',function(){
           fd_modal(false);
           return false;
@@ -1263,7 +1250,7 @@
 
     var targetHTML = $(selector_next_secondary);
 
-    var headerButtons = $(header_ui_buttons_secondary);
+    var headerButtons = $(header_ui_action_bar_links);
     if(targetHTML.length){
 
       var nextCardSecondary = $(next_item_HTML);
@@ -1279,14 +1266,8 @@
     }
 
     if(headerButtons.length){
-      var u = $('<ul/>',{
-        'class':'segmented',
-        'id':'copy-object',
-        'style':'margin-right:10px'
-      }),
-      l = $('<li/>'),
-      c = $('<a/>',{
-        'class':'fd-btn btn btn-separate',
+      var c = $('<button/>',{
+        'class':'btn action-bar__link btn--link',
         'href':'#'
       }).html('Duplicate').on('click',function(e){
         e.preventDefault();
@@ -1321,9 +1302,7 @@
 
       });
 
-      l.append(c);
-      u.append(l);
-      headerButtons.before(u);
+      headerButtons.append(c);
 
     }else{
       notice('ShopifyFD error : setup_articles : Header button missing',true);
@@ -1506,8 +1485,7 @@
 
     showSkuHeaderCount();
 
-    var targetHTML = $(header_ui_title);
-
+    var targetHTML = $(header_ui_action_bar_links);
 
     if(!targetHTML.length){ 
       notice('Error : setup_products_list : html not found',true); 
@@ -1516,21 +1494,13 @@
 
     if($('#showsku').length){ $('#showsku').remove() }
 
-    var u = $('<ul/>',{
-      'class':'segmented',
-      'id':'showsku',
-      'style':'margin-right: 10px;'
-    });
-    var l = $('<li/>');
-    var a = $('<a/>',{
-      'class':'btn fd-btn',
-      'href':'/',
-      'title':'Show SKU and Variant IDs'
+    var a = $('<button/>',{
+      'class':'btn action-bar__link btn--link'
     }).html('Show SKUs & ID').on('click',function(e){
       e.preventDefault();
-      var p = [],
-      sku =[],
-      a_list = $('#all-products td.name a[href]');
+      var p = [];
+      var sku =[];
+      var a_list = $('#all-products td.name a[href]');
 
       a_list.each(function(){
         p.push($(this).attr('href').split(/[/]+/).pop());
@@ -1575,9 +1545,7 @@
 
     });
 
-    l.append(a);
-    u.append(l);
-    targetHTML.after(u);
+    targetHTML.append(a);
   };
 
 
@@ -1655,11 +1623,11 @@
 
     if(themeIDs.length < 2){ return }
 
-    var target = $(header_ui_title); 
+    var target = $(header_ui_action_bar_links); 
     if(!target.length){ return }
 
-    var downloadAll= $('<a />',{
-      'class':'btn fd-btn',
+    var downloadAll= $('<button/>',{
+      'class':'btn action-bar__link btn--link',
       'style':'margin-right: 10px;'
     }).text('Export all themes').on('click',function(e){
       e.preventDefault();
@@ -3094,7 +3062,7 @@
 
   var setup_variants = function(){
     jsonEndpointShow(true);
-    var targetHTML = $(selector_sidebar_child);
+    var targetHTML = $(variant_edit_card);
     if(!targetHTML.length){ return false }
     targetHTML.after(metafieldloader);
     loadmeta($(selector_mf_content));
@@ -3650,6 +3618,8 @@
       notice('ShopifyFD error : setup_single_order : target html not found',true);
     }
 
+    /* removed in polaris */
+    /*
     var emailLink = $('.customer-email:last');
     if(emailLink.length){
       var input = $('<input />',{
@@ -3662,6 +3632,7 @@
       });
       emailLink.parent().parent().after(input);
     }
+    */
 
   };
 
@@ -3809,7 +3780,7 @@
   var init = function(){
 
     /* fire the main scripts */
-    document.getElementsByTagName('html')[0].className += ' shopifyJSoverride';
+    document.getElementsByTagName('html')[0].className += ' shopifyfd-loaded';
     if(settings.enableDragDrop){ set_drag_drop() }
     get_theme_data();
 
@@ -3873,6 +3844,7 @@
           } else if( alpha === 'admin' && omega === 'collections' ){ setup_collections();
           } else if( alpha === 'admin' && omega === 'discounts' ){ setup_discounts();
           } else if( alpha === 'admin' && omega === 'draft_orders' ){ /*setup_draft_orders();*/
+          } else if( alpha === 'admin' && omega === 'gift_cards' ){ /*setup_gift_cards();*/
           } else if( alpha === 'admin' && omega === 'menus' ){ setup_link_lists();
           } else if( alpha === 'admin' && omega === 'links' ){ setup_link_lists();
           } else if( alpha === 'admin' && omega === 'orders' ){ setup_orders();
