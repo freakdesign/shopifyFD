@@ -85,18 +85,17 @@
   }
   loadCss();
 
-
+  var shopifyfd_nav = '<ul id="shopifyfdnav" class="fadein ui-nav__group ui-nav__group--parent"><li class="ui-nav__item ui-nav__item--parent"><a href="https://freakdesign.com.au/pages/shopifyfd" target="_blank" class="ui-nav__link ui-nav__link--parent" style="color: #21c2a8;"><svg class="next-icon next-icon--size-20 next-icon--no-nudge" style="fill:#27c3aa"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-settings"></use> </svg><span class="ui-nav__label ui-nav__label--parent">ShopifyFD</span></a></li></ul>';
   var metafieldform = '<label class="metafield-next-label next-label">'+translation.add_new_metafield+'</label><input class="ssb" maxlength="20" type="text" id="metafield_namespace" placeholder="namespace" list="fd-dl-namespace"><datalist id="fd-dl-namespace"></datalist><input class="ssb" maxlength="30" type="text" id="metafield_key" placeholder="key" list="fd-dl-key"><datalist id="fd-dl-key"></datalist><textarea class="ssb" id="metafield_value" placeholder="value"></textarea><input type="hidden" id="metafield_id"><a class="btn btn-slim fd-btn savemymeta" id="shopifyjs_savemetafield">'+translation.save+'</a> <a class="int btn btn-slim fd-btn savemymeta" id="shopifyjs_savemetafield_int">Save as Integer</a> <a id="shopifyjs_copymetafield" class="btn btn-slim hide btn-primary tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Copy Metafield to Virtual Clipboard</span></span>Copy</a> <a class="btn btn-slim hide delete tooltip tooltip-bottom" id="shopifyjs_deletemetafield"><span class="tooltip-container"><span class="tooltip-label">There is no undo. Be careful...</span></span>'+translation.delete+'</a><p style="margin:1em 0;line-height:1"><small><span class="metafield-save-note">Please note: Using the save button top right will NOT save these metafields. Be sure to click '+translation.save+' above.<br><br></span><a id="advanced_meta_features" href="#">Toggle helper buttons</a></small></p><div id="advanced_meta" class="hide"><p style="border-bottom: 1px solid #ccc;margin-bottom:.5em">Handle Helper <a id="adv_clear_cache" style="float:right" href="#">Clear cache</a></p><p><a id="adv_get_collections" class="btn fd-btn" href="">Get collections</a></p><p><a id="adv_get_products" class="btn fd-btn" href="">Get '+settings.apiLimit+' products</a></p></div>';
   var metafieldloader = '<div class="next-card-metafield next-card next-card--aside fadein"><section class="next-card__section"><h3 class="next-heading">Metafields <svg class="next-icon next-icon--size-16 metafield-fullscreen-btn"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#next-website"></use></svg><span id="metacount" class="hide">0</span></h3><div class="metafield-content content"><i class="ico ico-20 ico-20-loading"></i></div></section></div>';
   var metafieldloaderSection = '<div class="section metafields"><div class="next-grid"><div class="next-grid__cell next-grid__cell--quarter"><div class="section-summary"><h1>Metafields</h1><p>Manage the metafields that belong to this collection.</p></div></div><div class="next-grid__cell"><div class="next-card"><div class="section-content" id="collection-metafields"><div class="next-card__section">'+metafieldloader+'</div></div></div></div></div></div>';
   var metafield_default = '<option value="">'+translation.select_or_create_metafield+'</option>';
   var metafield_copybox = '<div class="metafield-copy-paste sst"><a class="fd-btn btn btn-slim" id="fd_copymetafields">Copy All Metafields</a> <a class="fd-btn btn btn-slim" id="fd_pastemetafields">Paste Metafields</a> <a class="btn btn-slim tooltip tooltip-bottom" href="#" id="fd_whatmetafields"><span class="tooltip-container"><span class="tooltip-label">View what is in the clipboard</span></span>?</a></div>';
-  var rte_menu_html = '<div class="sst" id="rte_extra"><a class="btn btn-slim fd-btn tooltip delete tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge html</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except for <br>target,class,href & src</span></span>Clean HTML</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Create Backup</a> <a class="btn btn-slim fd-btn" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="save_images_to_meta" href="#"><span class="tooltip-container"><span class="tooltip-label">Add image paths to a metafield</span></span>Images to Metafields</a></div>';
+  var rte_menu_html = '<div class="sst" id="rte_extra"><a class="btn btn-slim fd-btn tooltip btn-destroy tooltip-bottom" id="clearformatting" href="#"><span class="tooltip-container"><span class="tooltip-label">Will remove all HTML on click</span></span>Purge HTML</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="clear-html-attributes" href="#"><span class="tooltip-container"><span class="tooltip-label">Removes HTML attributes except for <br>target,class,href & src</span></span>Clean HTML</a> <a class="btn btn-slim fd-btn tooltip tooltip-bottom" id="createbackup" href="#"><span class="tooltip-container"><span class="tooltip-label">Save contents as metafield</span></span>Backup</a> <a class="btn btn-slim fd-btn" style="display:none;" id="restorebackup" href="#">Restore Backup</a> <a class="btn btn-slim fd-btn" id="save_images_to_meta" href="#">Images to Metafields</a></div>';
   var vbox = '<div class="vbox fadein"><fieldset><select>'+metafield_default+'</select><input id="mv_namespace" placeholder="namespace" /><input id="mv_key" placeholder="key" /><input id="mv_value" placeholder="value" /></fieldset><span class="mybuttons"><a class="save btn btn-slim" href="#">'+translation.save+'</a> <a class="btn btn-slim saveinteger" href="#">'+translation.save+' as Integer</a> <a title="'+translation.delete+'" class="btn-slim delete hidden" href="#">'+translation.delete+'</a></span></div>';
   var vbox_single_html = '<div class="vbox-single-card next-card"><div class="next-card__section"><h2 class="next-heading--quarter-margin">Variant Metafields</h2><div id="vrow" class="single-variant">'+vbox+'</div></div></div>'
-  var appnav = '<li><a id="aboutapp" href="#">'+translation.about_shopifyfd+'</a></li><li><a id="bulkmetafields" href="#" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Experimental feature - has limitations</span></span>Bulk Metafields</a></li><li class="view-json-endpoint hidden"><a class="view-json-endpoint-link" href="#" target="_blank">View JSON</a></li><li><a href="'+paths.help+'" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Open the help PDF in new window</span></span>Help</a></li><li class="animated delay bounce support-development"><a href="http://shopifyfd.com/#install" target="_blank" class="tooltip tooltip-bottom"><span class="tooltip-container"><span class="tooltip-label">Your support is appreciated.</span></span>Use this free tool? Tip me! ($)</a></li>';
   var bulk_html_box = '<p class="warning">This section makes bulk changes to your product metafields. If something goes wrong it may adversely effect all product metafields. There is no undo.</p><table><tr><td>Namespace</td><td><input id="bulk_namespace" placeholder="Namespace" type="text" /></td></tr><tr><td>Key</td><td><input id="bulk_key" placeholder="Key" type="text" /></td></tr><tr><td>Value</td><td><input id="bulk_value" type="text" placeholder="value" /></td></tr><tr><td colspan="2"><p><strong>Note:</strong> Any existing metafield with the same namespace and key will be overwritten.</p></td></tr><tr><td><a class="btn create">'+translation.save+'</a> <a class="btn createint">Save Integer</a></td><td><span style="display:none"><a class="btn delete">Delete</a> <input type="text" style="width:50%" placeholder="Type delete" /></span></td></tr><tr><td colspan="2"><textarea class="debug" placeholder="Data Output (future use only)"></textarea></td></tr></table>';
-  var autosave_html = ' <a id="autosave" tabindex="-1" class="btn btn-slim" href="#">Autosave</a>';
+  var autosave_html = ' <a id="autosave" tabindex="-1" class="btn btn-slim has-loading" href="#">Autosave</a>';
   var html_about = '<p>ShopifyFD is "honor-ware", which means that we trust each other to be nice. As the developer of it, I\'m committed to keep the tool something that\'s actually useful. By releasing new features and correcting possible bugs on a constant basis I can do just that, but I need your support. If you use it and intend to keep it, please sponsor its development by making a small <a target="_blank" href="http://shopifyfd.com/">contribution</a>.</p><p>You can track changes by keeping an eye on the project page or following me on <a target="_blank" href="https://twitter.com/freakdesign">twitter</a>.</p><p><h4 style="margin-top:1em">Resources and links</h4><ul><li><a href="http://freakdesign.com.au/pages/shopifyfd" target="_blank">Project home page</a></li><li><a href="http://goo.gl/OsFK2d" target="_blank">Feature Request</a></li><li><a href="http://bit.ly/shopifyFD_forum" target="_blank">Shopify forum post</a></li></ul></p>';
   var bubble_html = '<div class="bubble hide fadein"><div class="bubble-content p"><div class="pr"><ul class="unstyled"></ul></div></div></div>';
   var bulk_tags = '<div><div class="clearfix em"><div class="half">Choose a collection</div><div class="half"><select data-action="collection"><option value="">Loading, please wait...</option></select></div></div><div class="clearfix em"><div class="half">Choose an action</div><div class="half"><select data-action="action"><option value="add">Add</option><option value="set">Set</option><option value="remove">Remove</option><option disabled value="toggle">Toggle</option><option value="purge" style="background:red;color:#fff">DELETE ALL</option></select></div></div><div class="clearfix em"><div class="half">Set the tag</div><div class="half"><input /></div></div><div class="half"><a class="btn" data-action="update_tags">Update tags</a></div><div class="half"><small>Add: Adds tags to the existing ones<br>Set: Replaces tags with new ones<br>Remove: Removes matching tags<br>Toggle: Future Use, disabled...</small></div></div>';
@@ -106,6 +105,7 @@
   var selector_next_primary = '.ui-layout__section--primary .ui-layout__item:last';
   var selector_sidebar = '.next-layout__sidebar:first';
   var selector_sidebar_child = '.next-layout__sidebar > div:first';
+  var variant_edit_card = '#variant-edit-card';
   var selector_sidebar_cell = '.next-grid__cell--third:first';
   var selector_sidebar_cell_alt = '.ui-layout__section--secondary .ui-layout__item:first';
   var selector_mf_content = 'div.metafield-content';
@@ -114,9 +114,10 @@
   var header_primary_action = '.header .header__primary-actions:first';
   var header_secondary_action = '.header .header__secondary-actions:first';
   var header_ui_title_bar = '.ui-title-bar';
-  var header_ui_title = '.ui-title-bar .ui-title-bar__heading-group';
+  var header_ui_title = '.ui-title-bar .ui-title-bar__heading-group'; /* header_ui_action_bar_links */
   var header_ui_buttons = 'ui-title-bar__actions:first';
   var header_ui_buttons_secondary = '.ui-title-bar__actions.ui-title-bar__actions--secondary:first';
+  var header_ui_action_bar_links = '.action-bar__top-links';
 
   var alphaOmega = function(url){
     /* return url parts for location / object detection */
@@ -231,35 +232,19 @@
 
   var add_ui = function(){
 
-    if($('#shopifyJSbar').length > 0){ return false }
-
-    var bar = $("<div />", { id: "shopifyJSbar",'class':'loading noprint fadein' });
-    var wrapper = $("<div>", {'class': "wrapper clearfix"});
-    var nav = $("<ul>", {id: "shopifyJSnav"});
-
-    nav.html(appnav).find('a').on('click',function(e){
-
-      if(isloading()){ return }
-      var t = $(this);
-      var id=t.prop('id');
-
-      if(id === 'bulkmetafields'){ 
-        bulkmetafields();
-        return false;
-      }else if(id === 'aboutapp'){ 
-        about_app();
-        return false;
-      }
-
-    });
-
-    /* put the jigsaw together */
-    wrapper.append(nav);
-    bar.append(wrapper);
+    /* option to increase working area */
+    addNavClose();
     
-    /* add to page */
-    $('body').append(bar);
-    bar.removeClass('loading');
+    if(document.getElementById('shopifyfdnav')){ return false }
+
+    /* get the first nav group */
+    var navGroup = document.querySelectorAll('.ui-nav .ui-nav__group')[0];
+    if(!navGroup){ return }
+
+    /* create the wrapper and insert */
+    var el = document.createElement('div');
+    el.innerHTML = shopifyfd_nav;
+    navGroup.parentNode.insertBefore(el, navGroup.nextSibling);
 
   }
 
@@ -367,81 +352,6 @@
     return url;
 
   }
-
-
-  var bulkmetafields = function(){
-
-    var myhtml=$(bulk_html_box);
-    var create_btn = myhtml.find('a.create');
-    var createint_btn = myhtml.find('a.createint');
-    var bulk_namespace = myhtml.find('#bulk_namespace');
-    var bulk_key = myhtml.find('#bulk_key');
-    var bulk_value = myhtml.find('#bulk_value');
-    var debug_box = myhtml.find('textarea.debug');
-    var ok=function(){return 1<bulk_namespace.val().length&&1<bulk_key.val().length&&1<bulk_value.val().length?!0:!1};
-
-
-    create_btn.off('click').on('click',function(){
-
-      if(ok){
-        var metaJSON = {
-          "metafield": {
-            "namespace": bulk_namespace.val(),
-            "key": bulk_key.val(),
-            "value": bulk_value.val(),
-            "value_type": 'string'
-          }
-        };
-        bulk_save_metafield_queue(metaJSON,0,debug_box);
-      }else{
-        notice('No empty fields allowed');
-      }
-
-    });
-
-    createint_btn.off('click').on('click',function(){
-      if(ok){
-
-        if(!isNaN(bulk_value.val())){
-          debug_box.val(_data('products'));
-          var metaJSON = {
-            "metafield": {
-              "namespace": bulk_namespace.val(),
-              "key": bulk_key.val(),
-              "value": bulk_value.val(),
-              "value_type": 'integer'
-            }
-          };
-          bulk_save_metafield_queue(metaJSON,0,debug_box);
-        }else{
-          notice('Value not an integer',true);
-        }
-
-      }else{
-        notice('No empty fields allowed',true);
-      } 
-    });
-
-    $.ajax({
-    type: 'GET',
-    url: '/admin/products.json?limit='+settings.apiLimit+'&fields=id,title',
-    dataType: 'json',
-    success: function(d){
-      if(d.products){
-        if(d.products.length){
-          _data('products',d.products);
-          fd_modal(true,myhtml,'Bulk Metafield editing (for '+ d.products.length +' products)',true);
-        }else{
-          notice('No products found',true);
-        }
-      } 
-    },
-    error:function(d){
-      notice('Error getting products',true);
-    }
-    });
-
-  };
 
 
   var loadmeta = function(loadinto,v){
@@ -806,17 +716,18 @@
   };
 
   var jsonEndpointShow = function(a){
-    var target = document.getElementsByClassName('view-json-endpoint');
+
+    var target = document.getElementsByClassName(header_ui_action_bar_links.replace('.',''));
     if(!target.length){ return }
 
-    var button = document.getElementsByClassName('view-json-endpoint-link');
-    if(typeof a !== 'undefined'){
-      target[0].classList.remove('hidden');
-      button[0].href=['//', location.host, location.pathname].join('')+'.json';
-    }else{
-      target[0].classList.add('hidden');
-      button[0].href='';
-    }
+    if(document.getElementsByClassName('view-json-endpoint-link').length){ return }
+    var button = document.createElement("a"); 
+    button.innerHTML = 'View JSON';
+    button.target = '_blank';
+    button.classList.add('btn','action-bar__link','btn--link');
+    button.href =['//', location.host, location.pathname].join('')+'.json';
+    target[0].appendChild(button);
+
   };
 
   var set_drag_drop = function(){
@@ -896,12 +807,12 @@
         success: function(){
           notice(files[files_index].name + ' uploaded ('+(files_index+1)+'/'+files_count+')');
           files_index++;
-          if(files_index < files_count){ doajax() }
-          /* if(files_index == files_count){ document.documentElement.className = '' } */
+          if(files_index < files_count){ doajax() } else {
+            document.documentElement.className = '';
+          }
         },
         error:function(){
           notice('File upload failed',true);
-          /* document.documentElement.className = ''; */
         }
       });
     }
@@ -1157,7 +1068,7 @@
     var targetHTML = $('ul.js-tag-list').eq(0).parent();
 
     if(targetHTML.length){
-      targetHTML.append('<a style="margin-top:.75em" id="removealltags" href="#" class="fd-btn btn delete">Remove all tags</a>');
+      targetHTML.append('<a style="margin-top:.75em" id="removealltags" href="#" class="fd-btn btn btn-destroy">Remove all tags</a>');
       $('#removealltags').on('click',function(e){
         e.preventDefault();
         $('ul.next-token-list').eq(0).find('a').click();
@@ -1202,7 +1113,7 @@
           fd_modal(false);
         });
       }else{
-        var mclose = $('<a href="#" class="close-modal">&times;</a>');
+        var mclose = $('<a href="#" class="close-modal"></a>');
         mclose.on('click',function(){
           fd_modal(false);
           return false;
@@ -1219,7 +1130,7 @@
 
 
   var restorebackup = function(id){
-    var mycontent = $("iframe").contents().find("#tinymce").eq(0);
+    var mycontent = $("iframe:first").contents().find("#tinymce:first")
     var m = _data('m');
 
     if(m){
@@ -1259,11 +1170,11 @@
   };
 
 
-  var setup_articles = function(){
+  var setup_single_article = function(){
 
     var targetHTML = $(selector_next_secondary);
 
-    var headerButtons = $(header_ui_buttons_secondary);
+    var headerButtons = $(header_ui_action_bar_links);
     if(targetHTML.length){
 
       var nextCardSecondary = $(next_item_HTML);
@@ -1275,18 +1186,12 @@
 
 
     }else{
-      notice('ShopifyFD error : setup_articles : Metafield target HTML not found',true);
+      notice('ShopifyFD error : setup_single_article : Metafield target HTML not found',true);
     }
 
     if(headerButtons.length){
-      var u = $('<ul/>',{
-        'class':'segmented',
-        'id':'copy-object',
-        'style':'margin-right:10px'
-      }),
-      l = $('<li/>'),
-      c = $('<a/>',{
-        'class':'fd-btn btn btn-separate',
+      var c = $('<button/>',{
+        'class':'btn action-bar__link btn--link',
         'href':'#'
       }).html('Duplicate').on('click',function(e){
         e.preventDefault();
@@ -1321,16 +1226,14 @@
 
       });
 
-      l.append(c);
-      u.append(l);
-      headerButtons.before(u);
+      headerButtons.append(c);
 
     }else{
-      notice('ShopifyFD error : setup_articles : Header button missing',true);
+      notice('ShopifyFD error : setup_single_article : Header button missing',true);
     }
 
     if ($('#rte_extra').length === 0){
-      $('#article-content_iframecontainer').eq(0).after(rte_menu_html);
+      $('#article-content_parent:first').append(rte_menu_html);
       setup_rte();
     }
 
@@ -1506,8 +1409,7 @@
 
     showSkuHeaderCount();
 
-    var targetHTML = $(header_ui_title);
-
+    var targetHTML = $(header_ui_action_bar_links);
 
     if(!targetHTML.length){ 
       notice('Error : setup_products_list : html not found',true); 
@@ -1516,21 +1418,13 @@
 
     if($('#showsku').length){ $('#showsku').remove() }
 
-    var u = $('<ul/>',{
-      'class':'segmented',
-      'id':'showsku',
-      'style':'margin-right: 10px;'
-    });
-    var l = $('<li/>');
-    var a = $('<a/>',{
-      'class':'btn fd-btn',
-      'href':'/',
-      'title':'Show SKU and Variant IDs'
+    var a = $('<button/>',{
+      'class':'btn action-bar__link btn--link'
     }).html('Show SKUs & ID').on('click',function(e){
       e.preventDefault();
-      var p = [],
-      sku =[],
-      a_list = $('#all-products td.name a[href]');
+      var p = [];
+      var sku =[];
+      var a_list = $('#all-products td.name a[href]');
 
       a_list.each(function(){
         p.push($(this).attr('href').split(/[/]+/).pop());
@@ -1575,9 +1469,7 @@
 
     });
 
-    l.append(a);
-    u.append(l);
-    targetHTML.after(u);
+    targetHTML.append(a);
   };
 
 
@@ -1655,11 +1547,11 @@
 
     if(themeIDs.length < 2){ return }
 
-    var target = $(header_ui_title); 
+    var target = $(header_ui_action_bar_links); 
     if(!target.length){ return }
 
-    var downloadAll= $('<a />',{
-      'class':'btn fd-btn',
+    var downloadAll= $('<button/>',{
+      'class':'btn action-bar__link btn--link',
       'style':'margin-right: 10px;'
     }).text('Export all themes').on('click',function(e){
       e.preventDefault();
@@ -2602,6 +2494,62 @@
     }); 
   };
 
+  var add_sitemap_button = function(){
+
+    if(document.getElementsByClassName('seo-hide-button').length){ return }
+    var target = $('#ChannelsPublishingPanel');
+    if(!target.length){ console.warn('add_sitemap_button(): target not found');return }
+
+    var seohideBtn = $('<a />',{
+      'class':'btn fd-btn seo-hide-button'
+    }).text(translation.hide_from_sitemap).on('click',function(e){
+
+      e.preventDefault();
+
+      var t = $(this);
+      var metafieldId = t.attr('data-id');
+
+      if(metafieldId){
+        $.ajax({
+          type: "DELETE",
+          url: ['//', location.host, location.pathname].join('')+'/metafields/'+metafieldId+'.json',
+          success: function(d){
+            updatedropdown();
+          },
+          error:function(d){
+            notice('Failed to delete',true);
+          }
+        });
+      }else{
+        $.ajax({
+          type: "POST",
+          url: ['//', location.host, location.pathname].join('')+'/metafields.json',
+          dataType: 'json',
+          data: {
+          "metafield": {
+            'namespace': 'seo',
+            'key': 'hidden',
+            'value': 1,
+            'value_type': 'integer'
+          }
+          },
+          success: function(d){
+             updatedropdown();
+          },
+          error:function(){
+            notice("Failed to save metafield",true);
+          }
+        }); 
+      }
+
+      });
+      
+      var section = $('<section class="ui-card__section"><div class="ui-type-container"><div class="ui-stack ui-stack--wrap ui-stack--alignment-center"><div class="ui-stack-item ui-stack-item--fill"><h3 class="ui-subheading">Sitemap</h3><p style="margin:1em 0">Add metafield to remove this product from the sitemap. It is <b>very</b> important that you <a href="https://help.shopify.com/api/tutorials/updating-seo-data#hide-an-object-from-search-engines-and-sitemaps" target="_blank">understand</a> what doing this means. If you don\'t, leave it alone.</p></div></div></div></section>');
+      section.find('.ui-stack-item').append(seohideBtn);
+      target.append(section);
+
+
+  };
 
   var setup_products = function(){
 
@@ -2632,8 +2580,7 @@
       }
       
       /* PRODUCT SWITCHER */
-      var targetHTMLRightMenu = $(header_secondary_action);
-      if(!targetHTMLRightMenu.length){ targetHTMLRightMenu = $(header_primary_action) }
+      var targetHTMLRightMenu = $(header_ui_action_bar_links);
 
       if(targetHTMLRightMenu.length && !document.getElementsByClassName('product-switcher').length){
         $.ajax({
@@ -2654,12 +2601,13 @@
               }
               var pselect = $('<select />',{
                 'class':'product-switcher header-select fadein'
-              }).append('<option>Edit other Product</option>',response).change(function(){
+              }).append('<option selected>Edit other Product</option>',response).change(function(){
                 var v = $(this).val();
                 if(v){ redirect('/admin/products/'+v); }
               });
-              pselect.find('option').sort(selectSort).appendTo(pselect);
-              targetHTMLRightMenu.prepend(pselect);
+              /* pselect.find('option').sort(selectSort).appendTo(pselect); */
+
+              targetHTMLRightMenu.append(pselect);
 
             }
             
@@ -2671,19 +2619,19 @@
       }
 
       /* FAST REMOVE FROM COLLECTIONS */
-      var collectionPanel = $('#js-collections');
+      var collectionPanel = $('#product-collections');
       if(collectionPanel.length){
-        var collectionRemoveButtons = collectionPanel.find('.list-of-added-collections a');
+        var collectionRemoveButtons = collectionPanel.find('.product-collections-list a.btn');
         if(collectionRemoveButtons.length){
           var removeFromAll = $('<a />',{
-            'class':'btn fd-btn delete'
+            'class':'btn fd-btn btn-destroy'
           }).text('Remove from all').on('click',function(e){
             e.preventDefault();
             collectionRemoveButtons.trigger('click');
           })
           collectionPanel.append(removeFromAll);
         }
-      }
+      }else{ console.warn('collectionPanel not found'); }
 
       /* variant helpers */
       if(!document.getElementsByClassName('additional-product-actions').length){
@@ -2696,7 +2644,7 @@
         /* DELETE ALL IMAGES */
         if(!document.getElementsByClassName('remove-all-images').length){
           var removeImagesBtn = $('<a />',{
-            'class':'btn delete tooltip tooltip-bottom'
+            'class':'btn btn-destroy tooltip tooltip-bottom'
           }).html('Remove all images<span class="tooltip-container"><span class="tooltip-label">Instant, and no undo</span></span>').on('click',function(e){
             e.preventDefault();
             var t = $(this);
@@ -2709,62 +2657,7 @@
       }
 
 
-      /* ADD SITEMAP BUTTON */
-      if(!document.getElementsByClassName('seo-hide-button').length){
-        var sectionVisibility = $('.next-card.visibility .next-card__section:first');
-        if(sectionVisibility.length){
-          var seohideBtn = $('<a />',{
-            'class':'btn fd-btn seo-hide-button'
-          }).text(translation.hide_from_sitemap).on('click',function(e){
-
-            e.preventDefault();
-
-            var t = $(this);
-            var metafieldId = t.attr('data-id');
-
-            if(metafieldId){
-              $.ajax({
-                type: "DELETE",
-                url: ['//', location.host, location.pathname].join('')+'/metafields/'+metafieldId+'.json',
-                success: function(d){
-                  updatedropdown();
-                },
-                error:function(d){
-                  notice('Failed to delete',true);
-                }
-              });
-            }else{
-              $.ajax({
-                type: "POST",
-                url: ['//', location.host, location.pathname].join('')+'/metafields.json',
-                dataType: 'json',
-                data: {
-                "metafield": {
-                  'namespace': 'seo',
-                  'key': 'hidden',
-                  'value': 1,
-                  'value_type': 'integer'
-                }
-                },
-                success: function(d){
-                   updatedropdown();
-                },
-                error:function(){
-                  notice("Failed to save metafield",true);
-                }
-              }); 
-            }
-
-
-
-
-
-          });
-
-          sectionVisibility.append('<p style="margin:1em 0">Add metafield to remove this product from the sitemap. It is <b>very</b> important that you <a href="https://help.shopify.com/api/tutorials/updating-seo-data#hide-an-object-from-search-engines-and-sitemaps" target="_blank">understand</a> what doing this means. If you don\'t, leave it alone.</p>',seohideBtn);
-
-        }
-      }
+      
 
       /* RTE ADD ON BUTTONS */
       if (document.getElementById('rte_extra') === null){
@@ -2811,22 +2704,23 @@
       /* INVENTORY AND VARIANTS PANEL */
       var variants_ids = variants_ids || {};
       if(!document.getElementsByClassName('bulk-variants-section').length){
+
         if(inventorySummary.length){
 
           var bulkPriceEdit = $('<div />',{
             'class':'next-card__section fadein hide bulk-variants-section',
-            'style':'background: #F5F6F7;'
+            'style':'background: #f4f5f7;'
           });
 
           var toggleBulkPriceEdit = $('<a />',{
-            'class':'btn fd-btn btn-slim',
+            'class':'btn--link',
             'style':'margin-left:1em;margin-top: -3px;'
           }).text('Bulk Edits').on('click',function(e){
             e.preventDefault();
             bulkPriceEdit.toggleClass('hide');
           });
 
-          bulkPriceEdit.html('<h2>Edit all variants</h2><p style="margin: .5em 0 1em;font-size: 12px;border-bottom: 1px solid #ccc;padding-bottom: .5em;">Bulk Editing comes with risks. Proceed with caution.</p><label style="margin-top:1.5em">Set Compare at Price<br><small>0 will clear the compare at price</small></label><input type="number" style="width:50%" value="0"> <a class="bulk-compare-save tooltip tooltip-bottom btn fd-btn"><span class="tooltip-container"><span class="tooltip-label">Save Compare at Price for all variants</span></span>Save</a>');
+          bulkPriceEdit.html('<h2>Edit all variants</h2><p style="margin: .5em 0 1em;font-size: 12px;border-bottom: 1px solid #ccc;padding-bottom: .5em;">Bulk Editing comes with risks. Proceed with caution.</p><label style="margin-top:1.5em">Set Compare at Price<br><small>0 will clear the compare at price</small></label><input type="number" style="width:50%" value="0"> <a class="bulk-compare-save tooltip tooltip-bottom btn btn-slim fd-btn"><span class="tooltip-container"><span class="tooltip-label">Save Compare at Price for all variants</span></span>Save</a>');
           var bulkCompareSaveBtn = bulkPriceEdit.find('a.bulk-compare-save');
           var bulkCompareFields = bulkPriceEdit.find('input');
           bulkCompareSaveBtn.on('click',function(e){
@@ -2875,7 +2769,7 @@
 
           });
 
-          inventorySummary.append(bulkPriceEdit);
+          inventorySummary.find('.ui-card:first').append(bulkPriceEdit);
 
         }else{
           notice('ShopifyFD error : setup_products : Inventory target HTML not found',true);
@@ -2990,6 +2884,7 @@
         }
       }
 
+      add_sitemap_button();
 
       /* add in buttons for additional bulk variant updates */
       if(!document.getElementsByClassName('edit-selected-weights').length){
@@ -3060,8 +2955,7 @@
 
             return !1;
 
-          })
-          /*var b=$('<span/>',{ 'class':'hide' });*/
+          });
 
           bulkpanel.append(a);
 
@@ -3080,11 +2974,10 @@
         }
       }
 
-
       if(inventorySummary.length){
         if(typeof variants_ids ==='object'){
           if(Object.keys(variants_ids).length > 1){
-            inventorySummary.find('header a.btn--plain:last').after(toggleBulkPriceEdit)
+            inventorySummary.find('.ui-card__header .btn--link:last').after(toggleBulkPriceEdit)
           }
         }
       }
@@ -3094,7 +2987,7 @@
 
   var setup_variants = function(){
     jsonEndpointShow(true);
-    var targetHTML = $(selector_sidebar_child);
+    var targetHTML = $(variant_edit_card);
     if(!targetHTML.length){ return false }
     targetHTML.after(metafieldloader);
     loadmeta($(selector_mf_content));
@@ -3109,12 +3002,9 @@
 
     var targetHTML = $(selector_next_secondary);
     if(targetHTML.length){
-      var previewButton = targetHTML.find('a').eq(0).clone(true); 
       var nextCardSecondary = $(next_item_HTML);
-
       nextCardSecondary.find('.next-card').append(metafieldloader);
       targetHTML.after(nextCardSecondary);
-
       loadmeta($(selector_mf_content));
     }else{
       notice('ShopifyFD error : setup_pages : Metafield target HTML not found',true);
@@ -3127,7 +3017,7 @@
     }
     
     /* PAGE SWITCHER */
-    var targetHTMLRightMenu = $(header_ui_title);
+    var targetHTMLRightMenu = $(header_ui_action_bar_links);
 
     if(targetHTMLRightMenu.length){
       $.ajax({
@@ -3146,9 +3036,8 @@
             }
             var pageSelect = $('<select />',{
               id:'shopifyjs_llselect',
-              'class':'header-select',
-              'style':'margin-right: 10px;'
-            }).append('<option>Edit other Page</option>',response).change(function(){
+              'class':'header-select'
+            }).append('<option selected>Edit other Page</option>',response).change(function(){
               var v = $(this).val();
               if(v){
                  redirect('/admin/pages/'+v);
@@ -3499,7 +3388,7 @@
       u.append(l);
       headerButtons.prepend(u);
     }else{
-      notice('ShopifyFD error : setup_articles : Header button missing',true);
+      notice('ShopifyFD error : setup_single_article : Header button missing',true);
     }
   };
 
@@ -3650,19 +3539,6 @@
       notice('ShopifyFD error : setup_single_order : target html not found',true);
     }
 
-    var emailLink = $('.customer-email:last');
-    if(emailLink.length){
-      var input = $('<input />',{
-        'value':emailLink.text(),
-        'readonly':'readonly',
-        'class':'noprint',
-        'style':'margin:1em 0'
-      }).on('click',function(){
-        $(this).select();
-      });
-      emailLink.parent().parent().after(input);
-    }
-
   };
 
 
@@ -3723,7 +3599,7 @@
 
   var hiddenObject = function(a){
     if(typeof a !== 'undefined'){
-      $('.seo-hide-button').addClass('active').attr('data-id',a).text('Hidden in Sitemap')
+      $('.seo-hide-button').addClass('active').attr('data-id',a).text('Show in Sitemap')
     }else{
       $('.seo-hide-button').removeClass('active').removeAttr('data-id').text(translation.hide_from_sitemap)
     }
@@ -3798,6 +3674,23 @@
 
   }
 
+  var addNavClose = function(){
+
+    if($('#toggleBigMode').length){ return }
+    var mainBody = $('.ui-app-frame__main');
+    if(!mainBody.length){ return }
+    
+    var button = $('<a/>',{
+      'id':'toggleBigMode',
+      'title':'Toggle navigation'
+    }).on('click',function(){
+      $('body').toggleClass('big-view');
+      return false;
+    });
+    button[0].innerHTML = '&lt;';
+    mainBody.append(button);
+  };
+
   var hasClass = function(e, c) {
     return (' '+e.className+' ').indexOf(' '+c+' ') > -1;
   };
@@ -3809,7 +3702,7 @@
   var init = function(){
 
     /* fire the main scripts */
-    document.getElementsByTagName('html')[0].className += ' shopifyJSoverride';
+    document.getElementsByTagName('html')[0].className += ' shopifyfd-loaded';
     if(settings.enableDragDrop){ set_drag_drop() }
     get_theme_data();
 
@@ -3858,7 +3751,7 @@
           app.queryString = query;
 
           if( alpha === 'customers' && !isNaN(omega)){ setup_customers();
-          } else if( alpha === 'articles' && !isNaN(omega)){ setup_articles();
+          } else if( alpha === 'articles' && !isNaN(omega)){ setup_single_article();
           } else if( alpha === 'blogs' && !isNaN(omega)){ setup_blogs();
           } else if( alpha === 'collections' && !isNaN(omega)){ setup_custom_collections();
           } else if( alpha === 'menus' && !isNaN(omega)){ setup_link_lists_single();
@@ -3867,14 +3760,17 @@
           } else if( alpha === 'pages' && !isNaN(omega)){ setup_pages();
           } else if( alpha === 'products' && !isNaN(omega)){ setup_products();
           } else if( alpha === 'variants' && !isNaN(omega)){ setup_variants();
+          } else if( alpha === 'admin' && omega === 'articles' ){ /*setup_articles();*/
           } else if( alpha === 'admin' && omega === 'apps' ){ /*setup_apps();*/
           } else if( alpha === 'admin' && omega === 'bulk' ){ setup_bulk_editor();
           } else if( alpha === 'admin' && omega === 'channels' ){ /*setup_channels();*/
           } else if( alpha === 'admin' && omega === 'collections' ){ setup_collections();
           } else if( alpha === 'admin' && omega === 'discounts' ){ setup_discounts();
           } else if( alpha === 'admin' && omega === 'draft_orders' ){ /*setup_draft_orders();*/
+          } else if( alpha === 'admin' && omega === 'gift_cards' ){ /*setup_gift_cards();*/
           } else if( alpha === 'admin' && omega === 'menus' ){ setup_link_lists();
           } else if( alpha === 'admin' && omega === 'links' ){ setup_link_lists();
+          } else if( alpha === 'admin' && omega === 'link_lists' ){ setup_link_lists();
           } else if( alpha === 'admin' && omega === 'orders' ){ setup_orders();
           } else if( alpha === 'admin' && omega === 'products' ){ setup_products_list();
           } else if( alpha === 'admin' && omega === 'redirects' ){ setup_redirects();

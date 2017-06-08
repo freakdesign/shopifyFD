@@ -16,52 +16,37 @@
  ### #           **# ### 
      # - - - - - - #                 
       | | | | | | |
-	
+  
      freakdesign.com               
 
 
 */
 
-#shopifyJSbar.loading{top:-40px}
-#shopifyJSbar{background:#57666f;position:fixed;top:0;left:0;width:100%;z-index:540;transition:top .5s}
-#shopifyJSbar ul{list-style: none;margin:0;color:#fff}
-#shopifyJSbar li, #shopifyJSbar li a{display: inline-block}
-#shopifyJSbar li {float:left}
-#shopifyJSbar li:first-child{width: 240px;background: #21C2A8;}
-#shopifyJSbar li:nth-child(2){background: #1D2225}
-#shopifyJSbar li a{padding:0 1em;transition:background .2s;color:#C8D1D1;height: 32px;line-height: 32px;font-size: 95%;}
-#shopifyJSbar li a.active{background:#1C1E1F;}
-#shopifyJSbar li a:hover{background:#139989;text-decoration: none;color:#fff}
-#shopifyJSbar li:nth-child(2) a:hover{background: #139989}
-#shopifyJSbar li:last-child{float:right}
-#shopifyJSbar li:first-child a{border-left: none;width: 100%;text-align: center;color:#fff;}
-#shopifyJSbar li:last-child a, #shopifyJSbar li:nth-child(2) a{border-left:none}
-#shopifyJSbar .ico-16{margin:2px 0 0 2px;}
-#shopifyJSbar *, #shopifyJSbar *:before, #shopifyJSbar *:after {-moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;}
-#shopifyJSnav .btn.is-loading, #shopifyJSnav .btn.is-loading:hover{background-color: #FAFAFA!important;border-radius: 0;color: rgba(0,0,0,0);}
-
-
-body, .global-search__pane{padding-top:32px}
-.activity-switch {top: 44px;}
 
 #wrapper{padding-bottom: 5em}
 #gheader.black-header {z-index:99999}
 #global-notification {z-index:999999}
 #sidebar{top: 36px}
 
+#AppFrameAside { background: #ffffff; }
+#rte_extra a { margin-bottom: .25em; }
 
-@media screen and (min-width: 769px){
- .header-row, .next-nav , .ui-title-bar{top:32px;}
+#toggleBigMode{
+  top: 56px;
+  position: absolute;
+  background: #1c2260;
+  color: #fff;
+  text-decoration: none;
+  padding: 0 .35em;
 }
 
-@media screen and (max-width: 768px){
-  #shopifyJSbar{ display: none; }
-  .next-nav {border-top:2px solid #57666f;}
-  body{padding-top:0px}
-  .header-row {top:0px}
-}
+.big-view #AppFrameMain { padding-left: 0; }
+.big-view .fresh-ui .ui-layout, 
+.big-view .ui-layout, 
+.big-view .ui-title-bar-container { max-width: initial; }
+.big-view #toggleBigMode { transform: rotate(180deg); }
 
-.edit-variant-metafield { color: #21c2a8;position: absolute;bottom: -4px;left: 18px;}
+.edit-variant-metafield { color: #21c2a8!important;position: absolute;bottom: -5px;left: 18px;}
 .edit-variant-metafield.active {color: #21C2A8;}
 
 /* you know, for hiding stuff... */
@@ -182,7 +167,7 @@ th.inventory.tc{min-width: 50px}
 .single-variant .vbox{border-bottom: 0;padding-bottom:0}
 .sku.label, .variant-label {float:right;font-size: 11px;padding: 0 1em;margin-right: .5rem;line-height: inherit;font-family: monospace;}
 .unpublished-theme-title {position: relative;}
-.header-select {height:32px;max-width: 180px;}
+.header-select {max-width: 180px;}
 
 html.dragit{height: 100%;overflow: hidden;opacity: .5;-webkit-user-select: none; -moz-user-select: none;-ms-user-select: none;}
 
