@@ -1624,7 +1624,9 @@
       return;
       */
 
-      var llf = $('.next-card__section .next-grid__cell--no-flex');
+      var llf = $('.menus-table.next-table--line-items td').not('[class]');
+
+
       var create_collection_linklist = function(){
 
         $.ajax({
@@ -1811,18 +1813,18 @@
 
         var a = $('<a/>',{
           'href':'#',
-          'class':'tooltip-bottom tooltip',
+          'class':'btn btn-slim has-loading',
           'style':'margin-right:1.5em'
-        }).html('<span class="tooltip-container"><span class="tooltip-label">Make a copy of this linklist</span></span>Duplicate').on('click',function(e){
+        }).html('Copy').on('click',function(e){
           e.preventDefault();
           var t = $(this);
-          var a = t.parent().find('a[href^="/admin/link_lists"]:first');
+          var a = t.parent().parent().find('a[href^="/admin/link_lists"]:first');
           if(!a.length){
             notice('Can not copy this linklist. ID was not found',true);
             return;
           }
           
-          t.addClass('btn is-loading');
+          t.addClass('is-loading');
           var linkId = a.attr('href').split('/').pop();
 
           /* prepare for html loading and parse */
@@ -1865,17 +1867,17 @@
   
         var deleteBtn = $('<a />',{
           'href':'#',
-          'class':'tooltip-bottom tooltip',
+          'class':'btn btn-slim btn-destroy has-loading',
           'style':'margin-right:1.5em'
-          }).html('<span class="tooltip-container"><span class="tooltip-label">Delete Linklist on click</span></span><i class="ico ico-14-svg ico-delete"></i>').on('click',function(e){
+          }).html('Delete').on('click',function(e){
 
               e.preventDefault();
               var t = $(this);
-              var a = t.parent().find('a[href^="/admin/link_lists"]').eq(0);
+              var a = t.parent().parent().find('a[href^="/admin/link_lists"]').eq(0);
 
               if(a.length){
-                t.addClass('btn is-loading no-btn');
-                href = a.attr('href').split('/').pop();
+                t.addClass('is-loading');
+                var href = a.attr('href').split('/').pop();
 
                 if(!isNaN(href)){
 
@@ -1889,7 +1891,7 @@
                     url: '/admin/link_lists/'+href,
                     data:data,
                     success: function(d){
-                      t.removeClass('btn is-loading no-btn').closest('.next-grid__cell.next-grid__cell--half').addClass('disable').css({'opacity':'.2','pointer-events' : 'none'});
+                      t.removeClass('is-loading').closest('tr').addClass('disable').css({'opacity':'.2','pointer-events' : 'none'});
                     }
                   });
                 }
@@ -1899,7 +1901,7 @@
 
         if(llf.length > 1){
 
-          llf.prepend(deleteBtn, a);
+          llf.append('<br><br>',a, deleteBtn);
 
           $.ajax({
           type: 'GET',
@@ -1917,7 +1919,7 @@
           });
 
         }else{
-          llf.prepend(a);
+          llf.append('<br><br>',a);
         }
         
         //var d = $('.section-summary').eq(0),
