@@ -1509,26 +1509,28 @@
       return d.toString();
     };
     
-    var publishedTitle = $('.published-theme-title');
+    var publishedInfo = $('.ui-stack.published-theme__stack:first');
     var unpublishedTitles = $('.unpublished-theme-title');
-    var themeBoxes = $('div.unpublished-box');
+    var themeBoxes = $('.themes-list__row[id]');
     var themeIDs = [];
+
+
 
     for (var i = 0; i < themeBoxes.length; i++) {
       var themeID = themeBoxes[i].id.split('_').pop();
       themeIDs.push(themeID);
-      var themeTitle = themeBoxes.eq(i).find('.unpublished-theme-title');
+      var themeInfo = themeBoxes.eq(i).find('div:first');
       var themeData = getTheme(themeID);
       var themeDates = '';
       if(themeData){
         themeDates += '<br>Created at: '+ dateFormat(themeData.created_at);
         themeDates += '<br>Updated at: '+ dateFormat(themeData.updated_at);
       }
-      themeTitle.after('<div style="font-size:90%;opacity:.5" class="theme-data" data-id="'+themeID+'">Theme ID: '+themeID+themeDates+'</div>');
+      themeInfo.after('<div style="font-size:90%;opacity:.5" class="theme-data" data-id="'+themeID+'">Theme ID: '+themeID+themeDates+'</div>');
     };
 
-    if(publishedTitle.length){
-      var customiseBtn = $('.published-theme .btn-primary').eq(0); /* for the published theme */
+    if(publishedInfo.length){
+      var customiseBtn = $('.published-themes .ui-button--primary:first'); /* for the published theme */
       var customiseHREF = customiseBtn.attr('href');
       if(typeof customiseHREF !== 'undefined'){
         if(customiseHREF.indexOf('/admin/themes')>-1){
@@ -1540,7 +1542,7 @@
           themeDates += '<br>Created at: '+ dateFormat(themeData.created_at);
           themeDates += '<br>Updated at: '+ dateFormat(themeData.updated_at);
           }
-          publishedTitle.after('<div style="font-size:90%;opacity:.5" class="theme-data" data-id="'+themeID+'">Theme ID: '+themeID+themeDates+'</div>');
+          publishedInfo.after('<div style="font-size:90%;opacity:.5" class="theme-data" data-id="'+themeID+'">Theme ID: '+themeID+themeDates+'</div>');
         }
       }
     }
