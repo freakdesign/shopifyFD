@@ -144,6 +144,12 @@
     .replace(/[\t]/g, '\\t');
   };
 
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
   var windowResize = function(){
     window.dispatchEvent(new Event('resize'));
   };
@@ -2340,7 +2346,7 @@
                   var toappend='';
 
                   for (var i = 0, len = d.collections.length; i < len; i++) {
-                    toappend+='<option value="'+d.collections[i].id+'">'+d.collections[i].title+'</option>';
+                    toappend+='<option value="'+d.collections[i].id+'">'+escapeHtml(d.collections[i].title)+'</option>';
                   }
 
                   c.append(toappend).find('option:eq(0)').text('Select a collection');
