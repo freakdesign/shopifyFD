@@ -3455,7 +3455,7 @@
               var next = html.find('#assets-table').next('.next-card__section').find('a:last');
               var nextUrl = next.length ? next[0].href : '';
 
-              if(nextUrl.indexOf('direction=next')>-1){
+              if(url !== nextUrl){
                 getFiles(nextUrl);
               }else{
                 t.removeClass('is-loading').removeAttr('style');
