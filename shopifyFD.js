@@ -3618,7 +3618,7 @@
   var updatedropdown = function(){
     /* Keeps the metafields edit box select menu up to date */
 
-    var url = getMetafieldUrl();
+    var url = getMetafieldUrl() + '?limit='+settings.apiLimit;
     $.getJSON(url, function(data) {
       
       var response = '';
